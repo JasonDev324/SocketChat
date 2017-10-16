@@ -1,12 +1,12 @@
 package io.tanjundang.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -14,9 +14,9 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.tanjundang.chat.base.BaseActivity;
+import io.tanjundang.chat.base.account.LoginActivity;
 import io.tanjundang.chat.talk.TalkFragment;
 import io.tanjundang.chat.contacts.ContactFragment;
-import io.tanjundang.chat.me.MeFragment;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -54,7 +54,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 SkipToFragment(ContactFragment.getInstance());
                 return true;
             case R.id.navigation_me:
-                SkipToFragment(MeFragment.getInstance());
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+//                SkipToFragment(MeFragment.getInstance());
                 return true;
         }
         return false;
