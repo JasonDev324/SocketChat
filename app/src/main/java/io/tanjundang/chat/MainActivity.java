@@ -34,11 +34,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         ButterKnife.bind(this);
         navigation.setOnNavigationItemSelectedListener(this);
         SkipToFragment(HomeFragment.getInstance());
-        boolean hasNavigationBar = Functions.hasNavigationBar(this);
-        Functions.setImmerseStatusBar(this);
-        if (hasNavigationBar) {
-            Functions.setNavigationBarPadding(container, this);
-        }
     }
 
     public void SkipToFragment(Fragment fragment) {
