@@ -1,4 +1,4 @@
-package io.tanjundang.chat.home;
+package io.tanjundang.chat.contacts;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -20,20 +20,20 @@ import io.tanjundang.chat.base.utils.PermissionTool;
  * Date:2017/3/28
  */
 
-public class HomeFragment extends BaseFragment   {
+public class ContactFragment extends BaseFragment   {
 
 
     ArrayList<String> permissionList = new ArrayList<>();
 
-    public static HomeFragment getInstance() {
-        HomeFragment fragment = new HomeFragment();
+    public static ContactFragment getInstance() {
+        ContactFragment fragment = new ContactFragment();
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_home, container, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_contact, container, false);
         permissionList.add(Manifest.permission.CAMERA);
         permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         return view;

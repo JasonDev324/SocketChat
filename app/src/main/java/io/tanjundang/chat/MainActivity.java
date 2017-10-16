@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -13,9 +14,8 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.tanjundang.chat.base.BaseActivity;
-import io.tanjundang.chat.base.utils.Functions;
-import io.tanjundang.chat.board.BoardFragment;
-import io.tanjundang.chat.home.HomeFragment;
+import io.tanjundang.chat.talk.TalkFragment;
+import io.tanjundang.chat.contacts.ContactFragment;
 import io.tanjundang.chat.me.MeFragment;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         navigation.setOnNavigationItemSelectedListener(this);
-        SkipToFragment(HomeFragment.getInstance());
+        SkipToFragment(TalkFragment.getInstance());
     }
 
     public void SkipToFragment(Fragment fragment) {
@@ -47,13 +47,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.navigation_home:
-                SkipToFragment(HomeFragment.getInstance());
+            case R.id.navigation_talk:
+                SkipToFragment(TalkFragment.getInstance());
                 return true;
-            case R.id.navigation_dashboard:
-                SkipToFragment(BoardFragment.getInstance());
+            case R.id.navigation_contact:
+                SkipToFragment(ContactFragment.getInstance());
                 return true;
-            case R.id.navigation_notifications:
+            case R.id.navigation_me:
                 SkipToFragment(MeFragment.getInstance());
                 return true;
         }

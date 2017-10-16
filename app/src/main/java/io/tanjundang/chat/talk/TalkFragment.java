@@ -1,4 +1,4 @@
-package io.tanjundang.chat.board;
+package io.tanjundang.chat.talk;
 
 
 import android.os.Bundle;
@@ -9,18 +9,17 @@ import android.view.ViewGroup;
 
 import io.tanjundang.chat.R;
 
-public class BoardFragment extends Fragment {
+public class TalkFragment extends Fragment {
 
-    public static BoardFragment getInstance() {
-        BoardFragment fragment = new BoardFragment();
+    public static TalkFragment getInstance() {
+        TalkFragment fragment = new TalkFragment();
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_board, container, false);
+        return inflater.inflate(R.layout.fragment_talk, container, false);
     }
 
 }
