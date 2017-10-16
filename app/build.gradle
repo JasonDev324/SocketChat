@@ -1,0 +1,142 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+//定义keystore.propertites文件，用于加载keystore信息
+//def keystoreFile = rootProject.file("keysotre.properties")
+//def keysotreProperties = new Properties()
+//keysotreProperties.load(new FileInputStream(keystoreFile))
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+//    useLibrary 'org.apache.http.legacy'
+    defaultConfig {
+        applicationId "io.tanjundang.chat"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        ndk {
+            // 设置支持的 SO 库构架
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+    }
+    signingConfigs {
+        release {
+//                storeFile file("../keystore/syq.jks")
+//                storePassword "88888888"
+//                keyAlias "tjd"
+//                keyPassword "88888888"
+        }
+        debug {
+//            storeFile file(keysotreProperties['storeFile'])
+//            storePassword keysotreProperties['storePassword']
+//            keyAlias keysotreProperties['keyAlias']
+//            keyPassword keysotreProperties['keyPassword']
+        }
+    }
+    buildTypes {
+        release {
+//            signingConfig signingConfigs.release
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            manifestPlaceholders = [UMENG_APPKEY: "570104fde0f55aedba00200d-REL"]
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug { //测试服 测试签名
+//            signingConfig signingConfigs.debug
+            minifyEnabled false
+            zipAlignEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            manifestPlaceholders = [UMENG_APPKEY: "570104fde0f55aedba00200d-DEB"]
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+
+    productFlavors {
+        inner {
+            buildConfigField("String", "BASE_URL", "\"http://test.shuiyq.com/\"");
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+//            signingConfig signingConfigs.release
+            manifestPlaceholders = [GIT_VERSION: getGitVersion(), QQ_SCHEME: "tencent1106457974"]
+        }
+
+        online_test {
+            buildConfigField("String", "BASE_URL", "\"http://test.shuiyq.com/\"");
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+        }
+
+        online_adv {
+            buildConfigField("String", "BASE_URL", "\"http://test.shuiyq.com/\"");
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+        }
+    }
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        def apk = output.outputFile;
+        def releaseTime = releaseTime();
+        def channelName = variant.productFlavors[0].name;
+        def versionName = 'v' + variant.getVersionName();
+        def buildType = variant.buildType.name;
+        def fileName;
+        if (buildType == "release" && channelName == "online") {
+            fileName = "syq_" + channelName + "_" + releaseTime + "_" + versionName;
+        } else {
+            fileName = "syq_" + channelName + "_" + buildType + "_" + getGitVersion();
+        }
+        output.outputFile = new File(apk.parent, fileName + ".apk");
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:support-vector-drawable:25.2.0'
+    compile 'com.android.support:support-v4:25.2.0'
+    testCompile 'junit:junit:4.12'
+
+//    UI
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+//    工具
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    compile 'com.facebook.stetho:stetho:1.3.1'
+    compile 'com.liulishuo.filedownloader:library:1.5.5'
+
+    compile 'org.apache.httpcomponents:httpcore:4.4.4'
+
+    compile 'com.jakewharton:butterknife:8.6.0'
+    apt 'com.jakewharton:butterknife-compiler:8.6.0'
+
+}
+//打包时间
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+// 获取修订版本最后一次 git 记录后6位
+static def getGitVersion() {
+    String desc = 'git describe --always'.execute().getText().trim()
+    return (desc == null || desc.size() == 0) ? new Date().format("yyMMdd") : desc.substring(desc.size() - 7)
+}
