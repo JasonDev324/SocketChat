@@ -48,7 +48,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick({R.id.btnLogin, R.id.btnRegister})
     public void onClick(View v) {
         if (v.equals(btnLogin)) {
-
+            Functions.hideKeyboard(v);
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 

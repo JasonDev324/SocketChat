@@ -52,8 +52,9 @@ public class RegisterActivity extends BaseActivity {
     }
 
     @OnClick({R.id.btnRegister, R.id.btnLogin})
-    public void onClick(View v) {
+    public void onClick(final View v) {
         if (v.equals(btnRegister)) {
+            Functions.hideKeyboard(v);
             String name = etAccount.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
