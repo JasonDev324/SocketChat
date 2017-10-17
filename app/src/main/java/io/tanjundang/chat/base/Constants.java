@@ -8,6 +8,8 @@ package io.tanjundang.chat.base;
  */
 
 public class Constants {
+    public static final int SUCCESS = 1;
+    public static final int FAILURE = 0;
     public static final String ACCOUNT = "ACCOUNT";
     public static final String PASSWORD = "PASSWORD";
     public static final String INDEX = "INDEX";

@@ -2,6 +2,8 @@ package io.tanjundang.chat.base.utils.cache;
 
 import android.content.Context;
 
+import io.tanjundang.chat.base.entity.User;
+
 /**
  * @Author: TanJunDang
  * @Date: 2017/6/19
@@ -19,4 +21,12 @@ public class CacheTool {
         CacheModel.clear(context);
     }
 
+
+    public static void saveUser(Context context, User data) {
+        CacheModel.saveObject(context, ACCOUNT, data);
+    }
+
+    public static User loadUser(Context context) {
+        return CacheModel.loadObject(context, ACCOUNT);
+    }
 }

@@ -13,7 +13,7 @@ public class SharePreTool {
 
     public static SharePreTool mPreUtil;
     private static SharedPreferences mSharePreference;
-    private static final String FILE_NAME = "Sam_Tam";
+    private static final String FILE_NAME = "tjd_chat";
     private static SharedPreferences.Editor editor;
     private static String fileName = ""; //用于找到自定义文件或者默认文件
 
@@ -26,7 +26,7 @@ public class SharePreTool {
     public static SharePreTool getSP(Context context) {
         if (mPreUtil == null || mSharePreference == null || editor == null || !fileName.equals(FILE_NAME)) {
             mPreUtil = new SharePreTool();
-            mSharePreference = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+            mSharePreference = context.getApplicationContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
             editor = mSharePreference.edit();
             fileName = FILE_NAME;
         }
@@ -43,7 +43,7 @@ public class SharePreTool {
     public static SharePreTool getSP(Context context, String name) {
         if (mPreUtil == null || mSharePreference == null || editor == null || !fileName.equals(name)) {
             mPreUtil = new SharePreTool();
-            mSharePreference = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+            mSharePreference = context.getApplicationContext().getSharedPreferences(name, Context.MODE_PRIVATE);
             editor = mSharePreference.edit();
             fileName = name;
         }
@@ -158,5 +158,10 @@ public class SharePreTool {
         return editor.commit();
     }
 
+    public boolean clear() {
+        SharedPreferences.Editor editor = mSharePreference.edit();
+        editor.clear();
+        return editor.commit();
+    }
 
 }

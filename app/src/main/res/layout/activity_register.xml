@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/base_theme_color"
+    android:orientation="vertical"
+    tools:context=".account.RegisterActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivAvatar"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:layout_marginTop="60dp"
         android:src="@mipmap/google_app2" />
 
@@ -27,10 +31,30 @@
             android:textColorHint="@color/color_white">
 
             <AutoCompleteTextView
+                android:id="@+id/etAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/color_white"
+                android:textColorHint="@color/color_white" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_white"
+            android:textColorHint="@color/color_white">
+
+            <AutoCompleteTextView
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/color_white"
@@ -49,8 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="Login"
+                android:imeActionId="@+id/register"
+                android:imeActionLabel="register"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
@@ -61,27 +85,27 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnRegister"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_15dp"
             android:background="@color/colorPrimaryDark"
-            android:text="Login"
+            android:text="create account"
             android:textColor="@color/color_white"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="@dimen/margin_15dp"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:text="Not account yet? Create one"
+            android:text="Already a member? Login"
             android:textAllCaps="false"
             android:textColor="@color/color_white" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
