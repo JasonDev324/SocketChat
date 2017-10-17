@@ -7,4 +7,10 @@
     <color name="color_white">#FFF</color>
     <color name="color_transparent">#00000000</color>
     <drawable name="color_transparent">#00000000</drawable>
+    <color name="color_black_transparent">#9000</color>
+    <drawable name="color_black_transparent">#9000</drawable>
+    <color name="text_color_gray">#999999</color>
+    <color name="text_color_black">#333</color>
+    <color name="base_background_color">#f5f5f5</color>
+    <drawable name="base_background_color">#f5f5f5</drawable>
 </resources>

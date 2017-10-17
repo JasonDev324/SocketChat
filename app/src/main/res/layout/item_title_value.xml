@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    android:minHeight="@dimen/item_height_50dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_15dp"
+        android:drawablePadding="10dp"
+        android:text="TITLE"
+        android:textColor="@color/text_color_black"
+        android:textSize="@dimen/text_size_15dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/ivArrow"
+            android:drawablePadding="10dp"
+            android:ellipsize="end"
+            android:gravity="right"
+            android:hint="VALUE"
+            android:maxEms="15"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:textColor="@color/text_color_gray"
+            android:textSize="@dimen/text_size_14dp" />
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_15dp"
+            android:background="@mipmap/ic_arrow_right" />
+
+    </LinearLayout>
+
+</RelativeLayout>

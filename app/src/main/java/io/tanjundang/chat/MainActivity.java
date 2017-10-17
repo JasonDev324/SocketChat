@@ -32,6 +32,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Functions.setImmerseStatusBar(this);
         navigation.setOnNavigationItemSelectedListener(this);
         SkipToFragment(TalkFragment.getInstance());
     }

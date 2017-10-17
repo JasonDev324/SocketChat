@@ -1,12 +1,61 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
     tools:context="io.tanjundang.chat.me.MeFragment">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Me Fragment" />
+        android:layout_height="180dp"
+        android:background="@color/colorPrimary">
 
-</FrameLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:background="@mipmap/default_journey_fragment_bg"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_15dp"
+            android:src="@mipmap/ic_default_avatar" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ivAvatar"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/margin_15dp"
+        android:paddingRight="@dimen/margin_15dp">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="TanJunDang"
+            android:textColor="@color/text_color_black"
+            android:textSize="@dimen/text_size_16dp" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:singleLine="true"
+            android:text="Email"
+            android:textColor="@color/text_color_gray"
+            android:textSize="@dimen/text_size_14dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
