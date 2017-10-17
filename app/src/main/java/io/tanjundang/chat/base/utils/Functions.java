@@ -17,8 +17,11 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -29,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -823,5 +827,67 @@ public class Functions {
             System.out.println("-------无法获取到状态栏高度");
         }
         return Functions.dp2px(24);
+    }
+
+    /**
+     * 判断email是否合法
+     *
+     * @param email
+     * @return
+     */
+    public static boolean isVaildEmail(String email) {
+        if (TextUtils.isEmpty(email)) {
+            return false;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 限制只能输入字母和数字以及特殊符号，默认弹出英文输入法
+     *
+     * @param editText
+     */
+    public static void setNoChineseInput(EditText editText) {
+        final String input_format = "<![CDATA[0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-~!@#$%^?？/{}`[]|\\\\——~·`;:´·\\'+=,.*()~·！“”：，；、;‘’˜¡¿&\\\"<>]]>";
+        /**
+         *
+         */
+        editText.setKeyListener(new DigitsKeyListener() {
+            @Override
+            public int getInputType() {
+                return InputType.TYPE_TEXT_VARIATION_PASSWORD;
+            }
+
+            @Override
+            protected char[] getAcceptedChars() {
+                char[] data = input_format.toCharArray();
+                return data;
+            }
+        });
+
+    }
+
+    /**
+     * 限制只能输入字母和数字，默认弹出英文输入法
+     *
+     * @param editText
+     */
+    public static void setOnlyEnglishNumInput(EditText editText) {
+        final String input_format = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890";
+        editText.setKeyListener(new DigitsKeyListener() {
+            @Override
+            public int getInputType() {
+                return InputType.TYPE_TEXT_VARIATION_PASSWORD;
+            }
+
+            @Override
+            protected char[] getAcceptedChars() {
+                char[] data = input_format.toCharArray();
+                return data;
+            }
+        });
     }
 }
