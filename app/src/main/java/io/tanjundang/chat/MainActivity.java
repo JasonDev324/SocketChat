@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.tanjundang.chat.base.BaseActivity;
-import io.tanjundang.chat.base.account.LoginActivity;
+import io.tanjundang.chat.me.MeFragment;
 import io.tanjundang.chat.talk.TalkFragment;
 import io.tanjundang.chat.contacts.ContactFragment;
 
@@ -54,9 +54,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 SkipToFragment(ContactFragment.getInstance());
                 return true;
             case R.id.navigation_me:
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-//                SkipToFragment(MeFragment.getInstance());
+                SkipToFragment(MeFragment.getInstance());
                 return true;
         }
         return false;

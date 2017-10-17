@@ -5,7 +5,8 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/color_white</item>
+        <item name="colorControlNormal">@color/color_white</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:fitsSystemWindows">false</item>
@@ -18,4 +19,23 @@
         <item name="android:windowEnterAnimation">@anim/popupwindow_up</item>
     </style>
 
+    <style name="ProgressDialogStyle" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/color_white</item>
+        <item name="android:windowBackground">@color/base_theme_color</item>
+        <item name="android:textSize">@dimen/text_size_15dp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+
+    <style name="SplashActivityStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="SwitchStyle" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#74cc1d</item>
+        <item name="colorSwitchThumbNormal">#cc0000</item>
+    </style>
 </resources>

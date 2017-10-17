@@ -11,8 +11,12 @@ import io.tanjundang.chat.base.utils.LogTool;
  * @Description:
  */
 
-public class ApiObserver implements Observer {
+public abstract class ApiObserver<T> implements Observer<T> {
     Disposable disposable;
+
+    public abstract void onSuccess(T resp);
+
+    public abstract void onFailure(String error);
 
     @Override
     public void onSubscribe(Disposable d) {
@@ -20,12 +24,13 @@ public class ApiObserver implements Observer {
     }
 
     @Override
-    public void onNext(Object value) {
-
+    public void onNext(T resp) {
+        onSuccess(resp);
     }
 
     @Override
     public void onError(Throwable e) {
+        onFailure(e.getMessage());
         LogTool.e(getClass().getName(), "Cause:" + e.getMessage());
         Functions.toast("网络不通畅,请检查您的网络是否正常连接");
         disposable.dispose();
