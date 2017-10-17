@@ -50,22 +50,15 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         final String token = SharePreTool.getSP(SplashActivity.this).getString(Constants.TOKEN);
-                        User user = Global.getInstance().getUser(SplashActivity.this);
-                        long userId = 0;
-                        try {
-                            userId = user.getUserId();
-                        } catch (Exception e) {
-                            userId = 0;
-                        }
-                        final long finalUserId = userId;
+                        final  long userId = SharePreTool.getSP(SplashActivity.this).getLong(Constants.USER_ID);
                         PermissionTool.getInstance(SplashActivity.this).requestPermissions(permissionList, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent();
-                                if (finalUserId != 0 && !TextUtils.isEmpty(token)) {
+                                if (userId != 0 && !TextUtils.isEmpty(token)) {
                                     intent.setClass(SplashActivity.this, MainActivity.class);
                                     Global.TOKEN = token;
-                                    Global.getInstance().setUserId(finalUserId);
+                                    Global.getInstance().setUserId(userId);
                                 } else {
                                     intent.setClass(SplashActivity.this, LoginActivity.class);
                                 }

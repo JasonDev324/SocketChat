@@ -19,11 +19,13 @@ import io.tanjundang.chat.MainActivity;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
+import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.LoginResp;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.base.utils.SharePreTool;
 
 public class LoginActivity extends BaseActivity {
 
@@ -74,6 +76,15 @@ public class LoginActivity extends BaseActivity {
                         public void onSuccess(LoginResp resp) {
                             dialog.dismiss();
                             if (resp.getStatus() == Constants.SUCCESS) {
+                                LoginResp.LoginInfo info = resp.getData();
+                                SharePreTool.getSP(LoginActivity.this).putString(Constants.TOKEN, info.getApi_token());
+                                SharePreTool.getSP(LoginActivity.this).putLong(Constants.USER_ID, info.getId());
+                                SharePreTool.getSP(LoginActivity.this).putString(Constants.NICKNAME, info.getName());
+
+                                Global.TOKEN = info.getApi_token();
+                                Global.getInstance().setNickname(info.getName());
+                                Global.getInstance().setEmail(info.getEmail());
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();

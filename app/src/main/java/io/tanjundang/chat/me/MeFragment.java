@@ -8,6 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.tanjundang.chat.R;
+/**
+ * @Author: TanJunDang
+ * @Date: 2017/10/17
+ * @Description: 个人资料
+ */
 
 public class MeFragment extends Fragment {
 

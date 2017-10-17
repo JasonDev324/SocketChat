@@ -78,7 +78,7 @@
             android:layout_marginTop="@dimen/margin_15dp"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:text="Not account yet? Create one"
+            android:text="Not account yet ? Create one."
             android:textAllCaps="false"
             android:textColor="@color/color_white" />
 

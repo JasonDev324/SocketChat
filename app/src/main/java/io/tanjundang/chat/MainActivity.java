@@ -1,6 +1,5 @@
 package io.tanjundang.chat;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,6 +13,7 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.tanjundang.chat.base.BaseActivity;
+import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.me.MeFragment;
 import io.tanjundang.chat.talk.TalkFragment;
 import io.tanjundang.chat.contacts.ContactFragment;
@@ -58,5 +58,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 return true;
         }
         return false;
+    }
+
+    long clickTime;
+
+    @Override
+    public void onBackPressed() {
+        exit();
+    }
+
+    private void exit() {
+        if ((System.currentTimeMillis() - clickTime) > 2000) {
+            Functions.toast("再按一次后退键退出程序");
+            clickTime = System.currentTimeMillis();
+        } else {
+            this.finish();
+        }
     }
 }

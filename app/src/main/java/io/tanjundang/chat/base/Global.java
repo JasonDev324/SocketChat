@@ -19,8 +19,10 @@ public class Global {
     public static boolean DEBUG = BuildConfig.DEBUG_MODE;
     public static String TOKEN = "";
 
+    String nickname;
     User user;
     long userId;
+    String email;
 
     static class Holder {
         static Global INSTANCE = new Global();
@@ -28,6 +30,22 @@ public class Global {
 
     public static Global getInstance() {
         return Holder.INSTANCE;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public User getUser(Context mContext) {
