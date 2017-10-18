@@ -43,7 +43,7 @@ public class GlideTool {
      * @param url
      */
     public void loadImage(ImageView imageView, String url) {
-        Glide.with(mContext).load(url).centerCrop().error(R.mipmap.ic_default_avatar).into(imageView);
+        Glide.with(mContext).load(url).centerCrop().error(R.drawable.ic_default_avatar).into(imageView);
     }
 
     public void loadImage(ImageView imageView, Bitmap bitmap) {
@@ -52,13 +52,13 @@ public class GlideTool {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             Glide.with(mContext)
                     .load(stream.toByteArray())
-                    .placeholder(R.mipmap.ic_default_avatar)
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(imageView);
         }
     }
 
     public void loadImage(ImageView imageView, String url, int width, int height) {
-        Glide.with(mContext).load(url).centerCrop().error(R.mipmap.ic_default_avatar).crossFade().override(width, height).into(imageView);
+        Glide.with(mContext).load(url).centerCrop().error(R.drawable.ic_default_avatar).crossFade().override(width, height).into(imageView);
     }
 
     /**
@@ -68,7 +68,7 @@ public class GlideTool {
      * @param url
      */
     public void loadBigImage(ImageView imageView, String url) {
-        Glide.with(mContext).load(url).centerCrop().placeholder(R.mipmap.ic_default_avatar).error(R.mipmap.ic_default_avatar).crossFade().into(imageView);
+        Glide.with(mContext).load(url).centerCrop().placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).crossFade().into(imageView);
     }
 
     /**
@@ -77,7 +77,7 @@ public class GlideTool {
      * @param url
      */
     public void loadBigImage(ImageView imageView, int errorDrawId, String url) {
-        Glide.with(mContext).load(url).centerCrop().placeholder(R.mipmap.ic_default_avatar).error(errorDrawId).crossFade().into(imageView);
+        Glide.with(mContext).load(url).centerCrop().placeholder(R.drawable.ic_default_avatar).error(errorDrawId).crossFade().into(imageView);
     }
 
     /**
@@ -87,7 +87,7 @@ public class GlideTool {
      * @param drawableId
      */
     public void loadLocalImage(ImageView imageView, int drawableId) {
-        Glide.with(mContext).load(drawableId).centerCrop().crossFade().error(R.mipmap.ic_default_avatar).into(imageView);
+        Glide.with(mContext).load(drawableId).centerCrop().crossFade().error(R.drawable.ic_default_avatar).into(imageView);
     }
 
 }

@@ -122,7 +122,7 @@ public class DialogTool {
             title = bundle.getString(TITLE);
             msg = bundle.getString(MSG);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//            builder.setIcon(R.mipmap.ic_launcher);
+//            builder.setIcon(R.drawable.ic_launcher);
             builder.setTitle(title);
             builder.setMessage(msg);
 

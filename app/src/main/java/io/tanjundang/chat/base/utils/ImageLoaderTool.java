@@ -78,9 +78,9 @@ public class ImageLoaderTool {
             .cacheInMemory(true)
             .bitmapConfig(Bitmap.Config.RGB_565)
             .imageScaleType(ImageScaleType.EXACTLY)
-            .showImageOnFail(R.mipmap.ic_launcher)
-            .showImageForEmptyUri(R.mipmap.ic_launcher)
-            .showImageOnLoading(R.mipmap.ic_launcher)
+            .showImageOnFail(R.drawable.ic_default_avatar)
+            .showImageForEmptyUri(R.drawable.ic_default_avatar)
+            .showImageOnLoading(R.drawable.ic_default_avatar)
             .delayBeforeLoading(1000)
             .considerExifParams(true) //是否考虑JPEG图像EXIF参数（旋转，翻转）
             .build();
@@ -88,9 +88,9 @@ public class ImageLoaderTool {
     //大图
     public static DisplayImageOptions imageBigOptions = new DisplayImageOptions
             .Builder()
-            .showImageOnLoading(R.mipmap.ic_launcher)
-            .showImageForEmptyUri(R.mipmap.ic_launcher)
-            .showImageOnFail(R.mipmap.ic_launcher)
+            .showImageOnLoading(R.drawable.ic_default_avatar)
+            .showImageForEmptyUri(R.drawable.ic_default_avatar)
+            .showImageOnFail(R.drawable.ic_default_avatar)
             .cacheInMemory(false)
             .cacheOnDisk(true)
             .resetViewBeforeLoading(true)
@@ -107,9 +107,9 @@ public class ImageLoaderTool {
             .cacheOnDisk(true)
             .cacheInMemory(true)
             .imageScaleType(ImageScaleType.EXACTLY)
-            .showImageOnLoading(R.mipmap.ic_launcher)
-            .showImageForEmptyUri(R.mipmap.ic_launcher)
-            .showImageOnFail(R.mipmap.ic_launcher)
+            .showImageOnLoading(R.drawable.ic_default_avatar)
+            .showImageForEmptyUri(R.drawable.ic_default_avatar)
+            .showImageOnFail(R.drawable.ic_default_avatar)
             .delayBeforeLoading(1000)
             .build();
 
@@ -122,9 +122,9 @@ public class ImageLoaderTool {
             .cacheOnDisk(true)
             .cacheInMemory(true)
             .imageScaleType(ImageScaleType.EXACTLY)
-            .showImageOnFail(R.mipmap.ic_launcher)
-            .showImageForEmptyUri(R.mipmap.ic_launcher)
-            .showImageOnLoading(R.mipmap.ic_launcher)
+            .showImageOnFail(R.drawable.ic_default_avatar)
+            .showImageForEmptyUri(R.drawable.ic_default_avatar)
+            .showImageOnLoading(R.drawable.ic_default_avatar)
             .delayBeforeLoading(1000)
             .build();
 

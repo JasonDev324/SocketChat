@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="60dp"
-            android:background="@mipmap/default_journey_fragment_bg"
+            android:background="@drawable/ic_arc_bg"
             android:visibility="visible" />
 
         <ImageView
@@ -23,8 +23,8 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/margin_15dp"
-            android:src="@mipmap/ic_default_avatar" />
+            android:layout_marginLeft="50dp"
+            android:src="@drawable/ic_ofo_default_avatar" />
 
     </RelativeLayout>
 
