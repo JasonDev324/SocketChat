@@ -4,9 +4,11 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 
+import io.tanjundang.chat.account.LoginActivity;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GlideTool;
 import io.tanjundang.chat.base.utils.ImageLoaderTool;
+import io.tanjundang.chat.base.utils.SharePreTool;
 
 
 /**
@@ -24,5 +26,14 @@ public class BaseApplication extends Application {
         ImageLoaderTool.initImageLoader(getApplicationContext());
         Stetho.initializeWithDefaults(this);
         GlideTool.init(getApplicationContext());
+
+        String token = SharePreTool.getSP(this).getString(Constants.TOKEN);
+        String nickname = SharePreTool.getSP(this).getString(Constants.NICKNAME);
+        String email = SharePreTool.getSP(this).getString(Constants.EMAIL);
+        long userId = SharePreTool.getSP(this).getLong(Constants.USER_ID);
+        Global.TOKEN = token;
+        Global.getInstance().setNickname(nickname);
+        Global.getInstance().setEmail(email);
+        Global.getInstance().setUserId(userId);
     }
 }

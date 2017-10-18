@@ -80,10 +80,12 @@ public class LoginActivity extends BaseActivity {
                                 SharePreTool.getSP(LoginActivity.this).putString(Constants.TOKEN, info.getApi_token());
                                 SharePreTool.getSP(LoginActivity.this).putLong(Constants.USER_ID, info.getId());
                                 SharePreTool.getSP(LoginActivity.this).putString(Constants.NICKNAME, info.getName());
+                                SharePreTool.getSP(LoginActivity.this).putString(Constants.EMAIL, info.getEmail());
 
                                 Global.TOKEN = info.getApi_token();
                                 Global.getInstance().setNickname(info.getName());
                                 Global.getInstance().setEmail(info.getEmail());
+                                Global.getInstance().setUserId(info.getId());
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);

@@ -19,4 +19,5 @@ public class Constants {
     public static final String MSG = "MSG";
     public static final String TOKEN = "TOKEN";
     public static final String USER_ID = "USER_ID";
+    public static final String EMAIL = "EMAIL";
 }

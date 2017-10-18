@@ -13,14 +13,12 @@ import io.tanjundang.chat.base.utils.cache.CacheTool;
  * Date: 2015/10/29.
  * Email:TanJunDang@126.com
  * 全局变量
- * 使数据在不同的地方调用
  */
 public class Global {
     public static boolean DEBUG = BuildConfig.DEBUG_MODE;
     public static String TOKEN = "";
 
     String nickname;
-    User user;
     long userId;
     String email;
 
@@ -48,16 +46,6 @@ public class Global {
         this.nickname = nickname;
     }
 
-    public User getUser(Context mContext) {
-        if (user == null) {
-            user = CacheTool.loadUser(mContext);
-        }
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public long getUserId() {
         return userId;
@@ -68,7 +56,6 @@ public class Global {
     }
 
     public void release(Context mContext) {
-        user = null;
         SharePreTool.getSP(mContext.getApplicationContext()).clear();
         CacheTool.release(mContext.getApplicationContext());
     }

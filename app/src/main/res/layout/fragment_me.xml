@@ -15,47 +15,97 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="60dp"
-            android:background="@drawable/ic_arc_bg"
-            android:visibility="visible" />
+            android:background="@drawable/ic_arc_bg" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivAvatar"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="50dp"
-            android:src="@drawable/ic_ofo_default_avatar" />
+            android:src="@drawable/ic_qq_avatar" />
+
+        <ImageView
+            android:id="@+id/ivSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/margin_15dp"
+            android:padding="@dimen/margin_15dp"
+            android:src="@drawable/ic_setting" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivAvatar"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:paddingLeft="50dp"
+            android:paddingRight="@dimen/margin_15dp">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="TanJunDang"
+                android:textColor="@color/text_color_black"
+                android:textSize="@dimen/text_size_16dp" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Email"
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/text_size_14dp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvAlbum"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/margin_15dp"
-        android:paddingRight="@dimen/margin_15dp">
+        android:layout_height="@dimen/item_height_50dp"
+        android:layout_marginTop="@dimen/margin_15dp"
+        android:drawableLeft="@drawable/ic_journey"
+        android:drawablePadding="10dp"
+        android:gravity="center|left"
+        android:paddingLeft="50dp"
+        android:text="我的相册" />
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="TanJunDang"
-            android:textColor="@color/text_color_black"
-            android:textSize="@dimen/text_size_16dp" />
+    <TextView
+        android:id="@+id/tvWallet"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_50dp"
+        android:drawableLeft="@drawable/ic_wallet"
+        android:drawablePadding="10dp"
+        android:gravity="center|left"
+        android:paddingLeft="50dp"
+        android:text="我的钱包" />
 
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:singleLine="true"
-            android:text="Email"
-            android:textColor="@color/text_color_gray"
-            android:textSize="@dimen/text_size_14dp" />
+    <TextView
+        android:id="@+id/tvFriends"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_50dp"
+        android:drawableLeft="@drawable/ic_invite"
+        android:drawablePadding="10dp"
+        android:gravity="center|left"
+        android:paddingLeft="50dp"
+        android:text="添加好友" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tvUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_50dp"
+        android:drawableLeft="@drawable/ic_update"
+        android:drawablePadding="10dp"
+        android:gravity="center|left"
+        android:paddingLeft="50dp"
+        android:text="版本更新" />
+
 
 </LinearLayout>
