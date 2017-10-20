@@ -1,15 +1,14 @@
 package io.tanjundang.chat.me;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import javax.microedition.khronos.opengles.GL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,7 +16,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.tanjundang.chat.R;
+import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.talk.ChatActivity;
 
 /**
  * @Author: TanJunDang
@@ -25,7 +26,7 @@ import io.tanjundang.chat.base.Global;
  * @Description: 个人资料
  */
 
-public class MeFragment extends Fragment {
+public class MeFragment extends BaseFragment {
 
     @BindView(R.id.ivAvatar)
     CircleImageView ivAvatar;
@@ -67,7 +68,8 @@ public class MeFragment extends Fragment {
             R.id.tvUpdate})
     public void onClick(View v) {
         if (v.equals(ivAvatar)) {
-
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            startActivity(intent);
         } else if (v.equals(tvAlbum)) {
 
         } else if (v.equals(tvWallet)) {

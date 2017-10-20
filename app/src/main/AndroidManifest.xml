@@ -37,10 +37,8 @@
         android:roundIcon="@drawable/ic_default_avatar"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".account.LoginActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".account.LoginActivity" />
         <activity android:name=".account.RegisterActivity" />
         <activity
             android:name=".SplashActivity"
@@ -51,6 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".talk.ChatActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

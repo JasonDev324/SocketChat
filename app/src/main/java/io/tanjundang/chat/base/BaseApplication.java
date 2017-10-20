@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 
-import io.tanjundang.chat.account.LoginActivity;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GlideTool;
 import io.tanjundang.chat.base.utils.ImageLoaderTool;
@@ -12,10 +11,11 @@ import io.tanjundang.chat.base.utils.SharePreTool;
 
 
 /**
- * Author: Orcish on 2015/10/28.
- * 初始化全局配置
- * 导入so文件，在src/main 下面新建一个jniLibs文件夹 放入文件即可
+ * @Author: TanJunDang
+ * @Date: 2017/10/20
+ * @Description:
  */
+
 public class BaseApplication extends Application {
     public static String AUTHOR = "TanJunDang";
 
@@ -35,5 +35,6 @@ public class BaseApplication extends Application {
         Global.getInstance().setNickname(nickname);
         Global.getInstance().setEmail(email);
         Global.getInstance().setUserId(userId);
+
     }
 }

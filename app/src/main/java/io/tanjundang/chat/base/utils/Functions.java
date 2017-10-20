@@ -765,7 +765,7 @@ public class Functions {
      * @param view
      * @param context
      */
-    public static void setNavigationBarPadding(View view, Context context) {
+    public static void setNavigationBarPadding(Context context, View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int marginTop = getStatusBarHeight(view.getContext());
             view.setPadding(view.getPaddingLeft(), 0,

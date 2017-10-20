@@ -6,6 +6,8 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+
+import io.tanjundang.chat.BuildConfig;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.network.ApiObserver;
 
@@ -34,4 +36,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setMessage("加载中....");
     }
+
 }
