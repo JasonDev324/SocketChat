@@ -3,6 +3,8 @@ package io.tanjundang.chat.talk;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
 
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +39,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
+import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.LogTool;
 
@@ -84,6 +89,17 @@ public class ChatActivity extends BaseActivity {
     String ipHost = "59.110.136.203";
     //    String ipHost = "lawntiger.free.ngrok.cc";
     int ipPort = 4000;
+
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            String data = bundle.getString(Constants.MSG);
+            tvMsg.append("from server:" + data + "\n");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +151,13 @@ public class ChatActivity extends BaseActivity {
             }
         } else if (v.equals(ivAudio)) {
             if (socket == null) return;
-            Functions.toast("服务器连接状态" + socket.isConnected());
+            boolean result;
+            if (socket.isClosed() == false && socket.isConnected() == true) {
+                result = true;
+            } else {
+                result = false;
+            }
+            Functions.toast("服务器连接状态" + result);
         } else if (v.equals(ivPhoto)) {
 
         } else if (v.equals(ivCamera)) {
@@ -153,6 +175,8 @@ public class ChatActivity extends BaseActivity {
         finish();
     }
 
+    boolean needReset = false;
+
     class TalkTask extends AsyncTask<Void, String, Void> {
         WeakReference<Context> weakReference;
         ChatActivity activity;
@@ -165,25 +189,33 @@ public class ChatActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                socket = new Socket(ipHost, ipPort);
-                br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-                boolean isConnect = socket.isConnected();
-                LogTool.v(TAG, "服务器链接状态：" + isConnect);
-                while ((receiveMsg = br.readLine()) != null) {
-                    publishProgress(receiveMsg);//将数据发送到onProgressUpdate
+                connect();
+                Observable.interval(2, TimeUnit.SECONDS)
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
+                                try {
+                                    socket.sendUrgentData(0xFF); // 发送心跳包
+                                    System.out.println("正常发送心跳包");
+                                } catch (IOException e) {
+                                    needReset = true;
+                                    System.out.println("发送心跳失败,请求重连");
+                                    connect();
+                                }
+                            }
+                        });
+                while ((receiveMsg = br.readLine()) != null && !needReset) {
+                    Message msg = new Message();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.MSG, receiveMsg);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LogTool.e(TAG, "server error" + e.getMessage());
                 e.printStackTrace();
             }
             return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            tvMsg.append("from server:" + values[0] + "\n");
         }
 
     }
@@ -198,6 +230,27 @@ public class ChatActivity extends BaseActivity {
 
             if (br != null)
                 br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void connect() {
+        try {
+            socket = new Socket(ipHost, ipPort);
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            socket.setKeepAlive(true);
+            socket.setTcpNoDelay(true);
+            if (needReset) {
+                while ((receiveMsg = br.readLine()) != null) {
+                    Message msg = new Message();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.MSG, receiveMsg);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
