@@ -118,6 +118,7 @@ public class HttpReqTool {
                 .client(getOKHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         return retrofit.create(clazz);
     }
