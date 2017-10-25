@@ -9,14 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.liaoinstan.springview.container.DefaultHeader;
+import com.liaoinstan.springview.container.RotationHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -46,6 +49,8 @@ public class FriendsFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.springView)
     SpringView springView;
+    @BindView(R.id.ivAdd)
+    ImageView ivAdd;
     Unbinder unbinder;
 
     FriendsAdapter mAdapter;
@@ -61,12 +66,18 @@ public class FriendsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_friends, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initView();
+        springView.callFresh();
+        return view;
+    }
+
+    private void initView() {
         mAdapter = new FriendsAdapter(getContext(), R.layout.list_item_friends, list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new ItemDivider(Color.GRAY, ItemDivider.HORIZONTAL));
         springView.setType(SpringView.Type.FOLLOW);
-        springView.setHeader(new DefaultHeader(getContext()));
+        springView.setHeader(new RotationHeader(getContext()));
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
@@ -78,9 +89,9 @@ public class FriendsFragment extends BaseFragment {
 
             }
         });
-        springView.callFresh();
-        return view;
     }
+
+    @OnClick
 
     private void getData() {
         HttpReqTool.getInstance().createApi(BusinessApi.class)

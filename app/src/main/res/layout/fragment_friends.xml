@@ -6,16 +6,28 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="70dp"
         android:background="@color/base_theme_color">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_15dp"
             android:text="联系人"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/text_size_15dp" />
+            android:textSize="@dimen/text_size_17dp" />
+
+        <ImageView
+            android:id="@+id/ivAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/margin_15dp"
+            android:src="@drawable/ic_agency_add" />
 
     </RelativeLayout>
 
