@@ -8,8 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.tanjundang.chat.R;
+import io.tanjundang.chat.base.BaseFragment;
 
-public class TalkFragment extends Fragment {
+public class TalkFragment extends BaseFragment {
 
     public static TalkFragment getInstance() {
         TalkFragment fragment = new TalkFragment();

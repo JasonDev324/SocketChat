@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void onSuccess(LoginResp resp) {
                             dialog.dismiss();
-                            if (resp.getStatus() == Constants.SUCCESS) {
+                            if (resp.isSuccess()) {
                                 LoginResp.LoginInfo info = resp.getData();
                                 SharePreTool.getSP(LoginActivity.this).putString(Constants.TOKEN, info.getApi_token());
                                 SharePreTool.getSP(LoginActivity.this).putLong(Constants.USER_ID, info.getId());

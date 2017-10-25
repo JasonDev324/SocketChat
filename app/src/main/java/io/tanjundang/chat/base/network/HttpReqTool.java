@@ -34,7 +34,7 @@ public class HttpReqTool {
 
     private Retrofit retrofit;
     //    此处修改host
-    private static int CONNECT_TIME_OUT = 15;
+    private static int CONNECT_TIME_OUT = 10;
 
     private static class Holder {
         private static HttpReqTool INSTANCE = new HttpReqTool();
@@ -71,7 +71,6 @@ public class HttpReqTool {
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addNetworkInterceptor(logInterceptor);
 //        设置超时时间
-
         builder.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS);
         builder.writeTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS);
         builder.readTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS);
@@ -96,6 +95,7 @@ public class HttpReqTool {
                     request = request
                             .newBuilder()
                             .url(authorizedUrlBuilder.build())
+                            .addHeader("Connection", "close")
 //                        添加头部信息(共同请求参数)
 //                            .addHeader(Constants.TOKEN, Global.TOKEN)
 //                            .addHeader(Constants.USER_ID, String.valueOf(Global.getInstance().getUserId()))

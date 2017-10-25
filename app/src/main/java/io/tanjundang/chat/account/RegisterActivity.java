@@ -83,7 +83,7 @@ public class RegisterActivity extends BaseActivity {
                         @Override
                         public void onSuccess(LoginResp resp) {
                             dialog.dismiss();
-                            if (resp.getStatus() == Constants.SUCCESS) {
+                            if (resp.isSuccess()) {
                                 Functions.toast("Register Success");
                                 finish();
                             } else {

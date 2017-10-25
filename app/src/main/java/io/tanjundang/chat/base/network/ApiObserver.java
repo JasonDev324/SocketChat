@@ -32,7 +32,7 @@ public abstract class ApiObserver<T> implements Observer<T> {
     public void onError(Throwable e) {
         onFailure(e.getMessage());
         LogTool.e(getClass().getName(), "Cause:" + e.getMessage());
-        Functions.toast("网络不通畅,请检查您的网络是否正常连接");
+        Functions.toast(e.getMessage());
         disposable.dispose();
     }
 

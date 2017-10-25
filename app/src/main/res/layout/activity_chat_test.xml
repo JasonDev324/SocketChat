@@ -37,7 +37,7 @@
                 android:background="@color/color_black_transparent" />
 
             <ImageView
-                android:id="@+id/tvas"
+                android:id="@+id/ivt"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:background="@drawable/google_bg" />
