@@ -88,9 +88,9 @@ android.applicationVariants.all { variant ->
         def buildType = variant.buildType.name;
         def fileName;
         if (buildType == "release" && channelName == "online") {
-            fileName = "syq_" + channelName + "_" + releaseTime + "_" + versionName;
+            fileName = "chat_" + channelName + "_" + releaseTime + "_" + versionName;
         } else {
-            fileName = "syq_" + channelName + "_" + buildType + "_" + getGitVersion();
+            fileName = "chat_" + channelName + "_" + buildType + "_" + getGitVersion();
         }
         output.outputFile = new File(apk.parent, fileName + ".apk");
     }

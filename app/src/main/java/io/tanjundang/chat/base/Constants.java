@@ -17,7 +17,7 @@ public class Constants {
     public static final String REQ_CODE = "REQ_CODE";
     public static final String TYPE = "TYPE";
     public static final String MSG = "MSG";
-    public static final String TOKEN = "TOKEN";
+    public static final String TOKEN = "api_token";
     public static final String USER_ID = "USER_ID";
     public static final String EMAIL = "EMAIL";
 }
