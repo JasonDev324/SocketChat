@@ -12,6 +12,9 @@
         <item name="android:fitsSystemWindows">false</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnim</item>
+        <!--去除Activity切换时，短暂黑屏的问题-->
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="PopupWindowStyle">
@@ -38,4 +41,10 @@
         <item name="colorControlActivated">#74cc1d</item>
         <item name="colorSwitchThumbNormal">#cc0000</item>
     </style>
+
+    <style name="ActivityAnim">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close</item>
+    </style>
+
 </resources>
