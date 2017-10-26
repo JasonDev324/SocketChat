@@ -1,6 +1,8 @@
-package io.tanjundang.chat.contacts;
+package io.tanjundang.chat.friends;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.container.RotationHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
@@ -22,11 +23,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
-import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.network.ApiObserver;
@@ -55,6 +54,7 @@ public class FriendsFragment extends BaseFragment {
 
     FriendsAdapter mAdapter;
     ArrayList<FriendsResp.FriendsInfo> list = new ArrayList<>();
+    int REQ_ADD_FRIEND = 0XFF;
 
     public static FriendsFragment getInstance() {
         FriendsFragment fragment = new FriendsFragment();
@@ -67,7 +67,7 @@ public class FriendsFragment extends BaseFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_friends, container, false);
         unbinder = ButterKnife.bind(this, view);
         initView();
-        springView.callFresh();
+        getData();
         return view;
     }
 
@@ -91,7 +91,12 @@ public class FriendsFragment extends BaseFragment {
         });
     }
 
-    @OnClick
+    @OnClick({R.id.ivAdd})
+    public void onClick(View v) {
+        if (v.equals(ivAdd)) {
+            AddFriendActivity.StartForResult(this, REQ_ADD_FRIEND);
+        }
+    }
 
     private void getData() {
         HttpReqTool.getInstance().createApi(BusinessApi.class)
@@ -145,6 +150,12 @@ public class FriendsFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_ADD_FRIEND && resultCode == Activity.RESULT_OK) {
+            springView.callFresh();
+        }
+    }
 }
 
 

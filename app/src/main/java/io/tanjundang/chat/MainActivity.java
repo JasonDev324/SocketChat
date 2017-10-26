@@ -16,7 +16,7 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.me.MeFragment;
 import io.tanjundang.chat.talk.TalkFragment;
-import io.tanjundang.chat.contacts.FriendsFragment;
+import io.tanjundang.chat.friends.FriendsFragment;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 

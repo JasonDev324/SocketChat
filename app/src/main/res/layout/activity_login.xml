@@ -49,7 +49,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:imeActionId="@+id/login"
                 android:imeActionLabel="Login"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"

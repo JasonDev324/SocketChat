@@ -37,9 +37,6 @@
         android:roundIcon="@drawable/ic_default_avatar"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".account.LoginActivity" />
-        <activity android:name=".account.RegisterActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashActivityStyle">
@@ -49,9 +46,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".account.LoginActivity" />
+        <activity android:name=".account.RegisterActivity" />
+
         <activity
             android:name=".talk.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".friends.AddFriendActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

@@ -13,4 +13,5 @@
     <color name="text_color_black">#333</color>
     <color name="base_background_color">#f5f5f5</color>
     <drawable name="base_background_color">#f5f5f5</drawable>
+    <color name="color_green">#499237</color>
 </resources>
