@@ -55,6 +55,14 @@ public interface BusinessApi {
     Observable<FriendsResp> getFriends();
 
     /**
+     * 获取好友请求列表
+     *
+     * @return
+     */
+    @GET("friends")
+    Observable<FriendsResp> getFriends(@Query("status") String status);
+
+    /**
      * 添加好友
      *
      * @param email
@@ -76,13 +84,12 @@ public interface BusinessApi {
     /**
      * 处理好友请求
      *
-     * @param token
      * @param id
      * @param type
      * @return
      */
     @PUT("friends/{id}")
-    Observable<AddFriendResp> handleFriendReq(@Query("api_token") String token, @Path("id") long id, @Query("type") int type);
+    Observable<HttpBaseBean> handleFriendReq(@Path("id") long id, @Query("type") int type);
 
 
 }

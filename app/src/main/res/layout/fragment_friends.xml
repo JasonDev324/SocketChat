@@ -27,7 +27,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/margin_15dp"
-            android:src="@drawable/ic_agency_add" />
+            android:src="@drawable/ic_add" />
 
     </RelativeLayout>
 

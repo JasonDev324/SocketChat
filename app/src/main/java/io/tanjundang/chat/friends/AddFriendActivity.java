@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
-import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.AddFriendResp;
@@ -44,9 +41,9 @@ public class AddFriendActivity extends BaseActivity {
     @BindView(R.id.etEmail)
     EditText etEmail;
 
-    public static void StartForResult(BaseFragment fragment, int reqCode) {
-        Intent intent = new Intent(fragment.getContext(), AddFriendActivity.class);
-        ((Activity) fragment.getContext()).startActivityForResult(intent, reqCode);
+    public static void StartForResult(Context context, int reqCode) {
+        Intent intent = new Intent(context, AddFriendActivity.class);
+        ((Activity) context).startActivityForResult(intent, reqCode);
     }
 
     @Override
@@ -54,7 +51,10 @@ public class AddFriendActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
         ButterKnife.bind(this);
+        initView();
+    }
 
+    private void initView() {
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolBar.setNavigationOnClickListener(new View.OnClickListener() {

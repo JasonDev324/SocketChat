@@ -54,7 +54,6 @@ public class FriendsFragment extends BaseFragment {
 
     FriendsAdapter mAdapter;
     ArrayList<FriendsResp.FriendsInfo> list = new ArrayList<>();
-    int REQ_ADD_FRIEND = 0XFF;
 
     public static FriendsFragment getInstance() {
         FriendsFragment fragment = new FriendsFragment();
@@ -94,7 +93,7 @@ public class FriendsFragment extends BaseFragment {
     @OnClick({R.id.ivAdd})
     public void onClick(View v) {
         if (v.equals(ivAdd)) {
-            AddFriendActivity.StartForResult(this, REQ_ADD_FRIEND);
+            NewFriendActivity.Start(getContext());
         }
     }
 
@@ -112,16 +111,16 @@ public class FriendsFragment extends BaseFragment {
                                 list.addAll(resp.getData());
                             }
                             mAdapter.notifyDataSetChanged();
-                            springView.onFinishFreshAndLoad();
                         } else {
                             Functions.toast(resp.getMsg());
                         }
-
+                        springView.onFinishFreshAndLoad();
                     }
 
                     @Override
                     public void onFailure(String error) {
                         Functions.toast(error);
+                        springView.onFinishFreshAndLoad();
                     }
                 });
     }
@@ -150,12 +149,6 @@ public class FriendsFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQ_ADD_FRIEND && resultCode == Activity.RESULT_OK) {
-            springView.callFresh();
-        }
-    }
 }
 
 

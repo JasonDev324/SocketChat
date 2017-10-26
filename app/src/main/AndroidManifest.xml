@@ -49,13 +49,13 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".account.LoginActivity" />
         <activity android:name=".account.RegisterActivity" />
-
         <activity
             android:name=".talk.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".friends.AddFriendActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".friends.NewFriendActivity"></activity>
     </application>
 
 </manifest>

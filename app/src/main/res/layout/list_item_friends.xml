@@ -23,4 +23,34 @@
         android:text="TanJunDang"
         android:textSize="@dimen/text_size_13dp" />
 
+    <LinearLayout
+        android:id="@+id/llHandle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvAccept"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="@dimen/margin_15dp"
+            android:background="@color/color_green"
+            android:gravity="center"
+            android:text="同意"
+            android:textColor="@color/color_white" />
+
+        <TextView
+            android:id="@+id/tvReject"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="拒绝"
+            android:textColor="@color/color_white" />
+    </LinearLayout>
 </RelativeLayout>

@@ -21,11 +21,11 @@ public class HttpBaseBean {
         this.msg = msg;
     }
 
-    public int getStatus() {
+    private int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    private void setStatus(int status) {
         this.status = status;
     }
 

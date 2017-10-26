@@ -54,6 +54,12 @@ public class CommonHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public CommonHolder setTextClick(int viewId, View.OnClickListener listener) {
+        TextView tvText = getView(viewId);
+        if (listener != null) tvText.setOnClickListener(listener);
+        return this;
+    }
+
     /**
      * 富文本
      *
@@ -107,7 +113,7 @@ public class CommonHolder extends RecyclerView.ViewHolder {
 
     public CommonHolder setImageResource(int viewId, int drawableId, View.OnClickListener listener) {
         ImageView ivImage = getView(viewId);
-        GlideTool.getInstance().loadLocalImage(ivImage,drawableId);
+        GlideTool.getInstance().loadLocalImage(ivImage, drawableId);
         if (listener != null) ivImage.setOnClickListener(listener);
         return this;
     }
@@ -122,6 +128,12 @@ public class CommonHolder extends RecyclerView.ViewHolder {
         ViewGroup layout = getView(layoutId);
         if (listener != null)
             layout.setOnClickListener(listener);
+        return this;
+    }
+
+    public CommonHolder setVisibility(int viewId, int visibility) {
+        View view = getView(viewId);
+        view.setVisibility(visibility);
         return this;
     }
 
