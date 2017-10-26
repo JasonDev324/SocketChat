@@ -18,6 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.talk.ChatActivity;
 
 /**
@@ -77,7 +78,7 @@ public class MeFragment extends BaseFragment {
         } else if (v.equals(tvFriends)) {
 
         } else if (v.equals(tvUpdate)) {
-
+            Functions.toast(Functions.getGitVersion());
         }
     }
 
