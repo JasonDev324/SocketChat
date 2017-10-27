@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.tanjundang.chat.base.BaseActivity;
+import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.me.MeFragment;
 import io.tanjundang.chat.talk.TalkFragment;
@@ -27,6 +28,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @BindView(R.id.container)
     LinearLayout container;
 
+    BaseFragment currentFragment;
+    String[] tags = new String[]{"TalkFragment", "FriendsFragment", "MeFragment"};
+
+    TalkFragment talkFragment;
+    FriendsFragment friendsFragment;
+    MeFragment meFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +46,44 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
         Functions.setImmerseStatusBar(this);
         navigation.setOnNavigationItemSelectedListener(this);
-        SkipToFragment(TalkFragment.getInstance());
+
+        initFragment();
+        switchContent(currentFragment, talkFragment, 0);
     }
 
-    public void SkipToFragment(Fragment fragment) {
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.content, fragment);
-        transaction.commit();
+    private void initFragment() {
+        if (talkFragment == null) {
+            talkFragment = new TalkFragment();
+        }
+        if (friendsFragment == null) {
+            friendsFragment = new FriendsFragment();
+        }
+        if (meFragment == null) {
+            meFragment = new MeFragment();
+        }
+    }
+
+    public void switchContent(BaseFragment from, BaseFragment to, int pos) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (currentFragment != null) {
+            currentFragment = to;
+            if (!to.isAdded()) {
+                transaction
+                        .hide(from)
+                        .add(R.id.content, to, tags[pos])
+                        .commit();
+            } else {
+                transaction
+                        .hide(from)
+                        .show(to)
+                        .commit();
+            }
+        } else {
+            currentFragment = new TalkFragment();
+            transaction
+                    .add(R.id.content, currentFragment, tags[0])
+                    .commit();
+        }
     }
 
 
@@ -53,13 +91,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_talk:
-                SkipToFragment(TalkFragment.getInstance());
+                switchContent(currentFragment, talkFragment, 0);
                 return true;
-            case R.id.navigation_contact:
-                SkipToFragment(FriendsFragment.getInstance());
+            case R.id.navigation_friends:
+                switchContent(currentFragment, friendsFragment, 1);
                 return true;
             case R.id.navigation_me:
-                SkipToFragment(MeFragment.getInstance());
+                switchContent(currentFragment, meFragment, 2);
                 return true;
         }
         return false;

@@ -7,7 +7,7 @@
         android:title="@string/title_talk" />
 
     <item
-        android:id="@+id/navigation_contact"
+        android:id="@+id/navigation_friends"
         android:icon="@drawable/ic_contact_enable"
         android:title="@string/title_friends" />
 
