@@ -99,7 +99,7 @@ public interface BusinessApi {
      * @return
      */
     @GET("groups")
-    Observable<ChatGroup> getGroupMsg();
+    Observable<ChatGroup> getGroupList();
 
     /**
      * 新建群聊
@@ -110,4 +110,23 @@ public interface BusinessApi {
     @FormUrlEncoded
     @POST("groups")
     Observable<ChatGroup> getGroupMsg(@Field("name") String groupName);
+
+    /**
+     * 加入群
+     *
+     * @param id
+     * @param group_id
+     * @return
+     */
+    @PUT("groups/{id}")
+    Observable<HttpBaseBean> joinGroup(@Query("id") long id, @Query("group_id") long group_id);
+
+    /**
+     * 查看群员
+     *
+     * @param group_id
+     * @return
+     */
+    @GET("groups/{id}")
+    Observable<HttpBaseBean> getGroupMember(@Query("id") long group_id);
 }

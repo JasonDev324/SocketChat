@@ -17,7 +17,7 @@ import io.tanjundang.chat.account.LoginActivity;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
-import io.tanjundang.chat.base.entity.User;
+import io.tanjundang.chat.base.utils.LogTool;
 import io.tanjundang.chat.base.utils.PermissionTool;
 import io.tanjundang.chat.base.utils.SharePreTool;
 
@@ -44,13 +44,14 @@ public class SplashActivity extends BaseActivity {
         permissionList.add(Manifest.permission.READ_CONTACTS);
         permissionList.add(Manifest.permission.CAMERA);
         permissionList.add(Manifest.permission.CALL_PHONE);
-        Observable.interval(TOTAL_SECOND, PERIOD_SECOND, TimeUnit.MILLISECONDS).take(1)
+        Observable.interval(TOTAL_SECOND, PERIOD_SECOND, TimeUnit.MILLISECONDS)
+                .take(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         final String token = SharePreTool.getSP(SplashActivity.this).getString(Constants.TOKEN);
-                        final  long userId = SharePreTool.getSP(SplashActivity.this).getLong(Constants.USER_ID);
+                        final long userId = SharePreTool.getSP(SplashActivity.this).getLong(Constants.USER_ID);
                         PermissionTool.getInstance(SplashActivity.this).requestPermissions(permissionList, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

@@ -3,8 +3,8 @@ package io.tanjundang.chat.friends;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -85,9 +85,9 @@ public class NewFriendActivity extends BaseActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mAdapter = new NewFriendAdapter(this, R.layout.list_item_friends, list);
+        recyclerView.addItemDecoration(new ItemDivider(ContextCompat.getColor(this, R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1)));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new ItemDivider(Color.GRAY, ItemDivider.HORIZONTAL));
         springView.setType(SpringView.Type.FOLLOW);
         springView.setHeader(new RotationHeader(this));
         springView.setListener(new SpringView.OnFreshListener() {

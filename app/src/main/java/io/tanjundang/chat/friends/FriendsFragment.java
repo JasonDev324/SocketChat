@@ -1,11 +1,9 @@
 package io.tanjundang.chat.friends;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,9 +70,9 @@ public class FriendsFragment extends BaseFragment {
 
     private void initView() {
         mAdapter = new FriendsAdapter(getContext(), R.layout.list_item_friends, list);
+        recyclerView.addItemDecoration(new ItemDivider(ContextCompat.getColor(getContext(), R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1)));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new ItemDivider(Color.GRAY, ItemDivider.HORIZONTAL));
         springView.setType(SpringView.Type.FOLLOW);
         springView.setHeader(new RotationHeader(getContext()));
         springView.setListener(new SpringView.OnFreshListener() {
