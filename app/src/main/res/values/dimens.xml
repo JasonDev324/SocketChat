@@ -1,5 +1,6 @@
 <resources>
     <dimen name="text_size_16dp">16dp</dimen>
+    <dimen name="divider_height_1dp">1dp</dimen>
     <dimen name="text_size_17dp">17dp</dimen>
     <dimen name="text_size_13dp">13dp</dimen>
     <dimen name="text_size_14dp">14dp</dimen>
@@ -10,7 +11,6 @@
     <dimen name="margin_15dp">15dp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
     <dimen name="item_height_50dp">50dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

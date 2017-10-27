@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.liaoinstan.springview.container.RotationHeader;
 import com.liaoinstan.springview.widget.SpringView;
@@ -31,6 +31,7 @@ import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
 import io.tanjundang.chat.base.view.CommonRecyclerViewAdapter;
+import io.tanjundang.chat.base.view.HeaderAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
 
 /**
@@ -46,12 +47,16 @@ public class FriendsFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.springView)
     SpringView springView;
-    @BindView(R.id.ivAdd)
-    ImageView ivAdd;
+    @BindView(R.id.tvNewFriend)
+    TextView tvNewFriend;
+    @BindView(R.id.tvGroupChat)
+    TextView tvGroupChat;
+
     Unbinder unbinder;
 
     FriendsAdapter mAdapter;
     ArrayList<FriendsResp.FriendsInfo> list = new ArrayList<>();
+    TestAdapter testAdapter;
 
     public static FriendsFragment getInstance() {
         FriendsFragment fragment = new FriendsFragment();
@@ -70,9 +75,11 @@ public class FriendsFragment extends BaseFragment {
 
     private void initView() {
         mAdapter = new FriendsAdapter(getContext(), R.layout.list_item_friends, list);
+        testAdapter = new TestAdapter(getContext(), R.layout.list_item_friends, list);
+
         recyclerView.addItemDecoration(new ItemDivider(ContextCompat.getColor(getContext(), R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1)));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(testAdapter);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setHeader(new RotationHeader(getContext()));
         springView.setListener(new SpringView.OnFreshListener() {
@@ -86,11 +93,19 @@ public class FriendsFragment extends BaseFragment {
 
             }
         });
+        testAdapter.setHeaderView(R.layout.layout_test_header);
+        TextView tvTitle = ButterKnife.findById(testAdapter.getHeaderView(), R.id.tvNewFriend);
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Functions.toast("可以");
+            }
+        });
     }
 
-    @OnClick({R.id.ivAdd})
+    @OnClick({R.id.tvNewFriend})
     public void onClick(View v) {
-        if (v.equals(ivAdd)) {
+        if (v.equals(tvNewFriend)) {
             NewFriendActivity.Start(getContext());
         }
     }
@@ -146,6 +161,28 @@ public class FriendsFragment extends BaseFragment {
                     });
         }
     }
+
+    public class TestAdapter extends HeaderAdapter<FriendsResp.FriendsInfo> {
+
+        @Override
+        public void convert(CommonHolder holder, FriendsResp.FriendsInfo data, int pos) {
+            holder.setImageResource(R.id.ivAvatar, null)
+                    .setText(R.id.tvName, data.getName(), null)
+                    .itemClick(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Functions.toast("进入聊天页面");
+                        }
+                    });
+        }
+
+        public TestAdapter(Context mContext, int layoutId, ArrayList<FriendsResp.FriendsInfo> list) {
+            super(mContext, layoutId, list);
+        }
+
+
+    }
+
 
 }
 

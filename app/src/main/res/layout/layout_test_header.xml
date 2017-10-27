@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@color/color_white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvNewFriend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_new_friend"
+            android:gravity="center"
+            android:paddingTop="11dp"
+            android:text="新朋友"
+            android:textColor="@color/text_color_black"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tvGroupChat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_group_chat"
+            android:gravity="center"
+            android:paddingTop="11dp"
+            android:text="群聊"
+            android:textColor="@color/text_color_black"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+</RelativeLayout>
