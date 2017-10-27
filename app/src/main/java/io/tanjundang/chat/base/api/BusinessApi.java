@@ -2,6 +2,7 @@ package io.tanjundang.chat.base.api;
 
 import io.reactivex.Observable;
 import io.tanjundang.chat.base.entity.AddFriendResp;
+import io.tanjundang.chat.base.entity.ChatGroup;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
 import io.tanjundang.chat.base.network.HttpBaseBean;
@@ -84,12 +85,29 @@ public interface BusinessApi {
     /**
      * 处理好友请求
      *
-     * @param id
-     * @param type
+     * @param friend_id
+     * @param type      {@link io.tanjundang.chat.base.entity.type.HandleType}
      * @return
      */
     @PUT("friends/{id}")
-    Observable<HttpBaseBean> handleFriendReq(@Path("id") long id, @Query("type") int type);
+    Observable<HttpBaseBean> handleFriendReq(@Path("id") long friend_id, @Query("type") int type);
 
 
+    /**
+     * 群聊列表
+     *
+     * @return
+     */
+    @GET("groups")
+    Observable<ChatGroup> getGroupMsg();
+
+    /**
+     * 新建群聊
+     *
+     * @param groupName
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("groups")
+    Observable<ChatGroup> getGroupMsg(@Field("name") String groupName);
 }

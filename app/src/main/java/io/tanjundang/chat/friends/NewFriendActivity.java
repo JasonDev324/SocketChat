@@ -154,7 +154,7 @@ public class NewFriendActivity extends BaseActivity {
                             HttpReqTool
                                     .getInstance()
                                     .createApi(BusinessApi.class)
-                                    .handleFriendReq(data.getId(), HandleType.ACCEPT.getType())
+                                    .handleFriendReq(data.getFriend_id(), HandleType.ACCEPT.getType())
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new ApiObserver<HttpBaseBean>() {
@@ -180,7 +180,7 @@ public class NewFriendActivity extends BaseActivity {
                             HttpReqTool
                                     .getInstance()
                                     .createApi(BusinessApi.class)
-                                    .handleFriendReq(data.getId(), HandleType.REJECT.getType())
+                                    .handleFriendReq(data.getFriend_id(), HandleType.REJECT.getType())
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new ApiObserver<HttpBaseBean>() {
