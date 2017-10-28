@@ -60,7 +60,8 @@
             android:name=".friends.CommonSetActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".friends.NewFriendActivity" />
-        <activity android:name=".friends.GroupChatActivity"></activity>
+        <activity android:name=".friends.GroupChatActivity" />
+        <activity android:name=".me.PersonalInfoActivity"></activity>
     </application>
 
 </manifest>

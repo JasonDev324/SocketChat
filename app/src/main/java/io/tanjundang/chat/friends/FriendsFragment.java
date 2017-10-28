@@ -31,6 +31,7 @@ import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
 import io.tanjundang.chat.base.view.HeaderAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
+import io.tanjundang.chat.me.PersonalInfoActivity;
 
 /**
  * Author: TanJunDang
@@ -150,7 +151,7 @@ public class FriendsFragment extends BaseFragment {
                     .itemClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Functions.toast("进入聊天页面");
+                            PersonalInfoActivity.Start(getContext());
                         }
                     });
         }
