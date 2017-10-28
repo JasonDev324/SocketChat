@@ -108,7 +108,7 @@ public interface BusinessApi {
      */
     @FormUrlEncoded
     @POST("groups")
-    Observable<GroupChatResp> getGroupMsg(@Field("name") String groupName);
+    Observable<HttpBaseBean> openGroupChat(@Field("name") String groupName);
 
     /**
      * 拉人入群

@@ -17,14 +17,15 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.GroupChatResp;
+import io.tanjundang.chat.base.entity.type.SetType;
 import io.tanjundang.chat.base.network.ApiObserver;
-import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
@@ -53,17 +54,26 @@ public class GroupChatActivity extends BaseActivity {
     GroupAdapter mAdapter;
 
     ArrayList<GroupChatResp.GroupBean> list = new ArrayList<>();
+    int REQ_OPEN_GROUP = 0xFF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
         initView();
+        getData();
     }
 
     public static void Start(Context context) {
         Intent intent = new Intent(context, GroupChatActivity.class);
         context.startActivity(intent);
+    }
+
+    @OnClick({R.id.tvSubTitle})
+    public void onClick(View v) {
+        if (v.equals(tvSubTitle)) {
+            CommonSetActivity.StartForResult(this, REQ_OPEN_GROUP, SetType.OPEN_GROUP);
+        }
     }
 
     private void initView() {
@@ -160,6 +170,13 @@ public class GroupChatActivity extends BaseActivity {
 //                                    });
                         }
                     });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_OPEN_GROUP && resultCode == RESULT_OK) {
+            springView.callFresh();
         }
     }
 }

@@ -8,14 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.container.BaseHeader;
 import com.liaoinstan.springview.container.RotationHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
@@ -31,11 +27,11 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.type.HandleType;
+import io.tanjundang.chat.base.entity.type.SetType;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
-import io.tanjundang.chat.base.utils.ItemTool;
 import io.tanjundang.chat.base.view.CommonHolder;
 import io.tanjundang.chat.base.view.CommonRecyclerViewAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
@@ -110,7 +106,7 @@ public class NewFriendActivity extends BaseActivity {
 
     @OnClick({R.id.tvSubTitle})
     public void onClick(View v) {
-        AddFriendActivity.StartForResult(this, REQ_ADD_FRIEND);
+        CommonSetActivity.StartForResult(this, REQ_ADD_FRIEND, SetType.ADD_FRIEND);
     }
 
     public void getData() {
