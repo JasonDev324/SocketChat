@@ -62,7 +62,7 @@ public abstract class HeaderAdapter<T> extends RecyclerView.Adapter<CommonHolder
         if (getItemViewType(position) == TYPE_HEADER) return;
         final int pos = getRealPosition(holder);
         if (!list.isEmpty()) {
-            T data = list.get(position);
+            T data = list.get(pos);
             convert(holder, data, pos);
         }
     }
