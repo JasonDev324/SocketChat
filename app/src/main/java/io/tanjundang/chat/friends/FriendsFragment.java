@@ -47,16 +47,13 @@ public class FriendsFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.springView)
     SpringView springView;
-    @BindView(R.id.tvNewFriend)
     TextView tvNewFriend;
-    @BindView(R.id.tvGroupChat)
     TextView tvGroupChat;
 
     Unbinder unbinder;
 
     FriendsAdapter mAdapter;
     ArrayList<FriendsResp.FriendsInfo> list = new ArrayList<>();
-    TestAdapter testAdapter;
 
     public static FriendsFragment getInstance() {
         FriendsFragment fragment = new FriendsFragment();
@@ -75,11 +72,10 @@ public class FriendsFragment extends BaseFragment {
 
     private void initView() {
         mAdapter = new FriendsAdapter(getContext(), R.layout.list_item_friends, list);
-        testAdapter = new TestAdapter(getContext(), R.layout.list_item_friends, list);
 
         recyclerView.addItemDecoration(new ItemDivider(ContextCompat.getColor(getContext(), R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1)));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(testAdapter);
+        recyclerView.setAdapter(mAdapter);
         springView.setType(SpringView.Type.FOLLOW);
         springView.setHeader(new RotationHeader(getContext()));
         springView.setListener(new SpringView.OnFreshListener() {
@@ -93,21 +89,21 @@ public class FriendsFragment extends BaseFragment {
 
             }
         });
-        testAdapter.setHeaderView(R.layout.layout_test_header);
-        TextView tvTitle = ButterKnife.findById(testAdapter.getHeaderView(), R.id.tvNewFriend);
-        tvTitle.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setHeaderView(R.layout.layout_test_header);
+        tvNewFriend = ButterKnife.findById(mAdapter.getHeaderView(), R.id.tvNewFriend);
+        tvGroupChat = ButterKnife.findById(mAdapter.getHeaderView(), R.id.tvGroupChat);
+        tvNewFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Functions.toast("可以");
+                NewFriendActivity.Start(getContext());
             }
         });
-    }
+        tvGroupChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-    @OnClick({R.id.tvNewFriend})
-    public void onClick(View v) {
-        if (v.equals(tvNewFriend)) {
-            NewFriendActivity.Start(getContext());
-        }
+            }
+        });
     }
 
     private void getData() {
@@ -144,7 +140,7 @@ public class FriendsFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    public class FriendsAdapter extends CommonRecyclerViewAdapter<FriendsResp.FriendsInfo> {
+    public class FriendsAdapter extends HeaderAdapter<FriendsResp.FriendsInfo> {
         public FriendsAdapter(Context context, int layoutId, ArrayList<FriendsResp.FriendsInfo> list) {
             super(context, layoutId, list);
         }
@@ -161,28 +157,6 @@ public class FriendsFragment extends BaseFragment {
                     });
         }
     }
-
-    public class TestAdapter extends HeaderAdapter<FriendsResp.FriendsInfo> {
-
-        @Override
-        public void convert(CommonHolder holder, FriendsResp.FriendsInfo data, int pos) {
-            holder.setImageResource(R.id.ivAvatar, null)
-                    .setText(R.id.tvName, data.getName(), null)
-                    .itemClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Functions.toast("进入聊天页面");
-                        }
-                    });
-        }
-
-        public TestAdapter(Context mContext, int layoutId, ArrayList<FriendsResp.FriendsInfo> list) {
-            super(mContext, layoutId, list);
-        }
-
-
-    }
-
 
 }
 

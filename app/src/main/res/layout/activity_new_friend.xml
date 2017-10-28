@@ -9,10 +9,6 @@
 
     <include layout="@layout/toolbar_layout" />
 
-    <include
-        android:id="@+id/rlAdd"
-        layout="@layout/item_title_value" />
-
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springView"
         android:layout_width="match_parent"

@@ -8,11 +8,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.container.BaseHeader;
 import com.liaoinstan.springview.container.RotationHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
@@ -47,8 +50,8 @@ public class NewFriendActivity extends BaseActivity {
 
     @BindView(R.id.tvTitle)
     TextView tvTitle;
-    @BindView(R.id.rlAdd)
-    RelativeLayout rlAdd;
+    @BindView(R.id.tvSubTitle)
+    TextView tvSubTitle;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
     @BindView(R.id.recyclerView)
@@ -76,6 +79,8 @@ public class NewFriendActivity extends BaseActivity {
 
     private void initView() {
         tvTitle.setText("新朋友");
+        tvSubTitle.setText("添加");
+        tvSubTitle.setVisibility(View.VISIBLE);
         setSupportActionBar(toolBar);
         toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,10 +106,9 @@ public class NewFriendActivity extends BaseActivity {
 
             }
         });
-        ItemTool.titleArrow(rlAdd, "新朋友");
     }
 
-    @OnClick({R.id.rlAdd})
+    @OnClick({R.id.tvSubTitle})
     public void onClick(View v) {
         AddFriendActivity.StartForResult(this, REQ_ADD_FRIEND);
     }
