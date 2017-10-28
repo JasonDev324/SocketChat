@@ -2,7 +2,7 @@ package io.tanjundang.chat.base.api;
 
 import io.reactivex.Observable;
 import io.tanjundang.chat.base.entity.AddFriendResp;
-import io.tanjundang.chat.base.entity.ChatGroup;
+import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
 import io.tanjundang.chat.base.network.HttpBaseBean;
@@ -10,7 +10,6 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -99,7 +98,7 @@ public interface BusinessApi {
      * @return
      */
     @GET("groups")
-    Observable<ChatGroup> getGroupList();
+    Observable<GroupChatResp> getGroupList();
 
     /**
      * 新建群聊
@@ -109,17 +108,17 @@ public interface BusinessApi {
      */
     @FormUrlEncoded
     @POST("groups")
-    Observable<ChatGroup> getGroupMsg(@Field("name") String groupName);
+    Observable<GroupChatResp> getGroupMsg(@Field("name") String groupName);
 
     /**
-     * 加入群
+     * 拉人入群
      *
-     * @param id
+     * @param userId
      * @param group_id
      * @return
      */
     @PUT("groups/{id}")
-    Observable<HttpBaseBean> joinGroup(@Query("id") long id, @Query("group_id") long group_id);
+    Observable<HttpBaseBean> joinGroup(@Query("id") long userId, @Query("group_id") long group_id);
 
     /**
      * 查看群员

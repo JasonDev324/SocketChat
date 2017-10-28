@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -30,7 +29,6 @@ import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
-import io.tanjundang.chat.base.view.CommonRecyclerViewAdapter;
 import io.tanjundang.chat.base.view.HeaderAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
 
@@ -41,7 +39,6 @@ import io.tanjundang.chat.base.view.ItemDivider;
  */
 
 public class FriendsFragment extends BaseFragment {
-
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -64,16 +61,17 @@ public class FriendsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_friends, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        initView();
+        initView(view);
         getData();
         return view;
     }
 
-    private void initView() {
+    private void initView(View view) {
+        unbinder = ButterKnife.bind(this, view);
         mAdapter = new FriendsAdapter(getContext(), R.layout.list_item_friends, list);
-
-        recyclerView.addItemDecoration(new ItemDivider(ContextCompat.getColor(getContext(), R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1)));
+        ItemDivider divider = new ItemDivider(ContextCompat.getColor(getContext(), R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1));
+        divider.setHeaderEnable(true);
+        recyclerView.addItemDecoration(divider);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
         springView.setType(SpringView.Type.FOLLOW);
@@ -89,7 +87,7 @@ public class FriendsFragment extends BaseFragment {
 
             }
         });
-        mAdapter.setHeaderView(R.layout.layout_test_header);
+        mAdapter.setHeaderView(R.layout.list_item_header_friends);
         tvNewFriend = ButterKnife.findById(mAdapter.getHeaderView(), R.id.tvNewFriend);
         tvGroupChat = ButterKnife.findById(mAdapter.getHeaderView(), R.id.tvGroupChat);
         tvNewFriend.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +99,7 @@ public class FriendsFragment extends BaseFragment {
         tvGroupChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                GroupChatActivity.Start(getContext());
             }
         });
     }

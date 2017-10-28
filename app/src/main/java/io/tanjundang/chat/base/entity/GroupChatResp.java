@@ -10,7 +10,7 @@ import io.tanjundang.chat.base.network.HttpBaseBean;
  * @Description:
  */
 
-public class ChatGroup extends HttpBaseBean {
+public class GroupChatResp extends HttpBaseBean {
 
     private ArrayList<GroupBean> data;
 
