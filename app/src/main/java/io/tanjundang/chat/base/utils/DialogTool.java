@@ -9,6 +9,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
+import io.tanjundang.chat.R;
+
 
 /**
  * Developer: TanJunDang
@@ -46,7 +48,7 @@ public class DialogTool {
         /**
          * 方法一 旋转屏幕消失
          */
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.ProgressDialogStyle);
         builder.setCancelable(false);
         builder.setTitle(title);
         builder.setMessage(msg);
