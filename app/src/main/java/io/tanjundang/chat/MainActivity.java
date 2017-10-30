@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,11 +41,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        boolean hasNavigationBar = Functions.hasNavigationBar(this);
-        if (hasNavigationBar) {
-            Functions.setNavigationBarPadding(this, container);
-        }
-        Functions.setImmerseStatusBar(this);
+        Functions.setImmerseStatusBar(this, container);
         navigation.setOnNavigationItemSelectedListener(this);
 
         initFragment();

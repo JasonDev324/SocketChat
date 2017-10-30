@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,13 +38,15 @@ public class LoginActivity extends BaseActivity {
     Button btnLogin;
     @BindView(R.id.btnRegister)
     Button btnRegister;
+    @BindView(R.id.rlRootView)
+    RelativeLayout rlRootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Functions.setImmerseStatusBar(this);
+        Functions.setImmerseStatusBar(this, rlRootView);
         Functions.setNoChineseInput(etEmail);
     }
 
