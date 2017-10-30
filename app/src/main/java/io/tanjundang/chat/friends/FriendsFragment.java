@@ -68,6 +68,7 @@ public class FriendsFragment extends BaseFragment {
     }
 
     private void initView(View view) {
+        dialog.show();
         unbinder = ButterKnife.bind(this, view);
         mAdapter = new FriendsAdapter(getContext(), R.layout.list_item_friends, list);
         ItemDivider divider = new ItemDivider(ContextCompat.getColor(getContext(), R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1));
@@ -113,6 +114,7 @@ public class FriendsFragment extends BaseFragment {
                 .subscribe(new ApiObserver<FriendsResp>() {
                     @Override
                     public void onSuccess(FriendsResp resp) {
+                        dialog.dismiss();
                         if (resp.isSuccess()) {
                             list.clear();
                             if (resp.getData() != null & !resp.getData().isEmpty()) {
@@ -127,6 +129,7 @@ public class FriendsFragment extends BaseFragment {
 
                     @Override
                     public void onFailure(String error) {
+                        dialog.dismiss();
                         Functions.toast(error);
                         springView.onFinishFreshAndLoad();
                     }
