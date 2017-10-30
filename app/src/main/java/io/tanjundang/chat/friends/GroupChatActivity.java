@@ -31,6 +31,7 @@ import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
 import io.tanjundang.chat.base.view.CommonRecyclerViewAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
+import io.tanjundang.chat.talk.ChatActivity;
 
 /**
  * @Author: TanJunDang
@@ -77,6 +78,7 @@ public class GroupChatActivity extends BaseActivity {
     }
 
     private void initView() {
+        dialog.show();
         ButterKnife.bind(this);
         tvSubTitle.setText("新建");
         tvSubTitle.setVisibility(View.VISIBLE);
@@ -118,6 +120,7 @@ public class GroupChatActivity extends BaseActivity {
                 .subscribe(new ApiObserver<GroupChatResp>() {
                     @Override
                     public void onSuccess(GroupChatResp resp) {
+                        dialog.dismiss();
                         if (resp.isSuccess()) {
                             list.clear();
                             if (resp.getData() != null && !resp.getData().isEmpty()) {
@@ -132,6 +135,7 @@ public class GroupChatActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String error) {
+                        dialog.dismiss();
                         springView.onFinishFreshAndLoad();
                     }
                 });
@@ -148,6 +152,7 @@ public class GroupChatActivity extends BaseActivity {
                     .itemClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            ChatActivity.Start(GroupChatActivity.this);
 //                            HttpReqTool
 //                                    .getInstance()
 //                                    .createApi(BusinessApi.class)

@@ -2,6 +2,7 @@ package io.tanjundang.chat.base.api;
 
 import io.reactivex.Observable;
 import io.tanjundang.chat.base.entity.AddFriendResp;
+import io.tanjundang.chat.base.entity.ChatMsgResp;
 import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
@@ -127,5 +128,5 @@ public interface BusinessApi {
      * @return
      */
     @GET("groups/{id}")
-    Observable<HttpBaseBean> getGroupMember(@Query("id") long group_id);
+    Observable<ChatMsgResp> getGroupMember(@Query("id") long group_id);
 }

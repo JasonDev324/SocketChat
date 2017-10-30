@@ -1,6 +1,7 @@
 package io.tanjundang.chat.talk;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.LogTool;
+import io.tanjundang.chat.friends.ChatMsgActivity;
 
 /**
  * @Author: TanJunDang
@@ -53,6 +55,8 @@ public class ChatActivity extends BaseActivity {
 
     @BindView(R.id.tvTitle)
     TextView tvTitle;
+    @BindView(R.id.ivRight)
+    ImageView ivRight;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
     @BindView(R.id.recyclerview)
@@ -89,7 +93,7 @@ public class ChatActivity extends BaseActivity {
     String ipHost = "59.110.136.203";
     //    String ipHost = "lawntiger.free.ngrok.cc";
     int ipPort = 4000;
-
+    long groupId;
 
     Handler handler = new Handler() {
         @Override
@@ -101,10 +105,16 @@ public class ChatActivity extends BaseActivity {
         }
     };
 
+    public static void Start(Context context) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        groupId = getIntent().getLongExtra(Constants.ID, groupId);
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -117,13 +127,15 @@ public class ChatActivity extends BaseActivity {
         TalkTask task = new TalkTask(this);
         task.execute();
         tvMsg.setMovementMethod(ScrollingMovementMethod.getInstance());
-
+        ivRight.setImageResource(R.drawable.ic_contact_enable);
+        ivRight.setVisibility(View.VISIBLE);
     }
 
 
     @OnClick({R.id.btnSend, R.id.ivAudio,
             R.id.ivPhoto, R.id.ivCamera,
-            R.id.ivMoon, R.id.ivMore})
+            R.id.ivMoon, R.id.ivMore,
+            R.id.ivRight})
     public void onClick(View v) {
         if (v.equals(btnSend)) {
             if (socket == null) return;
@@ -163,9 +175,9 @@ public class ChatActivity extends BaseActivity {
         } else if (v.equals(ivCamera)) {
 
         } else if (v.equals(ivMoon)) {
-
         } else if (v.equals(ivMore)) {
-
+        } else if (v.equals(ivRight)) {
+            ChatMsgActivity.Start(this, groupId);
         }
     }
 

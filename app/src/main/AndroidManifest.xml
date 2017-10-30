@@ -61,7 +61,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".friends.NewFriendActivity" />
         <activity android:name=".friends.GroupChatActivity" />
-        <activity android:name=".me.PersonalInfoActivity"></activity>
+        <activity android:name=".me.PersonalInfoActivity" />
+        <activity android:name=".friends.ChatMsgActivity"></activity>
     </application>
 
 </manifest>

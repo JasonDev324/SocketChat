@@ -69,8 +69,7 @@ public class MeFragment extends BaseFragment {
             R.id.tvUpdate})
     public void onClick(View v) {
         if (v.equals(ivAvatar)) {
-            Intent intent = new Intent(getContext(), ChatActivity.class);
-            startActivity(intent);
+
         } else if (v.equals(tvAlbum)) {
 
         } else if (v.equals(tvWallet)) {
