@@ -2,65 +2,128 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/base_background_color"
     tools:context="io.tanjundang.chat.me.PersonalInfoActivity">
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/rlTitle"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="@dimen/status_bar_height">
 
-        <ImageView
+        <TextView
+            android:id="@+id/tvBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_15dp"
+            android:text="返回"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text_size_17dp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/google_bg"
-            android:foreground="@color/color_black_transparent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/rlTitle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            <FrameLayout
+                android:id="@+id/flHead"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:paddingLeft="@dimen/margin_15dp"
-                android:text="返回"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_17dp" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/google_bg" />
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/margin_15dp">
 
-        <RelativeLayout
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tvSign"
+                        android:layout_marginBottom="7dp"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/text_size_18dp" />
+
+                    <TextView
+                        android:id="@+id/tvSign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="20dp"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/text_size_14dp" />
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/flHead"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:background="@color/color_white"
+                android:divider="@drawable/divider_horizontal"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <include
+                    android:id="@+id/rlAccount"
+                    layout="@layout/item_title_value_qq" />
+
+                <include
+                    android:id="@+id/rlEmail"
+                    layout="@layout/item_title_value_qq" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvSend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/margin_15dp">
+            android:layout_weight="1"
+            android:background="@color/base_theme_color"
+            android:gravity="center"
+            android:text="发消息"
+            android:textColor="@color/color_white" />
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/tvSign"
-                android:layout_marginBottom="7dp"
-                android:text="TanJunDang"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_18dp" />
+        <TextView
+            android:id="@+id/tvDel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/color_white"
+            android:gravity="center"
+            android:text="删除好友"
+            android:textColor="@color/base_theme_color" />
 
-            <TextView
-                android:id="@+id/tvSign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
-                android:text="Design By TJD"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_14dp" />
-
-        </RelativeLayout>
-
-    </FrameLayout>
-
+    </LinearLayout>
 
 </RelativeLayout>

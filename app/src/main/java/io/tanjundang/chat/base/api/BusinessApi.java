@@ -79,7 +79,7 @@ public interface BusinessApi {
      * @return
      */
     @DELETE("friends/{id}")
-    Observable<AddFriendResp> delFriend(@Path("id") long id);
+    Observable<HttpBaseBean> delFriend(@Path("id") long id);
 
     /**
      * 处理好友请求

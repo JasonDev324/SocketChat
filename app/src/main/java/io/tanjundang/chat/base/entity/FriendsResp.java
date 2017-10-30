@@ -1,5 +1,6 @@
 package io.tanjundang.chat.base.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import io.tanjundang.chat.base.network.HttpBaseBean;
@@ -22,7 +23,7 @@ public class FriendsResp extends HttpBaseBean {
         this.data = data;
     }
 
-    public static class FriendsInfo {
+    public static class FriendsInfo implements Serializable{
         long id;
         long friend_id;
         String email;

@@ -145,13 +145,13 @@ public class FriendsFragment extends BaseFragment {
         }
 
         @Override
-        public void convert(CommonHolder holder, FriendsResp.FriendsInfo data, int pos) {
+        public void convert(CommonHolder holder, final FriendsResp.FriendsInfo data, int pos) {
             holder.setImageResource(R.id.ivAvatar, null)
                     .setText(R.id.tvName, data.getName(), null)
                     .itemClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            PersonalInfoActivity.Start(getContext());
+                            PersonalInfoActivity.Start(getContext(), data);
                         }
                     });
         }
