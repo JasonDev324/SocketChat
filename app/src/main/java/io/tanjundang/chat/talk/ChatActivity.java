@@ -42,9 +42,11 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.base.entity.ContentMsg;
 import io.tanjundang.chat.base.entity.SocketInitJson;
 import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
 import io.tanjundang.chat.base.entity.SocketMsgJson;
+import io.tanjundang.chat.base.entity.SocketReceiveMsgResp;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
@@ -98,6 +100,7 @@ public class ChatActivity extends BaseActivity {
     String ipHost = "59.110.136.203";
     //    String ipHost = "lawntiger.free.ngrok.cc";
     int ipPort = 4000;
+    int HEARBEAT_PERIOD_SECOND = 20;
     long groupId;
     long userId;
     Handler handler = new Handler() {
@@ -106,7 +109,17 @@ public class ChatActivity extends BaseActivity {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
             String data = bundle.getString(Constants.MSG);
-            tvMsg.append("from server:" + data + "\n");
+
+            try {
+                SocketReceiveMsgResp resp = GsonTool.getServerBean(data, SocketReceiveMsgResp.class);
+                if (resp.getCode().equals("msg")) {
+                    SocketReceiveMsgResp.ReceiveMsgInfo info = resp.getData();
+                    ContentMsg contentMsg = info.getContent();
+                    tvMsg.append("from server:" + contentMsg.getBody() + "\n");
+                }
+            } catch (Exception e) {
+                tvMsg.append("from server:" + data + "\n");
+            }
         }
     };
 
@@ -213,7 +226,7 @@ public class ChatActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 connect();
-                Observable.interval(2, TimeUnit.SECONDS)
+                Observable.interval(HEARBEAT_PERIOD_SECOND, TimeUnit.SECONDS)
                         .subscribe(new Consumer<Long>() {
                             @Override
                             public void accept(Long aLong) throws Exception {
@@ -300,7 +313,7 @@ public class ChatActivity extends BaseActivity {
         try {
             SocketMsgJson json = new SocketMsgJson();
             SocketMsgJson.SocketSendInfo info = new SocketMsgJson.SocketSendInfo();
-            SocketMsgJson.ContentMsg msg = new SocketMsgJson.ContentMsg();
+            ContentMsg msg = new ContentMsg();
             msg.setContentType("txt");
             msg.setBody(sendMsg);
             info.setChatType("group");

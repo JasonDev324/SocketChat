@@ -59,26 +59,7 @@ public class SocketMsgJson {
 
     }
 
-    public static class ContentMsg {
-        private String contentType;
-        private String body;
 
-        public String getContentType() {
-            return contentType;
-        }
-
-        public void setContentType(String contentType) {
-            this.contentType = contentType;
-        }
-
-        public String getBody() {
-            return body;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-    }
     // p2p: 私聊, group: 群聊
     // 接收的好友或群id
     // txt: 文本, audio: 音频, video: 视频
