@@ -105,8 +105,9 @@ public class ChatActivity extends BaseActivity {
         }
     };
 
-    public static void Start(Context context) {
+    public static void Start(Context context, long groupId) {
         Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(Constants.ID, groupId);
         context.startActivity(intent);
     }
 
