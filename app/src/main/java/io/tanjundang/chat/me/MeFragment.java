@@ -1,7 +1,6 @@
 package io.tanjundang.chat.me;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.utils.Functions;
-import io.tanjundang.chat.talk.ChatActivity;
 
 /**
  * @Author: TanJunDang

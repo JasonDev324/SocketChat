@@ -41,7 +41,12 @@ import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
+import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.base.entity.SocketInitJson;
+import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
+import io.tanjundang.chat.base.entity.SocketMsgJson;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
 import io.tanjundang.chat.friends.ChatMsgActivity;
 
@@ -94,7 +99,7 @@ public class ChatActivity extends BaseActivity {
     //    String ipHost = "lawntiger.free.ngrok.cc";
     int ipPort = 4000;
     long groupId;
-
+    long userId;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -115,6 +120,7 @@ public class ChatActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        userId = Global.getInstance().getUserId();
         groupId = getIntent().getLongExtra(Constants.ID, groupId);
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
@@ -129,7 +135,11 @@ public class ChatActivity extends BaseActivity {
         task.execute();
         tvMsg.setMovementMethod(ScrollingMovementMethod.getInstance());
         ivRight.setImageResource(R.drawable.ic_contact_enable);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            ivRight.setImageTintList(getColorStateList(R.color.tint_color_white));
+        }
         ivRight.setVisibility(View.VISIBLE);
+        tvTitle.setText("聊天");
     }
 
 
@@ -208,7 +218,15 @@ public class ChatActivity extends BaseActivity {
                             @Override
                             public void accept(Long aLong) throws Exception {
                                 try {
-                                    socket.sendUrgentData(0xFF); // 发送心跳包
+//                                    socket.sendUrgentData(0xFF); // 发送心跳包
+                                    /**
+                                     * 定时向服务器发送消息，让服务器过滤掉该信息。
+                                     */
+                                    SocketKeepConnectJson json = new SocketKeepConnectJson();
+                                    json.setCode("ping");
+                                    String jsonStr = GsonTool.getObjectToJson(json);
+                                    bw.write(jsonStr + "\r");
+                                    bw.flush();
                                     System.out.println("正常发送心跳包");
                                 } catch (IOException e) {
                                     needReset = true;
@@ -251,11 +269,17 @@ public class ChatActivity extends BaseActivity {
     public void connect() {
         try {
             socket = new Socket(ipHost, ipPort);
-            socket.setOOBInline(true);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            socket.setKeepAlive(true);
             socket.setTcpNoDelay(true);
+            SocketInitJson initJson = new SocketInitJson();
+            initJson.setCode("init");
+            SocketInitJson.DataBean data = new SocketInitJson.DataBean();
+            data.setId(userId);
+            initJson.setData(data);
+            String initStr = GsonTool.getObjectToJson(initJson);
+            bw.write(initStr + "\r");
+            bw.flush();
             if (needReset) {
                 while ((receiveMsg = br.readLine()) != null) {
                     Message msg = new Message();
@@ -274,7 +298,18 @@ public class ChatActivity extends BaseActivity {
         if (bw == null) return;
         sendMsg = etContent.getText().toString().trim();
         try {
-            bw.write(sendMsg + "\r");
+            SocketMsgJson json = new SocketMsgJson();
+            SocketMsgJson.SocketSendInfo info = new SocketMsgJson.SocketSendInfo();
+            SocketMsgJson.ContentMsg msg = new SocketMsgJson.ContentMsg();
+            msg.setContentType("txt");
+            msg.setBody(sendMsg);
+            info.setChatType("group");
+            info.setId(groupId);
+            info.setContent(msg);
+            json.setCode("msg");
+            json.setData(info);
+            String msgContent = GsonTool.getObjectToJson(json);
+            bw.write(msgContent + "\r");
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
