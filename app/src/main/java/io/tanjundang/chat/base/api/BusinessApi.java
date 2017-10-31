@@ -119,7 +119,7 @@ public interface BusinessApi {
      * @return
      */
     @PUT("groups/{id}")
-    Observable<HttpBaseBean> joinGroup(@Query("id") long userId, @Query("group_id") long group_id);
+    Observable<HttpBaseBean> joinGroup(@Path("id") long userId, @Query("group_id") long group_id);
 
     /**
      * 查看群员
@@ -128,5 +128,5 @@ public interface BusinessApi {
      * @return
      */
     @GET("groups/{id}")
-    Observable<ChatMsgResp> getGroupMember(@Query("id") long group_id);
+    Observable<ChatMsgResp> getGroupMember(@Path("id") long group_id);
 }
