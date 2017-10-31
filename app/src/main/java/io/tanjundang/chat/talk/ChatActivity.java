@@ -251,6 +251,7 @@ public class ChatActivity extends BaseActivity {
     public void connect() {
         try {
             socket = new Socket(ipHost, ipPort);
+            socket.setOOBInline(true);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             socket.setKeepAlive(true);
