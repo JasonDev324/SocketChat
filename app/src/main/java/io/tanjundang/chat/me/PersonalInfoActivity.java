@@ -103,7 +103,7 @@ public class PersonalInfoActivity extends BaseActivity {
         if (v.equals(tvBack)) {
             finish();
         } else if (v.equals(tvSend)) {
-            ChatActivity.Start(this, info.getFriend_id(), ChatType.P2P);
+            ChatActivity.Start(this, info.getFriend_id(), ChatType.P2P, info.getName());
         } else if (v.equals(tvDel)) {
             DialogTool.getInstance()
                     .showDialog(this, "删除好友", "同时会屏蔽对方的临时对话，不再接收此人的消息。", new DialogInterface.OnClickListener() {

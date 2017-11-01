@@ -153,7 +153,7 @@ public class GroupChatActivity extends BaseActivity {
                     .itemClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ChatActivity.Start(GroupChatActivity.this, data.getGroup_id(), ChatType.GROUP);
+                            ChatActivity.Start(GroupChatActivity.this, data.getGroup_id(), ChatType.GROUP, data.getGroup().getName());
                         }
                     });
         }

@@ -35,7 +35,9 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
@@ -105,6 +107,7 @@ public class ChatActivity extends BaseActivity {
     //    p2p私聊、group群聊
     String chatType = "p2p";
     String contentType = "txt";
+    String chatTitle;
     ChatType type;
     Handler handler = new Handler() {
         @Override
@@ -118,7 +121,7 @@ public class ChatActivity extends BaseActivity {
                 if (resp.getCode().equals("msg")) {
                     SocketMsgResp.SocketMsgInfo info = resp.getData();
                     SocketMsgResp.ContentMsg contentMsg = info.getContent();
-                    tvMsg.append("from server:" + contentMsg.getBody() + "\n");
+                    tvMsg.append("from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
                 } else if (resp.getCode().equals("response")) {
 
                 }
@@ -128,10 +131,17 @@ public class ChatActivity extends BaseActivity {
         }
     };
 
-    public static void Start(Context context, long id, ChatType chatType) {
+    /**
+     * @param context
+     * @param id
+     * @param chatType
+     * @param chatTitle
+     */
+    public static void Start(Context context, long id, ChatType chatType, String chatTitle) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(Constants.ID, id);
         intent.putExtra(Constants.TYPE, chatType);
+        intent.putExtra(Constants.DATA, chatTitle);
         context.startActivity(intent);
     }
 
@@ -140,6 +150,7 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         userId = Global.getInstance().getUserId();
+        chatTitle = getIntent().getStringExtra(Constants.DATA);
         type = (ChatType) getIntent().getSerializableExtra(Constants.TYPE);
         if (type == ChatType.P2P) {
             chatId = getIntent().getLongExtra(Constants.ID, 0);
@@ -164,7 +175,7 @@ public class ChatActivity extends BaseActivity {
             ivRight.setImageTintList(getColorStateList(R.color.tint_color_white));
         }
         ivRight.setVisibility(View.VISIBLE);
-        tvTitle.setText("聊天");
+        tvTitle.setText(chatTitle);
     }
 
 
@@ -224,6 +235,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     boolean needReset = false;
+    Disposable disposable;
 
     class TalkTask extends AsyncTask<Void, String, Void> {
         WeakReference<Context> weakReference;
@@ -239,9 +251,15 @@ public class ChatActivity extends BaseActivity {
             try {
                 connect();
                 Observable.interval(HEARBEAT_PERIOD_SECOND, TimeUnit.SECONDS)
-                        .subscribe(new Consumer<Long>() {
+                        .subscribe(new Observer<Long>() {
+
                             @Override
-                            public void accept(Long aLong) throws Exception {
+                            public void onSubscribe(Disposable d) {
+                                disposable = d;
+                            }
+
+                            @Override
+                            public void onNext(Long value) {
                                 try {
 //                                    socket.sendUrgentData(0xFF); // 发送心跳包
                                     /**
@@ -258,6 +276,16 @@ public class ChatActivity extends BaseActivity {
                                     System.out.println("发送心跳失败,请求重连");
                                     connect();
                                 }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                disposable.dispose();
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                disposable.dispose();
                             }
                         });
                 while ((receiveMsg = br.readLine()) != null && !needReset) {
@@ -289,6 +317,8 @@ public class ChatActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (disposable != null)
+            disposable.dispose();
     }
 
     public void connect() {
