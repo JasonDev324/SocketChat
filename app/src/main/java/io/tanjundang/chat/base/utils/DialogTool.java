@@ -3,11 +3,15 @@ package io.tanjundang.chat.base.utils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 import io.tanjundang.chat.R;
 
@@ -48,13 +52,29 @@ public class DialogTool {
         /**
          * 方法一 旋转屏幕消失
          */
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.ProgressDialogStyle);
         builder.setCancelable(false);
         builder.setTitle(title);
         builder.setMessage(msg);
         builder.setPositiveButton("确定", positiveListener);
         builder.setNegativeButton("取消", negativeListener);
-        builder.create().show();
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
+//        反射修改dialog content的颜色
+        try {
+            Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
+            mAlert.setAccessible(true);
+            Object mAlertController = mAlert.get(alertDialog);
+            Field mMessage = mAlertController.getClass().getDeclaredField("mMessageView");
+            mMessage.setAccessible(true);
+            TextView mMessageView = (TextView) mMessage.get(mAlertController);
+            mMessageView.setTextColor(Color.WHITE);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
         /**
          * 方法二 旋转屏幕不消失，建议使用 跟PermissionTool有冲突
          */
