@@ -117,11 +117,11 @@ public class ChatActivity extends BaseActivity {
                     SocketMsgResp.SocketMsgInfo info = resp.getData();
                     SocketMsgResp.ContentMsg contentMsg = info.getContent();
                     tvMsg.append("from server:" + contentMsg.getBody() + "\n");
-                }else if(resp.getCode().equals("response")){
+                } else if (resp.getCode().equals("response")) {
 
                 }
             } catch (Exception e) {
-                tvMsg.append("from server:" + data + "\n");
+//                tvMsg.append("from server:" + data + "\n");
             }
         }
     };
@@ -138,6 +138,7 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.activity_chat);
         userId = Global.getInstance().getUserId();
         groupId = getIntent().getLongExtra(Constants.ID, groupId);
+        chatType = groupId == 0 ? "p2p" : "group";
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

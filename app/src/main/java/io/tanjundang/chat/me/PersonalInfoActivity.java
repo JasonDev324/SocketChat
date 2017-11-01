@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +30,7 @@ import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.DialogTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.ItemTool;
+import io.tanjundang.chat.talk.ChatActivity;
 
 /**
  * @Author: TanJunDang
@@ -65,7 +66,7 @@ public class PersonalInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
-        dialog.show();
+        initView();
         Observable
                 .interval(1, TimeUnit.SECONDS)
                 .take(1)
@@ -73,11 +74,9 @@ public class PersonalInfoActivity extends BaseActivity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        initView();
                         dialog.dismiss();
                     }
                 });
-
     }
 
     private void initView() {
@@ -88,6 +87,7 @@ public class PersonalInfoActivity extends BaseActivity {
         tvName.setText(info.getName());
         ItemTool.titleValue(rlAccount, "帐号", info.getName());
         ItemTool.titleValue(rlEmail, "邮箱", info.getEmail());
+        dialog.show();
     }
 
     public static void Start(Context context, FriendsResp.FriendsInfo info) {
@@ -96,10 +96,13 @@ public class PersonalInfoActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
-    @OnClick({R.id.tvBack, R.id.tvDel})
+    @OnClick({R.id.tvBack, R.id.tvDel,
+            R.id.tvSend})
     public void onClick(View v) {
         if (v.equals(tvBack)) {
             finish();
+        } else if (v.equals(tvSend)) {
+            ChatActivity.Start(this, 0);
         } else if (v.equals(tvDel)) {
             DialogTool.getInstance()
                     .showDialog(this, "删除好友", "同时会屏蔽对方的临时对话，不再接收此人的消息。", new DialogInterface.OnClickListener() {

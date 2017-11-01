@@ -5,7 +5,6 @@
     android:id="@+id/rlRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/base_background_color"
     tools:context="io.tanjundang.chat.me.PersonalInfoActivity">
 
     <RelativeLayout
@@ -102,6 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_height_50dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/color_green"
         android:orientation="horizontal">
 
         <TextView
