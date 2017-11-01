@@ -42,11 +42,9 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
-import io.tanjundang.chat.base.entity.ContentMsg;
 import io.tanjundang.chat.base.entity.SocketInitJson;
 import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
-import io.tanjundang.chat.base.entity.SocketMsgJson;
-import io.tanjundang.chat.base.entity.SocketReceiveMsgResp;
+import io.tanjundang.chat.base.entity.SocketMsgResp;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
@@ -103,19 +101,24 @@ public class ChatActivity extends BaseActivity {
     int HEARBEAT_PERIOD_SECOND = 20;
     long groupId;
     long userId;
+    //    p2p私聊、group群聊
+    String chatType = "p2p";
+    String contentType = "txt";
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
             String data = bundle.getString(Constants.MSG);
-
+            LogTool.v(TAG, "收到的消息：" + data);
             try {
-                SocketReceiveMsgResp resp = GsonTool.getServerBean(data, SocketReceiveMsgResp.class);
+                SocketMsgResp resp = GsonTool.getServerBean(data, SocketMsgResp.class);
                 if (resp.getCode().equals("msg")) {
-                    SocketReceiveMsgResp.ReceiveMsgInfo info = resp.getData();
-                    ContentMsg contentMsg = info.getContent();
+                    SocketMsgResp.SocketMsgInfo info = resp.getData();
+                    SocketMsgResp.ContentMsg contentMsg = info.getContent();
                     tvMsg.append("from server:" + contentMsg.getBody() + "\n");
+                }else if(resp.getCode().equals("response")){
+
                 }
             } catch (Exception e) {
                 tvMsg.append("from server:" + data + "\n");
@@ -311,12 +314,12 @@ public class ChatActivity extends BaseActivity {
         if (bw == null) return;
         sendMsg = etContent.getText().toString().trim();
         try {
-            SocketMsgJson json = new SocketMsgJson();
-            SocketMsgJson.SocketSendInfo info = new SocketMsgJson.SocketSendInfo();
-            ContentMsg msg = new ContentMsg();
-            msg.setContentType("txt");
+            SocketMsgResp json = new SocketMsgResp();
+            SocketMsgResp.SocketMsgInfo info = new SocketMsgResp.SocketMsgInfo();
+            SocketMsgResp.ContentMsg msg = new SocketMsgResp.ContentMsg();
+            msg.setContentType(contentType);
             msg.setBody(sendMsg);
-            info.setChatType("group");
+            info.setChatType(chatType);
             info.setId(groupId);
             info.setContent(msg);
             json.setCode("msg");
@@ -324,6 +327,7 @@ public class ChatActivity extends BaseActivity {
             String msgContent = GsonTool.getObjectToJson(json);
             bw.write(msgContent + "\r");
             bw.flush();
+            LogTool.v(TAG, "发送的消息" + msgContent);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
