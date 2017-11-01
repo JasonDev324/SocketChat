@@ -32,11 +32,21 @@ public class SocketMsgResp {
         private int groupId;
         private int userId;
         private String userName;
+        private String groupName;
 
         //        发送消息用到
         private String chatType;// p2p: 私聊, group: 群聊
         private long id;//好友id或者群id
         private ContentMsg content;
+
+
+        public String getGroupName() {
+            return groupName;
+        }
+
+        public void setGroupName(String groupName) {
+            this.groupName = groupName;
+        }
 
         public int getGroupId() {
             return groupId;
@@ -47,7 +57,7 @@ public class SocketMsgResp {
         }
 
         public int getUserId() {
-             return userId;
+            return userId;
         }
 
         public void setUserId(int userId) {

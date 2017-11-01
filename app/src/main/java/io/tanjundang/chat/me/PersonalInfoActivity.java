@@ -24,6 +24,7 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.FriendsResp;
+import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
@@ -102,7 +103,7 @@ public class PersonalInfoActivity extends BaseActivity {
         if (v.equals(tvBack)) {
             finish();
         } else if (v.equals(tvSend)) {
-            ChatActivity.Start(this, 0);
+            ChatActivity.Start(this, info.getFriend_id(), ChatType.P2P);
         } else if (v.equals(tvDel)) {
             DialogTool.getInstance()
                     .showDialog(this, "删除好友", "同时会屏蔽对方的临时对话，不再接收此人的消息。", new DialogInterface.OnClickListener() {

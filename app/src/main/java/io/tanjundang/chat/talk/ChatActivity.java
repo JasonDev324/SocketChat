@@ -45,6 +45,7 @@ import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.entity.SocketInitJson;
 import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
+import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
@@ -99,11 +100,12 @@ public class ChatActivity extends BaseActivity {
     //    String ipHost = "lawntiger.free.ngrok.cc";
     int ipPort = 4000;
     int HEARBEAT_PERIOD_SECOND = 20;
-    long groupId;
+    long chatId;
     long userId;
     //    p2p私聊、group群聊
     String chatType = "p2p";
     String contentType = "txt";
+    ChatType type;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -126,9 +128,10 @@ public class ChatActivity extends BaseActivity {
         }
     };
 
-    public static void Start(Context context, long groupId) {
+    public static void Start(Context context, long id, ChatType chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(Constants.ID, groupId);
+        intent.putExtra(Constants.ID, id);
+        intent.putExtra(Constants.TYPE, chatType);
         context.startActivity(intent);
     }
 
@@ -137,8 +140,13 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         userId = Global.getInstance().getUserId();
-        groupId = getIntent().getLongExtra(Constants.ID, groupId);
-        chatType = groupId == 0 ? "p2p" : "group";
+        type = (ChatType) getIntent().getSerializableExtra(Constants.TYPE);
+        if (type == ChatType.P2P) {
+            chatId = getIntent().getLongExtra(Constants.ID, 0);
+        } else {
+            chatId = getIntent().getLongExtra(Constants.ID, 0);
+        }
+        chatType = type == ChatType.P2P ? "p2p" : "group";
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -205,7 +213,7 @@ public class ChatActivity extends BaseActivity {
         } else if (v.equals(ivMoon)) {
         } else if (v.equals(ivMore)) {
         } else if (v.equals(ivRight)) {
-            ChatMsgActivity.Start(this, groupId);
+            ChatMsgActivity.Start(this, chatId);
         }
     }
 
@@ -321,7 +329,7 @@ public class ChatActivity extends BaseActivity {
             msg.setContentType(contentType);
             msg.setBody(sendMsg);
             info.setChatType(chatType);
-            info.setId(groupId);
+            info.setId(chatId);
             info.setContent(msg);
             json.setCode("msg");
             json.setData(info);
@@ -333,5 +341,11 @@ public class ChatActivity extends BaseActivity {
             e.printStackTrace();
         } finally {
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        close();
     }
 }

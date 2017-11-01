@@ -24,6 +24,7 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.GroupChatResp;
+import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.entity.type.SetType;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
@@ -152,7 +153,7 @@ public class GroupChatActivity extends BaseActivity {
                     .itemClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ChatActivity.Start(GroupChatActivity.this, data.getGroup_id());
+                            ChatActivity.Start(GroupChatActivity.this, data.getGroup_id(), ChatType.GROUP);
                         }
                     });
         }
