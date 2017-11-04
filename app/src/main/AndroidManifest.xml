@@ -57,6 +57,9 @@
             android:name=".talk.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name=".talk.ChatTestActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name=".friends.CommonSetActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".friends.NewFriendActivity" />

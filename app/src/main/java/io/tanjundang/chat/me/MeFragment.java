@@ -1,6 +1,7 @@
 package io.tanjundang.chat.me;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.talk.ChatActivity;
+import io.tanjundang.chat.talk.ChatTestActivity;
 
 /**
  * @Author: TanJunDang
@@ -67,7 +70,8 @@ public class MeFragment extends BaseFragment {
             R.id.tvUpdate})
     public void onClick(View v) {
         if (v.equals(ivAvatar)) {
-
+            Intent intent = new Intent(getContext(), ChatTestActivity.class);
+            startActivity(intent);
         } else if (v.equals(tvAlbum)) {
 
         } else if (v.equals(tvWallet)) {
