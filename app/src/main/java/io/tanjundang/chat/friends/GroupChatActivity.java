@@ -32,7 +32,7 @@ import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
 import io.tanjundang.chat.base.view.CommonRecyclerViewAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
-import io.tanjundang.chat.talk.ChatActivity;
+import io.tanjundang.chat.talk.ChatTestActivity;
 
 /**
  * @Author: TanJunDang
@@ -153,7 +153,9 @@ public class GroupChatActivity extends BaseActivity {
                     .itemClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ChatActivity.Start(GroupChatActivity.this, data.getGroup_id(), ChatType.GROUP, data.getGroup().getName());
+
+                            ChatTestActivity.Start(GroupChatActivity.this, data.getGroup_id(), ChatType.GROUP, data.getGroup().getName());
+//                            ChatActivity.Start(GroupChatActivity.this, data.getGroup_id(), ChatType.GROUP, data.getGroup().getName());
                         }
                     });
         }

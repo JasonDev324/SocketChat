@@ -29,9 +29,9 @@ public class SocketMsgResp {
 
     public static class SocketMsgInfo {
         //接收消息用到
-        private int groupId;
-        private int userId;
-        private String userName;
+        private int groupId;// 为0则为私聊
+        private int userId;// 发送者id
+        private String userName;// 发送者姓名
         private String groupName;
 
         //        发送消息用到

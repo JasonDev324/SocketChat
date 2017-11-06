@@ -2,10 +2,7 @@ package io.tanjundang.chat.talk;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
@@ -19,23 +16,12 @@ import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.ref.WeakReference;
-import java.net.Socket;
-import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -44,15 +30,16 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
-import io.tanjundang.chat.base.entity.SocketInitJson;
-import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
 import io.tanjundang.chat.base.entity.type.ChatType;
-import io.tanjundang.chat.base.network.SocketConnector;
+import io.tanjundang.chat.base.event.ReceiveMsgEvent;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
+import io.tanjundang.chat.base.utils.RxBus;
 import io.tanjundang.chat.friends.ChatMsgActivity;
+
+import static io.tanjundang.chat.MainActivity.connector;
 
 /**
  * @Author: TanJunDang
@@ -93,12 +80,11 @@ public class ChatTestActivity extends BaseActivity {
     @BindView(R.id.tvMsg)
     TextView tvMsg;
 
-    String receiveMsg;
     String sendMsg;
-
-    String ipHost = "59.110.136.203";
     //    String ipHost = "lawntiger.free.ngrok.cc";
     int ipPort = 4000;
+    String ipHost = "59.110.136.203";
+
     long chatId;
     long userId;
     //    p2p私聊、group群聊
@@ -106,27 +92,8 @@ public class ChatTestActivity extends BaseActivity {
     String contentType = "txt";
     String chatTitle;
     ChatType type;
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Bundle bundle = msg.getData();
-            String data = bundle.getString(Constants.MSG);
-            LogTool.v(TAG, "收到的消息：" + data);
-            try {
-                SocketMsgResp resp = GsonTool.getServerBean(data, SocketMsgResp.class);
-                if (resp.getCode().equals("msg")) {
-                    SocketMsgResp.SocketMsgInfo info = resp.getData();
-                    SocketMsgResp.ContentMsg contentMsg = info.getContent();
-                    tvMsg.append("from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
-                } else if (resp.getCode().equals("response")) {
 
-                }
-            } catch (Exception e) {
-                tvMsg.append("from server:" + data + "\n");
-            }
-        }
-    };
+    Disposable disposable;
 
     /**
      * @param context
@@ -164,8 +131,6 @@ public class ChatTestActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-//        TalkTask task = new TalkTask(this);
-//        task.execute();
         tvMsg.setMovementMethod(ScrollingMovementMethod.getInstance());
         ivRight.setImageResource(R.drawable.ic_contact_enable);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -174,7 +139,16 @@ public class ChatTestActivity extends BaseActivity {
         ivRight.setVisibility(View.VISIBLE);
         tvTitle.setText(chatTitle);
 
-        connect();
+        disposable = RxBus.getDefault()
+                .toObservable(ReceiveMsgEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ReceiveMsgEvent>() {
+                    @Override
+                    public void accept(ReceiveMsgEvent receiveMsgEvent) throws Exception {
+                        SocketMsgResp.SocketMsgInfo info = receiveMsgEvent.getInfo();
+                        tvMsg.append(receiveMsgEvent.getData());
+                    }
+                });
     }
 
 
@@ -220,38 +194,15 @@ public class ChatTestActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         close();
+    }
+
+
+    public void close() {
+        if (disposable != null)
+            disposable.dispose();
         finish();
     }
 
-    Disposable disposable;
-
-    public void close() {
-        connector.close();
-        if (disposable != null)
-            disposable.dispose();
-    }
-
-    SocketConnector connector;
-
-    public void connect() {
-        connector = new SocketConnector(ipHost, ipPort, new SocketConnector.ReceiveListener() {
-            @Override
-            public void receive(String receiveMsg) {
-                Message msg = new Message();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.MSG, receiveMsg);
-                msg.setData(bundle);
-                handler.sendMessage(msg);
-            }
-        });
-        SocketInitJson initJson = new SocketInitJson();
-        initJson.setCode("init");
-        SocketInitJson.DataBean data = new SocketInitJson.DataBean();
-        data.setId(userId);
-        initJson.setData(data);
-        String initStr = GsonTool.getObjectToJson(initJson);
-        connector.write(initStr);
-    }
 
     public void sendMsg() {
         sendMsg = etContent.getText().toString().trim();
@@ -267,7 +218,7 @@ public class ChatTestActivity extends BaseActivity {
         json.setData(info);
         String msgContent = GsonTool.getObjectToJson(json);
         connector.write(msgContent);
-        LogTool.v(TAG, "发送的消息" + msgContent);
+        LogTool.i(TAG, "发送的消息" + msgContent);
     }
 
     @Override

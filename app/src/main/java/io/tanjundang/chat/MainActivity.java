@@ -15,7 +15,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.BaseFragment;
+import io.tanjundang.chat.base.entity.SocketMsgResp;
+import io.tanjundang.chat.base.event.ReceiveMsgEvent;
+import io.tanjundang.chat.base.network.SocketConnector;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.base.utils.GsonTool;
+import io.tanjundang.chat.base.utils.LogTool;
+import io.tanjundang.chat.base.utils.RxBus;
 import io.tanjundang.chat.me.MeFragment;
 import io.tanjundang.chat.talk.TalkFragment;
 import io.tanjundang.chat.friends.FriendsFragment;
@@ -36,6 +42,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     FriendsFragment friendsFragment;
     MeFragment meFragment;
 
+    public static SocketConnector connector;
+    int ipPort = 4000;
+    String ipHost = "59.110.136.203";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +56,38 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         initFragment();
         switchContent(currentFragment, talkFragment, 0);
+        connector = new SocketConnector(ipHost, ipPort, new SocketConnector.Callback() {
+            @Override
+            public void receive(String data) {
+                LogTool.i(TAG, "收到的消息：" + data);
+                if (data.startsWith("\\")) {
+                    data = Functions.unicode2String(data);
+                }
+                RxBus.getDefault().post(new ReceiveMsgEvent(data));
+                try {
+                    SocketMsgResp resp = GsonTool.getServerBean(data, SocketMsgResp.class);
+                    if (resp.getCode().equals("msg")) {
+                        SocketMsgResp.SocketMsgInfo info = resp.getData();
+                        SocketMsgResp.ContentMsg contentMsg = info.getContent();
+                        LogTool.i("SocketMsgInfo：", "from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
+                    } else if (resp.getCode().equals("response")) {
+
+                    }
+                } catch (Exception e) {
+//                tvMsg.append("from server:" + data + "\n");
+                }
+            }
+
+            @Override
+            public void sendFailure(String error) {
+
+            }
+
+            @Override
+            public void reconnect() {
+
+            }
+        });
     }
 
     private void initFragment() {

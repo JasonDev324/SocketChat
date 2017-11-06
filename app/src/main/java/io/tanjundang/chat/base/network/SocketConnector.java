@@ -9,19 +9,28 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.base.entity.SocketInitJson;
+import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
+import io.tanjundang.chat.base.utils.FormatTool;
+import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
 
 
 /**
  * @Author: TanJunDang
  * @Date: 2017/10/25
- * @Description:
+ * @Description: Socket封装
  */
 
 public class SocketConnector {
 
-    Socket socket;
+    public Socket socket;
 
     private BufferedReader br;
     private BufferedWriter bw;
@@ -30,21 +39,39 @@ public class SocketConnector {
 
     //    设置连接超时
     private static final int CONNECT_TIME_OUT = 3000;
-    ReceiveListener listener;
+    Callback listener;
 
     String ipAddress;
     int port;
     Thread connectThread;
-    Timer timer = new Timer();
+    Timer timer;
+    Timer beatHeat;
+    //    每20s发送心跳
+    int BEATHEAT_PERIOD_SECOND = 20;
 
-    public SocketConnector(String ipAddress, int port, ReceiveListener listener) {
+    boolean isReconnect = false;
+
+    public SocketConnector(String ipAddress, int port, Callback listener) {
         this.ipAddress = ipAddress;
         this.port = port;
         this.listener = listener;
         connect();
+        sendBeatHeat();
+    }
+
+    private void sendInitMsg() {
+        SocketInitJson initJson = new SocketInitJson();
+        initJson.setCode("init");
+        SocketInitJson.DataBean data = new SocketInitJson.DataBean();
+        data.setId(Global.getInstance().getUserId());
+        initJson.setData(data);
+        String initStr = GsonTool.getObjectToJson(initJson);
+        write(initStr);
     }
 
     public void connect() {
+        timer = new Timer();
+        beatHeat = new Timer();
         connectThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -57,7 +84,14 @@ public class SocketConnector {
                     bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                     if (listener == null) {
-                        throw new RuntimeException("need to setReceiveListener ");
+                        throw new RuntimeException("Callback is null");
+                    }
+
+//                    连接成功后发送初始化连接的msg
+                    sendInitMsg();
+
+                    if (isReconnect) {
+                        listener.reconnect();
                     }
 
                     try {
@@ -73,7 +107,6 @@ public class SocketConnector {
             }
         });
         connectThread.start();
-
     }
 
     /**
@@ -94,10 +127,10 @@ public class SocketConnector {
                     bw.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    listener.sendFailure(e.getMessage());
                 }
-
             }
-        }, 0, 500);
+        }, 500);
     }
 
     /**
@@ -106,57 +139,44 @@ public class SocketConnector {
      * @param msg
      * @throws IOException
      */
-    public void sendMsg(String msg) throws IOException {
+    public void sendBeatHeatMsg(String msg) throws IOException {
+        if (bw == null) {
+            LogTool.e("SocketConnector", "心跳bw为null");
+            return;
+        }
+        LogTool.i("SocketConnector", "正常发送心跳包-----" + FormatTool.getYyyyMmDdHhMmSs(System.currentTimeMillis()));
         bw.write(msg + "\r");
         bw.flush();
     }
 
-    int HEARBEAT_PERIOD_SECOND = 20;
-
-    public void sendBeatHeat(final String beatHeadMsg) throws IOException {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-//                                    socket.sendUrgentData(0xFF); // 发送心跳包
-                    /**
-                     * 定时向服务器发送消息，让服务器过滤掉该信息。
-                     */
-                    sendMsg(beatHeadMsg);
-                    System.out.println("正常发送心跳包");
-                } catch (IOException e) {
-                    System.out.println("发送心跳失败,请求重连");
-                    reconnect();
-                }
-            }
-        }, 0, HEARBEAT_PERIOD_SECOND * 1000);
-//        Observable.interval(HEARBEAT_PERIOD_SECOND, TimeUnit.SECONDS)
-//                .subscribe(new Observer<Long>() {
-//
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        disposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onNext(Long value) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        disposable.dispose();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        disposable.dispose();
-//                    }
-//                });
+    private void sendBeatHeat() {
+        /**
+         * 定时向服务器发送消息，让服务器过滤掉该信息。
+         */
+        SocketKeepConnectJson json = new SocketKeepConnectJson();
+        json.setCode("ping");
+        final String jsonStr = GsonTool.getObjectToJson(json);
+        Observable.interval(BEATHEAT_PERIOD_SECOND, TimeUnit.SECONDS)
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        try {
+//              socket.sendUrgentData(0xFF); // 发送心跳包
+                            /**
+                             * 定时向服务器发送消息，让服务器过滤掉该信息。
+                             */
+                            sendBeatHeatMsg(jsonStr);
+                        } catch (IOException e) {
+                            LogTool.i("SocketConnector", "发送心跳失败,请求重连");
+                            reconnect();
+                        }
+                    }
+                });
     }
 
     public void close() {
+        beatHeat.cancel();
         try {
             if (socket != null)
                 socket.close();
@@ -169,17 +189,25 @@ public class SocketConnector {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        LogTool.i("SocketConnector", "Socket关闭");
     }
 
     /**
-     * 可能还有另外的操作
+     * 重连
      */
     public void reconnect() {
+        isReconnect = true;
+        close();
         connect();
     }
 
 
-    public interface ReceiveListener {
+    public interface Callback {
+
         void receive(String msg);
+
+        void sendFailure(String error);
+
+        void reconnect();
     }
 }

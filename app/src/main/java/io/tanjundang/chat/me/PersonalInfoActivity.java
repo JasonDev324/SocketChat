@@ -32,6 +32,7 @@ import io.tanjundang.chat.base.utils.DialogTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.ItemTool;
 import io.tanjundang.chat.talk.ChatActivity;
+import io.tanjundang.chat.talk.ChatTestActivity;
 
 /**
  * @Author: TanJunDang
@@ -103,7 +104,7 @@ public class PersonalInfoActivity extends BaseActivity {
         if (v.equals(tvBack)) {
             finish();
         } else if (v.equals(tvSend)) {
-            ChatActivity.Start(this, info.getFriend_id(), ChatType.P2P, info.getName());
+            ChatTestActivity.Start(this, info.getFriend_id(), ChatType.P2P, info.getName());
         } else if (v.equals(tvDel)) {
             DialogTool.getInstance()
                     .showDialog(this, "删除好友", "同时会屏蔽对方的临时对话，不再接收此人的消息。", new DialogInterface.OnClickListener() {
