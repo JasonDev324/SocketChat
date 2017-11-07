@@ -168,7 +168,6 @@ public class SocketConnector {
                              */
                             sendBeatHeatMsg(jsonStr);
                         } catch (IOException e) {
-                            LogTool.i("SocketConnector", "发送心跳失败,请求重连");
                             reconnect();
                         }
                     }
@@ -196,6 +195,7 @@ public class SocketConnector {
      * 重连
      */
     public void reconnect() {
+        LogTool.i("SocketConnector", "发送心跳失败,请求重连");
         isReconnect = true;
         close();
         connect();

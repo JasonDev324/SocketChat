@@ -3,13 +3,12 @@ package io.tanjundang.chat;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +21,7 @@ import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
 import io.tanjundang.chat.base.utils.RxBus;
+import io.tanjundang.chat.base.utils.cache.CacheTool;
 import io.tanjundang.chat.me.MeFragment;
 import io.tanjundang.chat.talk.TalkFragment;
 import io.tanjundang.chat.friends.FriendsFragment;
@@ -46,6 +46,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     int ipPort = 4000;
     String ipHost = "59.110.136.203";
 
+    ArrayList<SocketMsgResp.SocketMsgInfo> loadList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +65,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 if (data.startsWith("\\")) {
                     data = Functions.unicode2String(data);
                 }
-                RxBus.getDefault().post(new ReceiveMsgEvent(data));
+
                 try {
                     SocketMsgResp resp = GsonTool.getServerBean(data, SocketMsgResp.class);
                     if (resp.getCode().equals("msg")) {
                         SocketMsgResp.SocketMsgInfo info = resp.getData();
+                        loadList.clear();
+                        loadList.addAll(CacheTool.loadReceiveMsg(MainActivity.this));
+                        loadList.add(info);
+                        CacheTool.saveReceiveMsg(MainActivity.this, loadList);
+                        RxBus.getDefault().post(new ReceiveMsgEvent(info));
                         SocketMsgResp.ContentMsg contentMsg = info.getContent();
                         LogTool.i("SocketMsgInfo：", "from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
                     } else if (resp.getCode().equals("response")) {

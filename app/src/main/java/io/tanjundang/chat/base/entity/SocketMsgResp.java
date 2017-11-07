@@ -1,5 +1,7 @@
 package io.tanjundang.chat.base.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author: TanJunDang
  * @Date: 2017/10/31
@@ -27,7 +29,7 @@ public class SocketMsgResp {
         this.data = data;
     }
 
-    public static class SocketMsgInfo {
+    public static class SocketMsgInfo implements Serializable {
         //接收消息用到
         private int groupId;// 为0则为私聊
         private int userId;// 发送者id
@@ -38,7 +40,15 @@ public class SocketMsgResp {
         private String chatType;// p2p: 私聊, group: 群聊
         private long id;//好友id或者群id
         private ContentMsg content;
+        long time;
 
+        public long getTime() {
+            return time;
+        }
+
+        public void setTime(long time) {
+            this.time = time;
+        }
 
         public String getGroupName() {
             return groupName;
@@ -97,7 +107,7 @@ public class SocketMsgResp {
         }
     }
 
-    public static class ContentMsg {
+    public static class ContentMsg implements Serializable {
         private String contentType;// txt: 文本, audio: 音频, video: 视频
         private String body;
 

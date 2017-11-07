@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,6 +39,7 @@ import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
 import io.tanjundang.chat.base.utils.RxBus;
+import io.tanjundang.chat.base.utils.cache.CacheTool;
 import io.tanjundang.chat.friends.ChatMsgActivity;
 
 import static io.tanjundang.chat.MainActivity.connector;
@@ -94,6 +97,7 @@ public class ChatTestActivity extends BaseActivity {
     ChatType type;
 
     Disposable disposable;
+    ArrayList<SocketMsgResp.SocketMsgInfo> list = new ArrayList<>();
 
     /**
      * @param context
@@ -138,6 +142,9 @@ public class ChatTestActivity extends BaseActivity {
         }
         ivRight.setVisibility(View.VISIBLE);
         tvTitle.setText(chatTitle);
+        list.clear();
+        list.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
+        tvMsg.append("List Size:" + list.size());
 
         disposable = RxBus.getDefault()
                 .toObservable(ReceiveMsgEvent.class)
@@ -145,8 +152,9 @@ public class ChatTestActivity extends BaseActivity {
                 .subscribe(new Consumer<ReceiveMsgEvent>() {
                     @Override
                     public void accept(ReceiveMsgEvent receiveMsgEvent) throws Exception {
-                        SocketMsgResp.SocketMsgInfo info = receiveMsgEvent.getInfo();
-                        tvMsg.append(receiveMsgEvent.getData());
+                        list.clear();
+                        list.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
+                        tvMsg.append("List Size:" + list.size());
                     }
                 });
     }
