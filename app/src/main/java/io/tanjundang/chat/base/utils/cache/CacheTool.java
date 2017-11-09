@@ -18,6 +18,7 @@ public class CacheTool {
     private static final String ACCOUNT = "ACCOUNT";
     private static final String CACHE = "CACHE";
     private static final String RECEIVE_MSG_INFO = "RECEIVE_MSG_INFO";
+    private static final String SEND_MSG_INFO = "SEND_MSG_INFO";
 
     public static void release(Context context) {
         CacheModel.clear(context);
@@ -41,4 +42,11 @@ public class CacheTool {
         return CacheModel.loadList(context, RECEIVE_MSG_INFO);
     }
 
+    public static void saveSendMsg(Context context, ArrayList<SocketMsgResp.SocketMsgInfo> list) {
+        CacheModel.saveList(context, SEND_MSG_INFO, list);
+    }
+
+    public static ArrayList<SocketMsgResp.SocketMsgInfo> loadSendMsg(Context context) {
+        return CacheModel.loadList(context, SEND_MSG_INFO);
+    }
 }

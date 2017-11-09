@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -35,6 +36,7 @@ import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
 import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.event.ReceiveMsgEvent;
+import io.tanjundang.chat.base.utils.FormatTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
@@ -84,9 +86,6 @@ public class ChatTestActivity extends BaseActivity {
     TextView tvMsg;
 
     String sendMsg;
-    //    String ipHost = "lawntiger.free.ngrok.cc";
-    int ipPort = 4000;
-    String ipHost = "59.110.136.203";
 
     long chatId;
     long userId;
@@ -97,7 +96,8 @@ public class ChatTestActivity extends BaseActivity {
     ChatType type;
 
     Disposable disposable;
-    ArrayList<SocketMsgResp.SocketMsgInfo> list = new ArrayList<>();
+    ArrayList<SocketMsgResp.SocketMsgInfo> receiveList = new ArrayList<>();
+    ArrayList<SocketMsgResp.SocketMsgInfo> sendList = new ArrayList<>();
 
     /**
      * @param context
@@ -142,19 +142,28 @@ public class ChatTestActivity extends BaseActivity {
         }
         ivRight.setVisibility(View.VISIBLE);
         tvTitle.setText(chatTitle);
-        list.clear();
-        list.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
-        tvMsg.append("List Size:" + list.size());
+        receiveList.clear();
+        receiveList.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
 
+        for (SocketMsgResp.SocketMsgInfo info : receiveList) {
+            tvMsg.append("收到的消息 from:" + info.getUserName() + "日期：" + FormatTool.getYyyyMmDdHhMmSs(info.getTime()) + info.getContent().getBody() + "\n");
+        }
+
+
+        sendList.clear();
+        sendList.addAll(CacheTool.loadSendMsg(ChatTestActivity.this));
+        for (SocketMsgResp.SocketMsgInfo info : sendList) {
+            tvMsg.append("发送的消息 ：" + info.getUserName() + "日期：" + FormatTool.getYyyyMmDdHhMmSs(info.getTime()) + info.getContent().getBody() + "\n");
+        }
         disposable = RxBus.getDefault()
                 .toObservable(ReceiveMsgEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<ReceiveMsgEvent>() {
                     @Override
                     public void accept(ReceiveMsgEvent receiveMsgEvent) throws Exception {
-                        list.clear();
-                        list.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
-                        tvMsg.append("List Size:" + list.size());
+                        receiveList.clear();
+                        receiveList.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
+                        tvMsg.append("收到的消息 from:" + receiveMsgEvent.getInfo().getContent().getBody() + "\n");
                     }
                 });
     }
@@ -185,6 +194,11 @@ public class ChatTestActivity extends BaseActivity {
                             etContent.setText("");
                             Functions.toast("发送成功");
                         }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            Functions.toast("发送失败");
+                        }
                     });
         } else if (v.equals(ivAudio)) {
 
@@ -212,7 +226,7 @@ public class ChatTestActivity extends BaseActivity {
     }
 
 
-    public void sendMsg() {
+    public void sendMsg() throws IOException {
         sendMsg = etContent.getText().toString().trim();
         SocketMsgResp json = new SocketMsgResp();
         SocketMsgResp.SocketMsgInfo info = new SocketMsgResp.SocketMsgInfo();
@@ -222,11 +236,14 @@ public class ChatTestActivity extends BaseActivity {
         info.setChatType(chatType);
         info.setId(chatId);
         info.setContent(msg);
+        info.setTime(System.currentTimeMillis());
         json.setCode("msg");
         json.setData(info);
         String msgContent = GsonTool.getObjectToJson(json);
-        connector.write(msgContent);
         LogTool.i(TAG, "发送的消息" + msgContent);
+        connector.write(msgContent);
+        sendList.add(info);
+        CacheTool.saveSendMsg(ChatTestActivity.this, sendList);
     }
 
     @Override

@@ -149,6 +149,7 @@ public class GroupChatActivity extends BaseActivity {
 
         @Override
         public void convert(CommonHolder holder, final GroupChatResp.GroupBean data, int pos) {
+            if (data.getGroup() == null) return;
             holder.setText(R.id.tvName, data.getGroup().getName(), null)
                     .itemClick(new View.OnClickListener() {
                         @Override

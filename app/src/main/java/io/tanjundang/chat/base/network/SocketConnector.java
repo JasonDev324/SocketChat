@@ -56,7 +56,6 @@ public class SocketConnector {
         this.port = port;
         this.listener = listener;
         connect();
-        sendBeatHeat();
     }
 
     private void sendInitMsg() {
@@ -66,7 +65,11 @@ public class SocketConnector {
         data.setId(Global.getInstance().getUserId());
         initJson.setData(data);
         String initStr = GsonTool.getObjectToJson(initJson);
-        write(initStr);
+        try {
+            write(initStr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void connect() {
@@ -89,7 +92,7 @@ public class SocketConnector {
 
 //                    连接成功后发送初始化连接的msg
                     sendInitMsg();
-
+                    sendBeatHeat();
                     if (isReconnect) {
                         listener.reconnect();
                     }
@@ -114,23 +117,14 @@ public class SocketConnector {
      *
      * @param msg
      */
-    public void write(final String msg) {
+    public void write(final String msg) throws IOException {
         if (bw == null) {
             LogTool.e("SocketConnector", "服务器GG");
-            return;
+            throw new RuntimeException("SocketConnector --------服务器GG");
         }
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    bw.write(msg + "\r");
-                    bw.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    listener.sendFailure(e.getMessage());
-                }
-            }
-        }, 500);
+        bw.write(msg + "\r");
+        bw.flush();
+
     }
 
     /**
@@ -157,6 +151,7 @@ public class SocketConnector {
         json.setCode("ping");
         final String jsonStr = GsonTool.getObjectToJson(json);
         Observable.interval(BEATHEAT_PERIOD_SECOND, TimeUnit.SECONDS)
+                .delay(500, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
