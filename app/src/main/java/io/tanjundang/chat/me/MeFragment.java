@@ -66,11 +66,10 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivAvatar, R.id.tvAlbum,
             R.id.tvWallet, R.id.tvFriends,
-            R.id.tvUpdate})
+            R.id.tvUpdate, R.id.ivSetting})
     public void onClick(View v) {
         if (v.equals(ivAvatar)) {
-            Intent intent = new Intent(getContext(), ChatTestActivity.class);
-            startActivity(intent);
+
         } else if (v.equals(tvAlbum)) {
 
         } else if (v.equals(tvWallet)) {
@@ -79,6 +78,9 @@ public class MeFragment extends BaseFragment {
 
         } else if (v.equals(tvUpdate)) {
             Functions.toast(Functions.getGitVersion());
+        } else if (v.equals(ivSetting)) {
+            Intent intent = new Intent(getContext(), SettingActivity.class);
+            startActivity(intent);
         }
     }
 

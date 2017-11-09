@@ -12,9 +12,13 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
+import io.tanjundang.chat.base.event.FinishEvent;
 import io.tanjundang.chat.base.event.ReceiveMsgEvent;
 import io.tanjundang.chat.base.network.SocketConnector;
 import io.tanjundang.chat.base.utils.Functions;
@@ -47,6 +51,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     String ipHost = "59.110.136.203";
 
     ArrayList<SocketMsgResp.SocketMsgInfo> loadList = new ArrayList<>();
+
+    Disposable closeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
             }
         });
+
+        closeDisposable = RxBus.getDefault()
+                .toObservable(FinishEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<FinishEvent>() {
+                    @Override
+                    public void accept(FinishEvent finishEvent) throws Exception {
+                        finish();
+                    }
+                });
     }
 
     private void initFragment() {

@@ -66,7 +66,8 @@
         <activity android:name=".friends.GroupChatActivity" />
         <activity android:name=".me.PersonalInfoActivity" />
         <activity android:name=".friends.ChatMsgActivity" />
-        <activity android:name=".friends.FriendSelectActivity"></activity>
+        <activity android:name=".friends.FriendSelectActivity" />
+        <activity android:name=".me.SettingActivity"></activity>
     </application>
 
 </manifest>
