@@ -61,19 +61,19 @@ android {
 
     productFlavors {
         inner {
-            buildConfigField("String", "BASE_URL", "\"http://lawntiger.free.ngrok.cc/api/\"");
+            buildConfigField("String", "BASE_URL", "\"http://59.110.136.203:8282/api/\"");
             buildConfigField "boolean", "DEBUG_MODE", "true"
 //            signingConfig signingConfigs.release
             manifestPlaceholders = [GIT_VERSION: getGitVersion(), QQ_SCHEME: "tencent1106457974"]
         }
 
         online_test {
-            buildConfigField("String", "BASE_URL", "\"http://lawntiger.free.ngrok.cc/api/\"");
+            buildConfigField("String", "BASE_URL", "\"http://59.110.136.203:8282/api/\"");
             buildConfigField "boolean", "DEBUG_MODE", "true"
         }
 
         online_adv {
-            buildConfigField("String", "BASE_URL", "\"http://lawntiger.free.ngrok.cc/api/\"");
+            buildConfigField("String", "BASE_URL", "\"http://59.110.136.203:8282/api/\"");
             buildConfigField "boolean", "DEBUG_MODE", "true"
         }
     }
