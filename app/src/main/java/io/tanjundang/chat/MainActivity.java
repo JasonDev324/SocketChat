@@ -76,9 +76,18 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                     if (resp.getCode().equals("msg")) {
                         SocketMsgResp.SocketMsgInfo info = resp.getData();
                         loadList.clear();
-                        loadList.addAll(CacheTool.loadReceiveMsg(MainActivity.this));
-                        loadList.add(info);
-                        CacheTool.saveReceiveMsg(MainActivity.this, loadList);
+                        if (info.getGroupId() == 0) {
+                            //私聊
+                            loadList.addAll(CacheTool.loadReceiveMsg(MainActivity.this, info.getUserId()));
+                            loadList.add(info);
+                            CacheTool.saveReceiveMsg(MainActivity.this, loadList, info.getUserId());
+                        } else {
+                            //群聊
+                            loadList.addAll(CacheTool.loadGroupReceiveMsg(MainActivity.this, info.getGroupId()));
+                            loadList.add(info);
+                            CacheTool.saveGroupReceiveMsg(MainActivity.this, loadList, info.getGroupId());
+                        }
+
                         RxBus.getDefault().post(new ReceiveMsgEvent(info));
                         SocketMsgResp.ContentMsg contentMsg = info.getContent();
                         LogTool.i("SocketMsgInfo：", "from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
@@ -88,11 +97,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 } catch (Exception e) {
 //                tvMsg.append("from server:" + data + "\n");
                 }
-            }
-
-            @Override
-            public void sendFailure(String error) {
-
             }
 
             @Override

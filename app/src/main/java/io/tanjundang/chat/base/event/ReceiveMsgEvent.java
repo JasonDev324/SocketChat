@@ -15,19 +15,6 @@ public class ReceiveMsgEvent {
     }
 
     SocketMsgResp.SocketMsgInfo info;
-    String data;
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public ReceiveMsgEvent(String data) {
-        this.data = data;
-    }
 
     public SocketMsgResp.SocketMsgInfo getInfo() {
         return info;

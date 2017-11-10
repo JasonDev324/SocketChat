@@ -119,8 +119,8 @@ public class SocketConnector {
      */
     public void write(final String msg) throws IOException {
         if (bw == null) {
-            LogTool.e("SocketConnector", "服务器GG");
-            throw new RuntimeException("SocketConnector --------服务器GG");
+            reconnect();
+//            throw new RuntimeException("SocketConnector --------服务器GG");
         }
         bw.write(msg + "\r");
         bw.flush();
@@ -200,8 +200,6 @@ public class SocketConnector {
     public interface Callback {
 
         void receive(String msg);
-
-        void sendFailure(String error);
 
         void reconnect();
     }

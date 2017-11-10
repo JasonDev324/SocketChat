@@ -120,10 +120,16 @@ public class ChatTestActivity extends BaseActivity {
         userId = Global.getInstance().getUserId();
         chatTitle = getIntent().getStringExtra(Constants.DATA);
         type = (ChatType) getIntent().getSerializableExtra(Constants.TYPE);
+        receiveList.clear();
+        sendList.clear();
+
         if (type == ChatType.P2P) {
             chatId = getIntent().getLongExtra(Constants.ID, 0);
+            receiveList.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this, chatId));
+            sendList.addAll(CacheTool.loadSendMsg(ChatTestActivity.this, chatId));
         } else {
             chatId = getIntent().getLongExtra(Constants.ID, 0);
+            receiveList.addAll(CacheTool.loadGroupReceiveMsg(ChatTestActivity.this, chatId));
         }
         chatType = type == ChatType.P2P ? "p2p" : "group";
         ButterKnife.bind(this);
@@ -142,18 +148,13 @@ public class ChatTestActivity extends BaseActivity {
         }
         ivRight.setVisibility(View.VISIBLE);
         tvTitle.setText(chatTitle);
-        receiveList.clear();
-        receiveList.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
 
         for (SocketMsgResp.SocketMsgInfo info : receiveList) {
-            tvMsg.append("收到的消息 from:" + info.getUserName() + "日期：" + FormatTool.getYyyyMmDdHhMmSs(info.getTime()) + info.getContent().getBody() + "\n");
+            tvMsg.append("from " + info.getUserName() + " : " + info.getContent().getBody() + "\n");
         }
 
-
-        sendList.clear();
-        sendList.addAll(CacheTool.loadSendMsg(ChatTestActivity.this));
         for (SocketMsgResp.SocketMsgInfo info : sendList) {
-            tvMsg.append("发送的消息 ：" + info.getUserName() + "日期：" + FormatTool.getYyyyMmDdHhMmSs(info.getTime()) + info.getContent().getBody() + "\n");
+            tvMsg.append("from " + info.getUserName() + " : " + info.getContent().getBody() + "\n");
         }
         disposable = RxBus.getDefault()
                 .toObservable(ReceiveMsgEvent.class)
@@ -161,9 +162,15 @@ public class ChatTestActivity extends BaseActivity {
                 .subscribe(new Consumer<ReceiveMsgEvent>() {
                     @Override
                     public void accept(ReceiveMsgEvent receiveMsgEvent) throws Exception {
-                        receiveList.clear();
-                        receiveList.addAll(CacheTool.loadReceiveMsg(ChatTestActivity.this));
-                        tvMsg.append("收到的消息 from:" + receiveMsgEvent.getInfo().getContent().getBody() + "\n");
+                        SocketMsgResp.SocketMsgInfo info = receiveMsgEvent.getInfo();
+//                        处理接收到的消息，解决私聊发消息到群聊的问题
+                        if (info.getGroupId() == 0 && type == ChatType.P2P) {
+//                            私聊
+                            tvMsg.append("from  " + receiveMsgEvent.getInfo().getUserName() + " :  " + receiveMsgEvent.getInfo().getContent().getBody() + "\n");
+                        } else if (info.getGroupId() != 0 && type == ChatType.GROUP) {
+//                            群聊
+                            tvMsg.append("from  " + receiveMsgEvent.getInfo().getUserName() + " :  " + receiveMsgEvent.getInfo().getContent().getBody() + "\n");
+                        }
                     }
                 });
     }
@@ -192,6 +199,7 @@ public class ChatTestActivity extends BaseActivity {
                         @Override
                         public void accept(Integer integer) throws Exception {
                             etContent.setText("");
+                            tvMsg.append("me " + " :  " + sendMsg + "\n");
                             Functions.toast("发送成功");
                         }
                     }, new Consumer<Throwable>() {
@@ -229,21 +237,25 @@ public class ChatTestActivity extends BaseActivity {
     public void sendMsg() throws IOException {
         sendMsg = etContent.getText().toString().trim();
         SocketMsgResp json = new SocketMsgResp();
-        SocketMsgResp.SocketMsgInfo info = new SocketMsgResp.SocketMsgInfo();
-        SocketMsgResp.ContentMsg msg = new SocketMsgResp.ContentMsg();
-        msg.setContentType(contentType);
-        msg.setBody(sendMsg);
-        info.setChatType(chatType);
-        info.setId(chatId);
-        info.setContent(msg);
-        info.setTime(System.currentTimeMillis());
+        SocketMsgResp.SocketMsgInfo sendInfo = new SocketMsgResp.SocketMsgInfo();
+        SocketMsgResp.ContentMsg sendInfoMsg = new SocketMsgResp.ContentMsg();
+        sendInfoMsg.setContentType(contentType);
+        sendInfoMsg.setBody(sendMsg);
+        sendInfo.setChatType(chatType);
+        sendInfo.setId(chatId);
+        sendInfo.setContent(sendInfoMsg);
+        sendInfo.setTime(System.currentTimeMillis());
         json.setCode("msg");
-        json.setData(info);
+        json.setData(sendInfo);
         String msgContent = GsonTool.getObjectToJson(json);
-        LogTool.i(TAG, "发送的消息" + msgContent);
         connector.write(msgContent);
-        sendList.add(info);
-        CacheTool.saveSendMsg(ChatTestActivity.this, sendList);
+        LogTool.i(TAG, "发送的消息" + msgContent);
+        sendList.add(sendInfo);
+        if (type == ChatType.P2P) {
+            CacheTool.saveSendMsg(ChatTestActivity.this, sendList, chatId);
+        } else {
+            CacheTool.saveGroupSendMsg(ChatTestActivity.this, sendList, chatId);
+        }
     }
 
     @Override
