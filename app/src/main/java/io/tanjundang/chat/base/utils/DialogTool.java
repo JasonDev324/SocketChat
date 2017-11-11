@@ -2,6 +2,7 @@ package io.tanjundang.chat.base.utils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -83,6 +84,30 @@ public class DialogTool {
 //        dialog.setCancelable(false);
 ////        dialog.setRetainInstance(false);//Fragment忽略重建，true设置旋转屏幕后消失。
 //        dialog.show(context.getSupportFragmentManager(), DIALOG_TAG);
+    }
+
+    public void showSingleBtnDialog(Context context, String title, String msg, final DialogInterface.OnClickListener positiveListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.ProgressDialogStyle);
+        builder.setCancelable(false);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("确定", positiveListener);
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
+        //        反射修改dialog content的颜色
+        try {
+            Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
+            mAlert.setAccessible(true);
+            Object mAlertController = mAlert.get(alertDialog);
+            Field mMessage = mAlertController.getClass().getDeclaredField("mMessageView");
+            mMessage.setAccessible(true);
+            TextView mMessageView = (TextView) mMessage.get(mAlertController);
+            mMessageView.setTextColor(Color.WHITE);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

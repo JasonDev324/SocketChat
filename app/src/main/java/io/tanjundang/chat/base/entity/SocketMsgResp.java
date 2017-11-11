@@ -8,18 +8,8 @@ import java.io.Serializable;
  * @Description:
  */
 
-public class SocketMsgResp {
-
-    private String code;
+public class SocketMsgResp extends SocketBaseBean {
     private SocketMsgInfo data;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public SocketMsgInfo getData() {
         return data;

@@ -10,21 +10,28 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.AddFriendResp;
+import io.tanjundang.chat.base.entity.SocketFriendReqResp;
 import io.tanjundang.chat.base.entity.type.SetType;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.base.utils.GsonTool;
+
+import static io.tanjundang.chat.MainActivity.connector;
 
 /**
  * @Author: TanJunDang
@@ -87,7 +94,7 @@ public class CommonSetActivity extends BaseActivity {
     @OnClick({R.id.tvSubTitle})
     public void onClick(View v) {
         if (v.equals(tvSubTitle)) {
-            String content = etContent.getText().toString().trim();
+            final String content = etContent.getText().toString().trim();
             if (TextUtils.isEmpty(content)) {
                 String error = "";
                 if (type == SetType.ADD_FRIEND) {
@@ -104,20 +111,36 @@ public class CommonSetActivity extends BaseActivity {
                         .createApi(BusinessApi.class)
                         .addFriend(content)
                         .subscribeOn(Schedulers.io())
+                        .doOnNext(new Consumer<AddFriendResp>() {
+                            @Override
+                            public void accept(AddFriendResp resp) throws Exception {
+                                if (resp.isSuccess()) {
+                                    AddFriendResp.AddFriendInfo info = resp.getData();
+                                    if (info == null) return;
+                                    SocketFriendReqResp bean = new SocketFriendReqResp();
+                                    bean.setCode("notice");
+                                    SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
+                                    reqInfo.setContent("我可以加你好友吗？");
+                                    reqInfo.setName(content);
+                                    reqInfo.setType("addFriend");
+                                    reqInfo.setId(info.getAdd_id());
+                                    reqInfo.setTime(System.currentTimeMillis());
+                                    bean.setData(reqInfo);
+                                    String reqStr = GsonTool.getObjectToJson(bean);
+                                    connector.write(reqStr);
+                                } else {
+                                    Functions.toast(resp.getMsg());
+                                }
+                            }
+                        })
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new ApiObserver<AddFriendResp>() {
                             @Override
                             public void onSuccess(AddFriendResp resp) {
-                                if (resp. isSuccess()) {
-                                    AddFriendResp.AddFriendInfo info = resp.getData();
-                                    if (info == null) return;
-                                    Intent intent = new Intent();
-                                    intent.putExtra(Constants.ID, info.getAdd_id());
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                } else {
-                                    Functions.toast(resp.getMsg());
-                                }
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.ID, resp.getData().getAdd_id());
+                                setResult(RESULT_OK, intent);
+                                finish();
                             }
 
                             @Override

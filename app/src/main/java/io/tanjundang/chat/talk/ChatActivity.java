@@ -45,7 +45,7 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.entity.SocketInitJson;
-import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
+import io.tanjundang.chat.base.entity.SocketBaseBean;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
 import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.utils.Functions;
@@ -265,7 +265,7 @@ public class ChatActivity extends BaseActivity {
                                     /**
                                      * 定时向服务器发送消息，让服务器过滤掉该信息。
                                      */
-                                    SocketKeepConnectJson json = new SocketKeepConnectJson();
+                                    SocketBaseBean json = new SocketBaseBean();
                                     json.setCode("ping");
                                     String jsonStr = GsonTool.getObjectToJson(json);
                                     bw.write(jsonStr + "\r");

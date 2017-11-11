@@ -1,6 +1,10 @@
 package io.tanjundang.chat;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -17,10 +21,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.BaseFragment;
+import io.tanjundang.chat.base.Constants;
+import io.tanjundang.chat.base.entity.FriendsResp;
+import io.tanjundang.chat.base.entity.SocketBaseBean;
+import io.tanjundang.chat.base.entity.SocketFriendReqResp;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
 import io.tanjundang.chat.base.event.FinishEvent;
 import io.tanjundang.chat.base.event.ReceiveMsgEvent;
 import io.tanjundang.chat.base.network.SocketConnector;
+import io.tanjundang.chat.base.utils.DialogTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
@@ -53,6 +62,23 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     Disposable closeDisposable;
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            SocketFriendReqResp.FriendReqInfo info = (SocketFriendReqResp.FriendReqInfo) msg.getData().getSerializable(Constants.MSG);
+            DialogTool
+                    .getInstance()
+                    .showSingleBtnDialog(MainActivity.this,
+                            "好友请求", "用户：" + info.getName() + "\n内容：" + info.getContent(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +98,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 }
 
                 try {
-                    SocketMsgResp resp = GsonTool.getServerBean(data, SocketMsgResp.class);
+
+                    SocketBaseBean resp = GsonTool.getServerBean(data, SocketBaseBean.class);
                     if (resp.getCode().equals("msg")) {
-                        SocketMsgResp.SocketMsgInfo info = resp.getData();
+                        SocketMsgResp bean = GsonTool.getServerBean(data, SocketMsgResp.class);
+                        SocketMsgResp.SocketMsgInfo info = bean.getData();
                         loadList.clear();
                         if (info.getGroupId() == 0) {
                             //私聊
@@ -91,6 +119,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                         RxBus.getDefault().post(new ReceiveMsgEvent(info));
                         SocketMsgResp.ContentMsg contentMsg = info.getContent();
                         LogTool.i("SocketMsgInfo：", "from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
+                    } else if (resp.getCode().equals("notice")) {
+                        SocketFriendReqResp bean = GsonTool.getServerBean(data, SocketFriendReqResp.class);
+                        SocketFriendReqResp.FriendReqInfo info = bean.getData();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(Constants.MSG, info);
+                        Message message = new Message();
+                        message.setData(bundle);
+                        handler.sendMessage(message);
                     } else if (resp.getCode().equals("response")) {
 
                     }

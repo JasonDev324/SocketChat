@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -16,7 +15,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.entity.SocketInitJson;
-import io.tanjundang.chat.base.entity.SocketKeepConnectJson;
+import io.tanjundang.chat.base.entity.SocketBaseBean;
 import io.tanjundang.chat.base.utils.FormatTool;
 import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.utils.LogTool;
@@ -147,7 +146,7 @@ public class SocketConnector {
         /**
          * 定时向服务器发送消息，让服务器过滤掉该信息。
          */
-        SocketKeepConnectJson json = new SocketKeepConnectJson();
+        SocketBaseBean json = new SocketBaseBean();
         json.setCode("ping");
         final String jsonStr = GsonTool.getObjectToJson(json);
         Observable.interval(BEATHEAT_PERIOD_SECOND, TimeUnit.SECONDS)

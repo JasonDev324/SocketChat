@@ -6,7 +6,7 @@ package io.tanjundang.chat.base.entity;
  * @Description:
  */
 
-public class SocketKeepConnectJson {
+public class SocketBaseBean {
     String code;
 
     public String getCode() {

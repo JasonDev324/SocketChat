@@ -6,19 +6,8 @@ package io.tanjundang.chat.base.entity;
  * @Description:
  */
 
-public class SocketInitJson {
-
-
-    private String code;
+public class SocketInitJson extends SocketBaseBean {
     private DataBean data;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public DataBean getData() {
         return data;
