@@ -170,6 +170,7 @@ public class NewFriendActivity extends BaseActivity {
                                                 SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
                                                 reqInfo.setName(data.getName());
                                                 reqInfo.setType("responseFriend");
+                                                reqInfo.setIsAccept( HandleType.ACCEPT.getType());
                                                 reqInfo.setId(data.getFriend_id());
                                                 reqInfo.setTime(System.currentTimeMillis());
                                                 bean.setData(reqInfo);
@@ -213,6 +214,7 @@ public class NewFriendActivity extends BaseActivity {
                                                 SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
                                                 reqInfo.setName(data.getName());
                                                 reqInfo.setType("responseFriend");
+                                                reqInfo.setIsAccept( HandleType.REJECT.getType());
                                                 reqInfo.setId(data.getFriend_id());
                                                 reqInfo.setTime(System.currentTimeMillis());
                                                 bean.setData(reqInfo);
