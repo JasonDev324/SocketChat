@@ -2,13 +2,15 @@ package io.tanjundang.chat.base.entity;
 
 import java.io.Serializable;
 
+import io.tanjundang.chat.base.entity.type.HandleType;
+
 /**
  * @Author: TanJunDang
  * @Date: 2017/11/11
  * @Description:
  */
 
-public class SocketFriendReqResp  extends SocketBaseBean{
+public class SocketFriendReqResp extends SocketBaseBean {
 
     private FriendReqInfo data;
 
@@ -20,13 +22,30 @@ public class SocketFriendReqResp  extends SocketBaseBean{
         this.data = data;
     }
 
-    public static class FriendReqInfo implements Serializable{
+    public static class FriendReqInfo implements Serializable {
 
         private String type;
         private long id;
         private String name;
         private String content;
         private long time;
+//        0拒绝、1同意
+        /**
+         * {@link io.tanjundang.chat.base.entity.type.HandleType}
+         */
+        private int isAccept;
+
+        public boolean isAddFriendSuccess() {
+            return HandleType.ACCEPT.getType() == isAccept ? true : false;
+        }
+
+        public int getIsAccept() {
+            return isAccept;
+        }
+
+        public void setIsAccept(int isAccept) {
+            this.isAccept = isAccept;
+        }
 
         public String getType() {
             return type;

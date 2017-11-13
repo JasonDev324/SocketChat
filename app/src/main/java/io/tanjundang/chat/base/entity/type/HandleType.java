@@ -9,7 +9,7 @@ package io.tanjundang.chat.base.entity.type;
 public enum HandleType {
 
     ACCEPT(1),
-    REJECT(2);
+    REJECT(0);
 
     int type;
 

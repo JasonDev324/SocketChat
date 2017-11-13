@@ -67,15 +67,30 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             SocketFriendReqResp.FriendReqInfo info = (SocketFriendReqResp.FriendReqInfo) msg.getData().getSerializable(Constants.MSG);
-            DialogTool
-                    .getInstance()
-                    .showSingleBtnDialog(MainActivity.this,
-                            "好友请求", "用户：" + info.getName() + "\n内容：" + info.getContent(), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
+
+            if (info.getType().equals("addFriend")) {
+                DialogTool
+                        .getInstance()
+                        .showSingleBtnDialog(MainActivity.this,
+                                "好友请求", "用户：" + info.getName() + "\n内容：" + info.getContent(), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+            } else {
+                String strMsg = info.isAddFriendSuccess() ? info.getName() + "同意了你的请求" : info.getName() + "拒绝了你的请求" + "\n理由：" + info.getContent();
+                DialogTool
+                        .getInstance()
+                        .showSingleBtnDialog(MainActivity.this,
+                                "好友请求结果", strMsg, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+            }
+
         }
     };
 

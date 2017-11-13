@@ -104,6 +104,7 @@ public class SocketConnector {
                         e.printStackTrace();
                     }
                 } catch (IOException e) {
+                    LogTool.e("SocketConnector", "服务器GG-------------" + e.getMessage());
                     e.printStackTrace();
                 }
             }

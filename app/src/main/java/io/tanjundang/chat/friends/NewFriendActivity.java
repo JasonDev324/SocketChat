@@ -21,20 +21,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.FriendsResp;
+import io.tanjundang.chat.base.entity.SocketFriendReqResp;
 import io.tanjundang.chat.base.entity.type.HandleType;
 import io.tanjundang.chat.base.entity.type.SetType;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.base.utils.GsonTool;
 import io.tanjundang.chat.base.view.CommonHolder;
 import io.tanjundang.chat.base.view.CommonRecyclerViewAdapter;
 import io.tanjundang.chat.base.view.ItemDivider;
+
+import static io.tanjundang.chat.MainActivity.connector;
 
 /**
  * @Author: TanJunDang
@@ -156,15 +161,32 @@ public class NewFriendActivity extends BaseActivity {
                                     .createApi(BusinessApi.class)
                                     .handleFriendReq(data.getFriend_id(), HandleType.ACCEPT.getType())
                                     .subscribeOn(Schedulers.io())
+                                    .doOnNext(new Consumer<HttpBaseBean>() {
+                                        @Override
+                                        public void accept(HttpBaseBean resp) throws Exception {
+                                            if (resp.isSuccess()) {
+                                                SocketFriendReqResp bean = new SocketFriendReqResp();
+                                                bean.setCode("notice");
+                                                SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
+                                                reqInfo.setName(data.getName());
+                                                reqInfo.setType("responseFriend");
+                                                reqInfo.setId(data.getFriend_id());
+                                                reqInfo.setTime(System.currentTimeMillis());
+                                                bean.setData(reqInfo);
+                                                String reqStr = GsonTool.getObjectToJson(bean);
+                                                connector.write(reqStr);
+                                            } else {
+//                                           todo     可能GG
+                                                Functions.toast(resp.getMsg());
+                                            }
+
+                                        }
+                                    })
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new ApiObserver<HttpBaseBean>() {
                                         @Override
                                         public void onSuccess(HttpBaseBean resp) {
-                                            if (resp.isSuccess()) {
-                                                springView.callFresh();
-                                            } else {
-                                                Functions.toast(resp.getMsg());
-                                            }
+                                            springView.callFresh();
                                         }
 
                                         @Override
@@ -182,6 +204,27 @@ public class NewFriendActivity extends BaseActivity {
                                     .createApi(BusinessApi.class)
                                     .handleFriendReq(data.getFriend_id(), HandleType.REJECT.getType())
                                     .subscribeOn(Schedulers.io())
+                                    .doOnNext(new Consumer<HttpBaseBean>() {
+                                        @Override
+                                        public void accept(HttpBaseBean resp) throws Exception {
+                                            if (resp.isSuccess()) {
+                                                SocketFriendReqResp bean = new SocketFriendReqResp();
+                                                bean.setCode("notice");
+                                                SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
+                                                reqInfo.setName(data.getName());
+                                                reqInfo.setType("responseFriend");
+                                                reqInfo.setId(data.getFriend_id());
+                                                reqInfo.setTime(System.currentTimeMillis());
+                                                bean.setData(reqInfo);
+                                                String reqStr = GsonTool.getObjectToJson(bean);
+                                                connector.write(reqStr);
+                                            } else {
+//                                           todo     可能GG
+                                                Functions.toast(resp.getMsg());
+                                            }
+
+                                        }
+                                    })
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new ApiObserver<HttpBaseBean>() {
                                         @Override
