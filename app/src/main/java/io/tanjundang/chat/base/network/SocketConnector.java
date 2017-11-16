@@ -133,14 +133,18 @@ public class SocketConnector {
      * @param msg
      * @throws IOException
      */
-    public void sendBeatHeatMsg(String msg) throws IOException {
+    public void sendBeatHeatMsg(String msg) {
         if (bw == null) {
             LogTool.e("SocketConnector", "心跳bw为null");
             return;
         }
         LogTool.i("SocketConnector", "正常发送心跳包-----" + FormatTool.getYyyyMmDdHhMmSs(System.currentTimeMillis()));
-        bw.write(msg + "\r");
-        bw.flush();
+        try {
+            bw.write(msg + "\r");
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendBeatHeat() {
@@ -156,15 +160,11 @@ public class SocketConnector {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        try {
-//              socket.sendUrgentData(0xFF); // 发送心跳包
-                            /**
-                             * 定时向服务器发送消息，让服务器过滤掉该信息。
-                             */
-                            sendBeatHeatMsg(jsonStr);
-                        } catch (IOException e) {
-                            reconnect();
-                        }
+                        //              socket.sendUrgentData(0xFF); // 发送心跳包
+                        /**
+                         * 定时向服务器发送消息，让服务器过滤掉该信息。
+                         */
+                        sendBeatHeatMsg(jsonStr);
                     }
                 });
     }
