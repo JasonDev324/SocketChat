@@ -18,6 +18,7 @@ import com.liaoinstan.springview.widget.SpringView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,7 +89,6 @@ public class ChatTestActivity extends BaseActivity {
     String sendMsg;
 
     long chatId;
-    long userId;
     //    p2p私聊、group群聊
     String chatType = "p2p";
     String contentType = "txt";
@@ -117,7 +117,6 @@ public class ChatTestActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        userId = Global.getInstance().getUserId();
         chatTitle = getIntent().getStringExtra(Constants.DATA);
         type = (ChatType) getIntent().getSerializableExtra(Constants.TYPE);
         receiveList.clear();
@@ -130,7 +129,10 @@ public class ChatTestActivity extends BaseActivity {
         } else {
             chatId = getIntent().getLongExtra(Constants.ID, 0);
             receiveList.addAll(CacheTool.loadGroupReceiveMsg(ChatTestActivity.this, chatId));
+            sendList.addAll(CacheTool.loadGroupSendMsg(ChatTestActivity.this, chatId));
         }
+        Collections.sort(receiveList);
+        Collections.sort(sendList);
         chatType = type == ChatType.P2P ? "p2p" : "group";
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);

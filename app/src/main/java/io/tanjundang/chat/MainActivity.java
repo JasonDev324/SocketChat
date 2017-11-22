@@ -1,6 +1,5 @@
 package io.tanjundang.chat;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -22,10 +22,11 @@ import io.reactivex.functions.Consumer;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Constants;
-import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.SocketBaseBean;
 import io.tanjundang.chat.base.entity.SocketFriendReqResp;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
+import io.tanjundang.chat.base.entity.SocketOfflineMsg;
+import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.event.FinishEvent;
 import io.tanjundang.chat.base.event.ReceiveMsgEvent;
 import io.tanjundang.chat.base.network.SocketConnector;
@@ -143,6 +144,32 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                         message.setData(bundle);
                         handler.sendMessage(message);
                     } else if (resp.getCode().equals("response")) {
+//                        处理接收到的离线消息
+                        try {
+                            SocketOfflineMsg bean = GsonTool.getServerBean(data, SocketOfflineMsg.class);
+                            for (String json : bean.getData()) {
+                                SocketMsgResp itemBean = GsonTool.getServerBean(json, SocketMsgResp.class);
+                                SocketMsgResp.SocketMsgInfo info = itemBean.getData();
+                                loadList.clear();
+                                if (info.getGroupId() == 0 && info.getChatType().equals("p2p")) {
+                                    //私聊
+                                    loadList.addAll(CacheTool.loadReceiveMsg(MainActivity.this, info.getUserId()));
+                                    loadList.add(info);
+                                    CacheTool.saveReceiveMsg(MainActivity.this, loadList, info.getUserId());
+                                } else {
+                                    //群聊
+                                    loadList.addAll(CacheTool.loadGroupReceiveMsg(MainActivity.this, info.getGroupId()));
+                                    loadList.add(info);
+                                    CacheTool.saveGroupReceiveMsg(MainActivity.this, loadList, info.getGroupId());
+                                }
+
+                                RxBus.getDefault().post(new ReceiveMsgEvent(info));
+                                SocketMsgResp.ContentMsg contentMsg = info.getContent();
+                                LogTool.i("SocketMsgInfo：", "收到离线消息from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
+                            }
+                        } catch (Exception e) {
+                            LogTool.e(TAG, e.getCause());
+                        }
 
                     }
                 } catch (Exception e) {
