@@ -1,6 +1,7 @@
 package io.tanjundang.chat;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import io.reactivex.functions.Consumer;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Constants;
+import io.tanjundang.chat.base.broadcast.MsgReceiver;
 import io.tanjundang.chat.base.entity.SocketBaseBean;
 import io.tanjundang.chat.base.entity.SocketFriendReqResp;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
@@ -134,6 +136,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
                         RxBus.getDefault().post(new ReceiveMsgEvent(info));
                         SocketMsgResp.ContentMsg contentMsg = info.getContent();
+//                        发送收到消息的广播
+                        Intent intent = new Intent(MsgReceiver.MSG_ACTION);
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        intent.putExtra(Constants.DATA, info);
+                        sendBroadcast(intent);
                         LogTool.i("SocketMsgInfo：", "from  " + info.getUserName() + " :  " + contentMsg.getBody() + "\n");
                     } else if (resp.getCode().equals("notice")) {
                         SocketFriendReqResp bean = GsonTool.getServerBean(data, SocketFriendReqResp.class);

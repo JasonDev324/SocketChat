@@ -148,6 +148,14 @@ public class SocketMsgResp extends SocketBaseBean {
         private String contentType;// txt: 文本, audio: 音频, video: 视频
         private String body;
 
+        public ContentMsg() {
+        }
+
+        public ContentMsg(String contentType, String body) {
+            this.contentType = contentType;
+            this.body = body;
+        }
+
         public String getContentType() {
             return contentType;
         }

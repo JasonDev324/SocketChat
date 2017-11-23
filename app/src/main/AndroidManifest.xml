@@ -68,6 +68,12 @@
         <activity android:name=".friends.ChatMsgActivity" />
         <activity android:name=".friends.FriendSelectActivity" />
         <activity android:name=".me.SettingActivity"></activity>
+
+        <receiver android:name=".base.broadcast.MsgReceiver">
+            <intent-filter>
+                <action android:name="io.tanjundang.github.msg.receiver"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

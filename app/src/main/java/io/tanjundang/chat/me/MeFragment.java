@@ -17,7 +17,10 @@ import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
+import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.base.broadcast.MsgReceiver;
+import io.tanjundang.chat.base.entity.SocketMsgResp;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.talk.ChatTestActivity;
 
@@ -71,7 +74,14 @@ public class MeFragment extends BaseFragment {
         if (v.equals(ivAvatar)) {
 
         } else if (v.equals(tvAlbum)) {
-
+//            SocketMsgResp.SocketMsgInfo info = new SocketMsgResp.SocketMsgInfo();
+//            info.setChatType("p2p");
+//            info.setUserName("TJD");
+//            info.setContent(new SocketMsgResp.ContentMsg("txt", "顶你肺"));
+//            Intent intent = new Intent(MsgReceiver.MSG_ACTION);
+//            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//            intent.putExtra(Constants.DATA, info);
+//            getContext().sendBroadcast(intent);
         } else if (v.equals(tvWallet)) {
 
         } else if (v.equals(tvFriends)) {
