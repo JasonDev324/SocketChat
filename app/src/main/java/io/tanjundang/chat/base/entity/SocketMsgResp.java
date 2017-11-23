@@ -23,8 +23,8 @@ public class SocketMsgResp extends SocketBaseBean {
 
     public static class SocketMsgInfo implements Serializable, Comparable<SocketMsgInfo> {
         //接收消息用到
-        private int groupId;// 为0则为私聊
-        private int userId;// 发送者id
+        private long groupId;// 为0则为私聊
+        private long userId;// 发送者id
         private String userName;// 发送者姓名
         private String groupName;
 
@@ -51,19 +51,19 @@ public class SocketMsgResp extends SocketBaseBean {
             this.groupName = groupName;
         }
 
-        public int getGroupId() {
+        public long getGroupId() {
             return groupId;
         }
 
-        public void setGroupId(int groupId) {
+        public void setGroupId(long groupId) {
             this.groupId = groupId;
         }
 
-        public int getUserId() {
+        public long getUserId() {
             return userId;
         }
 
-        public void setUserId(int userId) {
+        public void setUserId(long userId) {
             this.userId = userId;
         }
 
@@ -99,7 +99,6 @@ public class SocketMsgResp extends SocketBaseBean {
             this.content = content;
         }
 
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -122,8 +121,8 @@ public class SocketMsgResp extends SocketBaseBean {
 
         @Override
         public int hashCode() {
-            int result = groupId;
-            result = 31 * result + userId;
+            int result = (int) (groupId ^ (groupId >>> 32));
+            result = 31 * result + (int) (userId ^ (userId >>> 32));
             result = 31 * result + (userName != null ? userName.hashCode() : 0);
             result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
             result = 31 * result + (chatType != null ? chatType.hashCode() : 0);
