@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path
+        name="files_root"
+        path="Android/data/io.tanjundang.chat/" />
+    <!--name用于拼装uri这里是content://io.tanjundang.chat.provider/external_storage_root/-->
+    <!--点表示在当前目录下，即sd卡目录。/storage/emulated/0/Socket_Chat/xxx.jpg-->
+    <external-path
+        name="external_storage_root"
+        path="." />
+</paths>

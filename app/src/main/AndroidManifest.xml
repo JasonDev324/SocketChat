@@ -37,6 +37,15 @@
         android:roundIcon="@drawable/ic_default_avatar"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="io.tanjundang.chat.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
         <meta-data
             android:name="GIT_VERSION"
             android:value="${GIT_VERSION}" />

@@ -404,9 +404,9 @@ public class Functions {
         String sdPath = "";
 
         if (isSDCardExist()) {
-            sdPath = Environment.getExternalStorageDirectory() + "/ZHKJ_SYQ/";
+            sdPath = Environment.getExternalStorageDirectory() + "/Socket_Chat/";
         } else {
-            sdPath = Environment.getDataDirectory() + "/ZHKJ_SYQ/";
+            sdPath = Environment.getDataDirectory() + "/Socket_Chat/";
         }
 
         File file = new File(sdPath); //创建路径
