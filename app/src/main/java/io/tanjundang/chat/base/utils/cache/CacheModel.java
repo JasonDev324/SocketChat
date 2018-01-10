@@ -39,6 +39,7 @@ public abstract class CacheModel {
 
     public static void clear(Context context) {
         File fileDir = new File(context.getCacheDir() + "/" + FOLDER);
+        if (fileDir.listFiles() == null) return;
         for (int i = 0; i < fileDir.listFiles().length; i++) {
             fileDir.listFiles()[i].delete();
         }

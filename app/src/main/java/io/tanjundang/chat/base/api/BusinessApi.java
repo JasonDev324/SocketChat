@@ -6,6 +6,7 @@ import io.tanjundang.chat.base.entity.ChatMsgResp;
 import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
+import io.tanjundang.chat.base.entity.QiNiuTokenResp;
 import io.tanjundang.chat.base.entity.TokenResp;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import retrofit2.http.DELETE;
@@ -130,6 +131,14 @@ public interface BusinessApi {
      */
     @GET("groups/{id}")
     Observable<ChatMsgResp> getGroupMember(@Path("id") long group_id);
+
+    /**
+     * 获取七牛token
+     *
+     * @return
+     */
+    @GET("data/qiniu/token")
+    Observable<QiNiuTokenResp> getQiNiuToken();
 
     /**
      * 获取七牛token

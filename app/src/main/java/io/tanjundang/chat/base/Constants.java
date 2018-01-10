@@ -22,4 +22,5 @@ public class Constants {
     public static final String ID = "ID";
     public static final String EMAIL = "EMAIL";
     public static final String DATA = "DATA";
+    public static final String QINIU_TOKEN = "QINIU_TOKEN";
 }

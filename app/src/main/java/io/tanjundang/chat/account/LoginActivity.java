@@ -14,7 +14,9 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.MainActivity;
 import io.tanjundang.chat.R;
@@ -23,6 +25,7 @@ import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.LoginResp;
+import io.tanjundang.chat.base.entity.QiNiuTokenResp;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
@@ -72,12 +75,9 @@ public class LoginActivity extends BaseActivity {
                     .getInstance()
                     .createApi(BusinessApi.class)
                     .login(email, password)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ApiObserver<LoginResp>() {
+                    .flatMap(new Function<LoginResp, ObservableSource<QiNiuTokenResp>>() {
                         @Override
-                        public void onSuccess(LoginResp resp) {
-                            dialog.dismiss();
+                        public ObservableSource<QiNiuTokenResp> apply(LoginResp resp) {
                             if (resp.isSuccess()) {
                                 LoginResp.LoginInfo info = resp.getData();
                                 SharePreTool.getSP(LoginActivity.this).putString(Constants.TOKEN, info.getApi_token());
@@ -90,6 +90,25 @@ public class LoginActivity extends BaseActivity {
                                 Global.getInstance().setEmail(info.getEmail());
                                 Global.getInstance().setUserId(info.getId());
 
+                                return HttpReqTool.getInstance().createApi(BusinessApi.class).getQiNiuToken();
+                            } else {
+                                Functions.toast(resp.getMsg());
+                                return null;
+                            }
+
+                        }
+                    })
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new ApiObserver<QiNiuTokenResp>() {
+                        @Override
+                        public void onSuccess(QiNiuTokenResp resp) {
+                            dialog.dismiss();
+                            if (resp.isSuccess()) {
+                                QiNiuTokenResp.TokenInfo info = resp.getData();
+                                if (info == null) return;
+                                SharePreTool.getSP(LoginActivity.this).putString(Constants.QINIU_TOKEN, info.getToken());
+                                Global.getInstance().setQiniuToken(info.getToken());
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();

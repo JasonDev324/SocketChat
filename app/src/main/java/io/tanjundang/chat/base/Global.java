@@ -21,6 +21,7 @@ public class Global {
     String nickname;
     long userId;
     String email;
+    String qiniuToken;
 
     static class Holder {
         static Global INSTANCE = new Global();
@@ -46,6 +47,13 @@ public class Global {
         this.nickname = nickname;
     }
 
+    public String getQiniuToken() {
+        return qiniuToken;
+    }
+
+    public void setQiniuToken(String qiniuToken) {
+        this.qiniuToken = qiniuToken;
+    }
 
     public long getUserId() {
         return userId;
