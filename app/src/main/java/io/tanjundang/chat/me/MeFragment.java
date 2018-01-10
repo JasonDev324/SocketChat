@@ -37,7 +37,7 @@ import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.api.BusinessApi;
-import io.tanjundang.chat.base.entity.TokenResp;
+import io.tanjundang.chat.base.entity.QiNiuTokenResp;
 import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
@@ -119,12 +119,12 @@ public class MeFragment extends BaseFragment {
         } else if (v.equals(tvFriends)) {
             HttpReqTool.getInstance()
                     .createApi(BusinessApi.class)
-                    .getPicToken()
+                    .getQiNiuToken()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ApiObserver<TokenResp>() {
+                    .subscribe(new ApiObserver<QiNiuTokenResp>() {
                         @Override
-                        public void onSuccess(TokenResp resp) {
+                        public void onSuccess(QiNiuTokenResp resp) {
                             if (resp.isSuccess()) {
                                 Functions.toast(resp.getData().getToken());
                             } else {

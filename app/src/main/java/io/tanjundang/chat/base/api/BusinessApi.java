@@ -7,7 +7,6 @@ import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
 import io.tanjundang.chat.base.entity.QiNiuTokenResp;
-import io.tanjundang.chat.base.entity.TokenResp;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -140,11 +139,5 @@ public interface BusinessApi {
     @GET("data/qiniu/token")
     Observable<QiNiuTokenResp> getQiNiuToken();
 
-    /**
-     * 获取七牛token
-     *
-     * @return
-     */
-    @GET("data/qiniu/token")
-    Observable<TokenResp> getPicToken();
+
 }
