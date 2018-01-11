@@ -10,6 +10,8 @@ import com.qiniu.android.storage.UploadManager;
 
 import org.json.JSONObject;
 
+import java.io.File;
+
 /**
  * @Author: TanJunDang
  * @Date: 2017/11/27
@@ -38,19 +40,27 @@ public class PicUploadTool {
         static PicUploadTool INSTANCE = new PicUploadTool();
     }
 
-    public void upload(String path, String fileName, String token) {
+    public void upload(String path, String fileName, String token, final Callback callback) {
         uploadManager.put(path, fileName, token,
                 new UpCompletionHandler() {
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //res包含hash、key等信息，具体字段取决于上传策略的设置
                         if (info.isOK()) {
+                            callback.onSuccess();
                         } else {
                             //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                            callback.onFailure(info.error);
                         }
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
                     }
                 }, null);
+    }
+
+    public interface Callback {
+        void onSuccess();
+
+        void onFailure(String error);
     }
 
 }

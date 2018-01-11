@@ -30,11 +30,13 @@ public class BaseApplication extends Application {
         String token = SharePreTool.getSP(this).getString(Constants.TOKEN);
         String nickname = SharePreTool.getSP(this).getString(Constants.NICKNAME);
         String email = SharePreTool.getSP(this).getString(Constants.EMAIL);
+        String qiNiuToken = SharePreTool.getSP(this).getString(Constants.QINIU_TOKEN);
         long userId = SharePreTool.getSP(this).getLong(Constants.USER_ID);
         Global.TOKEN = token;
         Global.getInstance().setNickname(nickname);
         Global.getInstance().setEmail(email);
         Global.getInstance().setUserId(userId);
+        Global.getInstance().setQiniuToken(qiNiuToken);
 
     }
 }

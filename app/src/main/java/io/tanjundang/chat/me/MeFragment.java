@@ -42,6 +42,7 @@ import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.LogTool;
+import io.tanjundang.chat.base.utils.PicUploadTool;
 
 /**
  * @Author: TanJunDang
@@ -117,26 +118,8 @@ public class MeFragment extends BaseFragment {
 //            getContext().sendBroadcast(intent);
         } else if (v.equals(tvWallet)) {
         } else if (v.equals(tvFriends)) {
-            HttpReqTool.getInstance()
-                    .createApi(BusinessApi.class)
-                    .getQiNiuToken()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ApiObserver<QiNiuTokenResp>() {
-                        @Override
-                        public void onSuccess(QiNiuTokenResp resp) {
-                            if (resp.isSuccess()) {
-                                Functions.toast(resp.getData().getToken());
-                            } else {
-                                Functions.toast(resp.getMsg());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(String error) {
-                            Functions.toast(error);
-                        }
-                    });
+            Functions.toast(Global.getInstance().getQiniuToken());
+            LogTool.d(TAG, "Qi Niu Token :" + Global.getInstance().getQiniuToken());
         } else if (v.equals(tvUpdate)) {
             Functions.toast(Functions.getGitVersion());
         } else if (v.equals(ivSetting)) {
@@ -149,30 +132,42 @@ public class MeFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_ZIP) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            File file = new File(Functions.getSDPath(), "zipPhoto.jpg");
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(file);
-//                bitmap输出到文件
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                fos.flush();
-                ivAvatar.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            final Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+
+//            File file = new File(Functions.getSDPath(), "zipPhoto.jpg");
+//            FileOutputStream fos = null;
+//            try {
+//                fos = new FileOutputStream(file);
+////                bitmap输出到文件
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+//                fos.flush();
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    fos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         } else if (requestCode == REQ_NO_ZIP) {
 //            通过file来定位文件，通过fileInputStream获取bitmap
             File file = new File(Functions.getSDPath(), "uriPhoto.jpg");
+            PicUploadTool.getInstance().upload(file.getPath(), "qiniutjd.jpg", Global.getInstance().getQiniuToken(), new PicUploadTool.Callback() {
+                @Override
+                public void onSuccess() {
+                    Functions.toast("上错成功");
+                }
 
+                @Override
+                public void onFailure(String error) {
+                    Functions.toast(error);
+                }
+            });
 //            Bitmap bitmap = getimage(file.getPath());
 //            File outputFile = new File(Functions.getSDPath(), "zipImage.jpg");
 //            try {
@@ -180,25 +175,25 @@ public class MeFragment extends BaseFragment {
 //            } catch (FileNotFoundException e) {
 //                e.printStackTrace();
 //            }
-            try {
-//                加载bitmap
-                FileInputStream is = new FileInputStream(file);
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-
-//                压缩bitmap
-                Bitmap zipBitmap = compressImage(bitmap);
-                File zipFile = new File(Functions.getSDPath(), "zipImage.jpg");
-                FileOutputStream fos = new FileOutputStream(zipFile);
-                zipBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                fos.flush();
-                ivAvatar.setImageBitmap(zipBitmap);
-                zipBitmap.recycle();
-                bitmap.recycle();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+////                加载bitmap
+//                FileInputStream is = new FileInputStream(file);
+//                Bitmap bitmap = BitmapFactory.decodeStream(is);
+//
+////                压缩bitmap
+//                Bitmap zipBitmap = compressImage(bitmap);
+//                File zipFile = new File(Functions.getSDPath(), "zipImage.jpg");
+//                FileOutputStream fos = new FileOutputStream(zipFile);
+//                zipBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//                fos.flush();
+//                ivAvatar.setImageBitmap(zipBitmap);
+//                zipBitmap.recycle();
+//                bitmap.recycle();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
