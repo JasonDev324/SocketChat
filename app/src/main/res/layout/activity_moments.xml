@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".me.MomentsActivity">
+
+    <include
+        android:id="@+id/rlTitle"
+        layout="@layout/toolbar_layout" />
+
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/springView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlTitle">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.liaoinstan.springview.widget.SpringView>
+</RelativeLayout>

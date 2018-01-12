@@ -117,6 +117,8 @@ public class MeFragment extends BaseFragment {
 //            intent.putExtra(Constants.DATA, info);
 //            getContext().sendBroadcast(intent);
         } else if (v.equals(tvWallet)) {
+            Intent intent = new Intent(getContext(), MomentsActivity.class);
+            startActivity(intent);
         } else if (v.equals(tvFriends)) {
             Functions.toast(Global.getInstance().getQiniuToken());
             LogTool.d(TAG, "Qi Niu Token :" + Global.getInstance().getQiniuToken());

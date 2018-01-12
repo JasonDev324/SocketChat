@@ -6,6 +6,7 @@ import io.tanjundang.chat.base.entity.ChatMsgResp;
 import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
+import io.tanjundang.chat.base.entity.MomentsResp;
 import io.tanjundang.chat.base.entity.QiNiuTokenResp;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import retrofit2.http.DELETE;
@@ -139,5 +140,13 @@ public interface BusinessApi {
     @GET("data/qiniu/token")
     Observable<QiNiuTokenResp> getQiNiuToken();
 
+    /**
+     * 查看朋友圈
+     *
+     * @param type
+     * @return
+     */
+    @GET("moments")
+    Observable<MomentsResp> getMoments(@Query("type") String type);
 
 }
