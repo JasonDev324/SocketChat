@@ -126,6 +126,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.qiniu:qiniu-android-sdk:7.3.+'
+
+    compile 'com.zhihu.android:matisse:0.4.3'
 }
 //打包时间
 def releaseTime() {
