@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.widget.SpringView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,8 +63,8 @@ public class ChatTestActivity extends BaseActivity {
     Toolbar toolBar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    @BindView(R.id.springView)
-    SpringView springView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
     @BindView(R.id.etContent)
     EditText etContent;
     @BindView(R.id.btnSend)

@@ -9,8 +9,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.container.RotationHeader;
-import com.liaoinstan.springview.widget.SpringView;
+import com.scwang.smartrefresh.header.TaurusHeader;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 
@@ -41,8 +46,8 @@ public class MomentsActivity extends BaseActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.springView)
-    SpringView springView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
     @BindView(R.id.ivBack)
     ImageView ivBack;
     @BindView(R.id.tvTitle)
@@ -77,19 +82,23 @@ public class MomentsActivity extends BaseActivity {
         recyclerView.addItemDecoration(new ItemDivider(R.color.divider_color_gray, ItemDivider.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setHeader(new RotationHeader(this));
-        springView.setListener(new SpringView.OnFreshListener() {
+        //设置 Header 为 Material样式
+        refreshLayout.setRefreshHeader(new TaurusHeader(this));
+//设置 Footer 为 球脉冲
+        refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(RefreshLayout refreshlayout) {
                 getData();
             }
-
+        });
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
-            public void onLoadmore() {
-
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                refreshLayout.finishLoadmore();
             }
         });
+        refreshLayout.autoRefresh();
     }
 
     @OnClick({R.id.ivRight})
@@ -120,14 +129,14 @@ public class MomentsActivity extends BaseActivity {
                         } else {
                             Functions.toast(resp.getMsg());
                         }
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                     }
 
                     @Override
                     public void onFailure(String error) {
                         dialog.dismiss();
                         Functions.toast(error);
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                     }
                 });
     }

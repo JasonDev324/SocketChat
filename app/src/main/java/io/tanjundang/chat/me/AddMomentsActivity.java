@@ -34,7 +34,7 @@ import io.tanjundang.chat.base.network.ApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.PhotoPickTool;
-import io.tanjundang.chat.base.utils.PicUploadTool;
+import io.tanjundang.chat.base.utils.PhotoUploadTool;
 import io.tanjundang.chat.base.view.ninegridview.NineGridView;
 
 import static io.tanjundang.chat.base.utils.PhotoPickTool.REQUEST_CODE_CHOOSE;
@@ -132,7 +132,7 @@ public class AddMomentsActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(String error) {
-
+                            Functions.toast(error);
                         }
                     });
         }
@@ -154,10 +154,10 @@ public class AddMomentsActivity extends BaseActivity {
                     .subscribe(new Consumer<File>() {
                         @Override
                         public void accept(File file) throws Exception {
-                            PicUploadTool
+                            PhotoUploadTool
                                     .getInstance()
                                     .upload(file, file.getName(), Global.getInstance()
-                                            .getQiniuToken(), new PicUploadTool.Callback() {
+                                            .getQiniuToken(), new PhotoUploadTool.Callback() {
                                         @Override
                                         public void onSuccess(String url) {
                                             if (!picUrls.contains(url))

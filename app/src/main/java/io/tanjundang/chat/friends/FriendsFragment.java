@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.container.RotationHeader;
-import com.liaoinstan.springview.widget.SpringView;
+import com.scwang.smartrefresh.header.DeliveryHeader;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 
@@ -43,8 +45,8 @@ public class FriendsFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.springView)
-    SpringView springView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
     TextView tvNewFriend;
     TextView tvGroupChat;
 
@@ -76,17 +78,18 @@ public class FriendsFragment extends BaseFragment {
         recyclerView.addItemDecoration(divider);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setHeader(new RotationHeader(getContext()));
-        springView.setListener(new SpringView.OnFreshListener() {
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                getData();
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshLayout.finishRefresh();
             }
-
+        });
+        refreshLayout.setRefreshHeader(new DeliveryHeader(getContext()));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onLoadmore() {
-
+            public void onRefresh(RefreshLayout refreshlayout) {
+                getData();
             }
         });
         mAdapter.setHeaderView(R.layout.list_item_header_friends);
@@ -104,6 +107,7 @@ public class FriendsFragment extends BaseFragment {
                 GroupChatActivity.Start(getContext());
             }
         });
+        refreshLayout.autoRefresh();
     }
 
     private void getData() {
@@ -124,14 +128,14 @@ public class FriendsFragment extends BaseFragment {
                         } else {
                             Functions.toast(resp.getMsg());
                         }
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                     }
 
                     @Override
                     public void onFailure(String error) {
                         dialog.dismiss();
                         Functions.toast(error);
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                     }
                 });
     }

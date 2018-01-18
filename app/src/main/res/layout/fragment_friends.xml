@@ -21,8 +21,8 @@
 
     </RelativeLayout>
 
-    <com.liaoinstan.springview.widget.SpringView
-        android:id="@+id/springView"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/base_background_color">
@@ -33,6 +33,6 @@
             android:layout_height="wrap_content"
             android:background="@color/color_white" />
 
-    </com.liaoinstan.springview.widget.SpringView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

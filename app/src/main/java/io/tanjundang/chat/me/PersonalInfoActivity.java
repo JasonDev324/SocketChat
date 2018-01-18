@@ -31,7 +31,6 @@ import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.DialogTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.ItemTool;
-import io.tanjundang.chat.talk.ChatActivity;
 import io.tanjundang.chat.talk.ChatTestActivity;
 
 /**

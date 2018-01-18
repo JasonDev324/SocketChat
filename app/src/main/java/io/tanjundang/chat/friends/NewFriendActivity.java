@@ -12,8 +12,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.container.RotationHeader;
-import com.liaoinstan.springview.widget.SpringView;
+import com.scwang.smartrefresh.header.TaurusHeader;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 
@@ -57,8 +59,8 @@ public class NewFriendActivity extends BaseActivity {
     Toolbar toolBar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.springView)
-    SpringView springView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
     NewFriendAdapter mAdapter;
 
     ArrayList<FriendsResp.FriendsInfo> list = new ArrayList<>();
@@ -94,19 +96,15 @@ public class NewFriendActivity extends BaseActivity {
         recyclerView.addItemDecoration(new ItemDivider(ContextCompat.getColor(this, R.color.divider_color_gray), ItemDivider.HORIZONTAL, Functions.dp2px(1)));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setHeader(new RotationHeader(this));
-        springView.setListener(new SpringView.OnFreshListener() {
+
+        refreshLayout.setRefreshHeader(new TaurusHeader(this));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(RefreshLayout refreshlayout) {
                 getData();
             }
-
-            @Override
-            public void onLoadmore() {
-
-            }
         });
+        refreshLayout.autoRefresh();
     }
 
     @OnClick({R.id.tvSubTitle})
@@ -131,12 +129,12 @@ public class NewFriendActivity extends BaseActivity {
                         } else {
                             Functions.toast(resp.getMsg());
                         }
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                         Functions.toast(error);
                     }
                 });
@@ -170,7 +168,7 @@ public class NewFriendActivity extends BaseActivity {
                                                 SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
                                                 reqInfo.setName(data.getName());
                                                 reqInfo.setType("responseFriend");
-                                                reqInfo.setIsAccept( HandleType.ACCEPT.getType());
+                                                reqInfo.setIsAccept(HandleType.ACCEPT.getType());
                                                 reqInfo.setId(data.getFriend_id());
                                                 reqInfo.setTime(System.currentTimeMillis());
                                                 bean.setData(reqInfo);
@@ -187,7 +185,7 @@ public class NewFriendActivity extends BaseActivity {
                                     .subscribe(new ApiObserver<HttpBaseBean>() {
                                         @Override
                                         public void onSuccess(HttpBaseBean resp) {
-                                            springView.callFresh();
+                                            refreshLayout.autoRefresh();
                                         }
 
                                         @Override
@@ -214,7 +212,7 @@ public class NewFriendActivity extends BaseActivity {
                                                 SocketFriendReqResp.FriendReqInfo reqInfo = new SocketFriendReqResp.FriendReqInfo();
                                                 reqInfo.setName(data.getName());
                                                 reqInfo.setType("responseFriend");
-                                                reqInfo.setIsAccept( HandleType.REJECT.getType());
+                                                reqInfo.setIsAccept(HandleType.REJECT.getType());
                                                 reqInfo.setId(data.getFriend_id());
                                                 reqInfo.setTime(System.currentTimeMillis());
                                                 bean.setData(reqInfo);
@@ -231,7 +229,7 @@ public class NewFriendActivity extends BaseActivity {
                                     .subscribe(new ApiObserver<HttpBaseBean>() {
                                         @Override
                                         public void onSuccess(HttpBaseBean resp) {
-                                            springView.callFresh();
+                                            refreshLayout.autoRefresh();
                                         }
 
                                         @Override
@@ -254,7 +252,7 @@ public class NewFriendActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_ADD_FRIEND && resultCode == Activity.RESULT_OK) {
-            springView.callFresh();
+            refreshLayout.autoRefresh();
         }
     }
 }

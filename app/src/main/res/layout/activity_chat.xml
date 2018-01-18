@@ -18,8 +18,8 @@
         android:layout_above="@+id/llBottomTab"
         android:layout_below="@+id/rlTitle" />
 
-    <com.liaoinstan.springview.widget.SpringView
-        android:id="@+id/springView"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/llBottomTab"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.liaoinstan.springview.widget.SpringView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <LinearLayout
         android:id="@+id/llBottomTab"

@@ -11,8 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.container.RotationHeader;
-import com.liaoinstan.springview.widget.SpringView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 
@@ -46,8 +48,8 @@ public class FriendSelectActivity extends BaseActivity {
     Toolbar toolBar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.springView)
-    SpringView springView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
 
     SelectAdapter mAdapter;
     ArrayList<FriendsResp.FriendsInfo> list = new ArrayList<>();
@@ -84,19 +86,14 @@ public class FriendSelectActivity extends BaseActivity {
         recyclerView.addItemDecoration(divider);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setHeader(new RotationHeader(this));
-        springView.setListener(new SpringView.OnFreshListener() {
+        refreshLayout.setRefreshHeader(new BezierRadarHeader(this));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(RefreshLayout refreshlayout) {
                 getData();
             }
-
-            @Override
-            public void onLoadmore() {
-
-            }
         });
+        refreshLayout.autoRefresh();
     }
 
     private void getData() {
@@ -118,14 +115,14 @@ public class FriendSelectActivity extends BaseActivity {
                         } else {
                             Functions.toast(resp.getMsg());
                         }
-                        springView.onFinishFreshAndLoad();
+                        refreshLayout.finishRefresh();
                     }
 
                     @Override
                     public void onFailure(String error) {
                         dialog.dismiss();
+                        refreshLayout.finishRefresh();
                         Functions.toast(error);
-                        springView.onFinishFreshAndLoad();
                     }
                 });
     }
