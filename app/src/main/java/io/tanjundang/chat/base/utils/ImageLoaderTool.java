@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
@@ -78,9 +79,9 @@ public class ImageLoaderTool {
             .cacheInMemory(true)
             .bitmapConfig(Bitmap.Config.RGB_565)
             .imageScaleType(ImageScaleType.EXACTLY)
-            .showImageOnFail(R.drawable.ic_default_avatar)
-            .showImageForEmptyUri(R.drawable.ic_default_avatar)
-            .showImageOnLoading(R.drawable.ic_default_avatar)
+            .showImageOnFail(R.mipmap.ic_launcher)
+            .showImageForEmptyUri(R.mipmap.ic_launcher)
+            .showImageOnLoading(R.mipmap.ic_launcher)
             .delayBeforeLoading(1000)
             .considerExifParams(true) //是否考虑JPEG图像EXIF参数（旋转，翻转）
             .build();
@@ -88,9 +89,9 @@ public class ImageLoaderTool {
     //大图
     public static DisplayImageOptions imageBigOptions = new DisplayImageOptions
             .Builder()
-            .showImageOnLoading(R.drawable.ic_default_avatar)
-            .showImageForEmptyUri(R.drawable.ic_default_avatar)
-            .showImageOnFail(R.drawable.ic_default_avatar)
+            .showImageOnLoading(R.mipmap.ic_launcher)
+            .showImageForEmptyUri(R.mipmap.ic_launcher)
+            .showImageOnFail(R.mipmap.ic_launcher)
             .cacheInMemory(false)
             .cacheOnDisk(true)
             .resetViewBeforeLoading(true)
@@ -107,9 +108,9 @@ public class ImageLoaderTool {
             .cacheOnDisk(true)
             .cacheInMemory(true)
             .imageScaleType(ImageScaleType.EXACTLY)
-            .showImageOnLoading(R.drawable.ic_default_avatar)
-            .showImageForEmptyUri(R.drawable.ic_default_avatar)
-            .showImageOnFail(R.drawable.ic_default_avatar)
+            .showImageOnLoading(R.mipmap.ic_launcher)
+            .showImageForEmptyUri(R.mipmap.ic_launcher)
+            .showImageOnFail(R.mipmap.ic_launcher)
             .delayBeforeLoading(1000)
             .build();
 
@@ -122,9 +123,9 @@ public class ImageLoaderTool {
             .cacheOnDisk(true)
             .cacheInMemory(true)
             .imageScaleType(ImageScaleType.EXACTLY)
-            .showImageOnFail(R.drawable.ic_default_avatar)
-            .showImageForEmptyUri(R.drawable.ic_default_avatar)
-            .showImageOnLoading(R.drawable.ic_default_avatar)
+            .showImageOnFail(R.mipmap.ic_launcher)
+            .showImageForEmptyUri(R.mipmap.ic_launcher)
+            .showImageOnLoading(R.mipmap.ic_launcher)
             .delayBeforeLoading(1000)
             .build();
 
@@ -132,20 +133,20 @@ public class ImageLoaderTool {
     /**
      * 加载普通图片
      *
-     * @param url
      * @param imageView
+     * @param url
      */
-    public void loadImage(String url, ImageView imageView) {
+    public void loadImage(ImageView imageView, String url) {
         imageLoader.displayImage(url, imageView, defaultOptions);
     }
 
     /**
      * 加载drawable图片,不能加载系统的drawable 即android:drawable
      *
-     * @param resid
      * @param imageView
+     * @param resid
      */
-    public void loadImageFromDrawable(int resid, ImageView imageView) {
+    public void loadImageFromDrawable(ImageView imageView, int resid) {
         imageLoader.displayImage(DRAWABLE_PREFIX + resid, imageView);
     }
 
@@ -165,11 +166,15 @@ public class ImageLoaderTool {
         return imageLoader.getDiskCache().get(imageUri);
     }
 
-    public void loadBigImage(String url, ImageView imageView) {
+    public void loadBigImage(ImageView imageView, String url) {
         imageLoader.displayImage(url, imageView, bigImageOptions);
     }
 
-    public void loadSmallImage(String url, ImageView imageView) {
+    public void loadSmallImage(ImageView imageView, String url) {
         imageLoader.displayImage(url, imageView, smallImageOptions);
+    }
+
+    public void loadImage(ImageView imageView, String url, int width, int height) {
+
     }
 }

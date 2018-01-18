@@ -20,10 +20,14 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Constants;
+import io.tanjundang.chat.base.Global;
+import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.broadcast.MsgReceiver;
+import io.tanjundang.chat.base.entity.QiNiuTokenResp;
 import io.tanjundang.chat.base.entity.SocketBaseBean;
 import io.tanjundang.chat.base.entity.SocketFriendReqResp;
 import io.tanjundang.chat.base.entity.SocketMsgResp;
@@ -31,6 +35,7 @@ import io.tanjundang.chat.base.entity.SocketOfflineMsg;
 import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.event.FinishEvent;
 import io.tanjundang.chat.base.event.ReceiveMsgEvent;
+import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.network.SocketConnector;
 import io.tanjundang.chat.base.utils.DialogTool;
 import io.tanjundang.chat.base.utils.Functions;
@@ -267,5 +272,24 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         } else {
             this.finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HttpReqTool.getInstance().createApi(BusinessApi.class)
+                .getQiNiuToken().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<QiNiuTokenResp>() {
+                    @Override
+                    public void accept(QiNiuTokenResp resp) throws Exception {
+                        if (resp.isSuccess()) {
+                            QiNiuTokenResp.TokenInfo info = resp.getData();
+                            Global.getInstance().setQiniuToken(info.getToken());
+                        } else {
+                            Functions.toast(resp.getMsg());
+                        }
+                    }
+                });
     }
 }

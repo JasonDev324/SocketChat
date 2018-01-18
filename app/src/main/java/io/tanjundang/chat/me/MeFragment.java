@@ -161,7 +161,7 @@ public class MeFragment extends BaseFragment {
             File file = new File(Functions.getSDPath(), "uriPhoto.jpg");
             PicUploadTool.getInstance().upload(file.getPath(), "qiniutjd.jpg", Global.getInstance().getQiniuToken(), new PicUploadTool.Callback() {
                 @Override
-                public void onSuccess() {
+                public void onSuccess(String url) {
                     Functions.toast("上错成功");
                 }
 

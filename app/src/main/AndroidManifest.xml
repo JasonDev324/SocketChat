@@ -87,7 +87,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".me.MomentsActivity"></activity>
+        <activity android:name=".me.MomentsActivity" />
+        <activity android:name=".me.AddMomentsActivity"></activity>
     </application>
 
 </manifest>

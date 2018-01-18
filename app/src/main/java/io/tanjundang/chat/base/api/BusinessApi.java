@@ -3,6 +3,7 @@ package io.tanjundang.chat.base.api;
 import io.reactivex.Observable;
 import io.tanjundang.chat.base.entity.AddFriendResp;
 import io.tanjundang.chat.base.entity.ChatMsgResp;
+import io.tanjundang.chat.base.entity.CreateMomentsResp;
 import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.LoginResp;
@@ -149,4 +150,13 @@ public interface BusinessApi {
     @GET("moments")
     Observable<MomentsResp> getMoments(@Query("type") String type);
 
+    /**
+     * 发朋友圈
+     * @param contents
+     * @param picurls
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("moments")
+    Observable<CreateMomentsResp> addMoments(@Field("contents") String contents, @Field("pictures") String[] picurls);
 }

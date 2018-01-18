@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".me.AddMomentsActivity">
+
+    <include layout="@layout/toolbar_layout" />
+
+    <RelativeLayout
+        android:id="@+id/rlRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:minHeight="250dp"
+        android:padding="@dimen/margin_15dp">
+
+        <EditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:cursorVisible="true"
+            android:gravity="left|top"
+            android:maxLines="3"
+            android:textCursorDrawable="@null" />
+
+        <io.tanjundang.chat.base.view.ninegridview.NineGridView
+            android:id="@+id/multipleGridView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etContent"
+            android:layout_marginTop="@dimen/margin_10dp" />
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/multipleGridView"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="7dp"
+            android:text="所在位置" />
+    </RelativeLayout>
+
+
+
+</LinearLayout>

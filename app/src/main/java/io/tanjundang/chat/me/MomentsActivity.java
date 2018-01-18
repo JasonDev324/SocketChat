@@ -95,7 +95,7 @@ public class MomentsActivity extends BaseActivity {
     @OnClick({R.id.ivRight})
     public void onClick(View v) {
         if (v.equals(ivRight)) {
-
+            AddMomentsActivity.Start(this);
         }
     }
 
