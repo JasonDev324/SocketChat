@@ -18,7 +18,7 @@ import java.io.File;
  * @Description:
  */
 
-public class PicUploadTool {
+public class PhotoUploadTool {
     Configuration config = new Configuration.Builder()
             .chunkSize(512 * 1024)        // 分片上传时，每片的大小。 默认256K
             .putThreshhold(1024 * 1024)   // 启用分片上传阀值。默认512K
@@ -32,12 +32,12 @@ public class PicUploadTool {
     // 重用uploadManager。一般地，只需要创建一个uploadManager对象
     UploadManager uploadManager = new UploadManager(config);
 
-    public static PicUploadTool getInstance() {
+    public static PhotoUploadTool getInstance() {
         return Holder.INSTANCE;
     }
 
     static class Holder {
-        static PicUploadTool INSTANCE = new PicUploadTool();
+        static PhotoUploadTool INSTANCE = new PhotoUploadTool();
     }
 
     public void upload(String path, final String fileName, String token, final Callback callback) {

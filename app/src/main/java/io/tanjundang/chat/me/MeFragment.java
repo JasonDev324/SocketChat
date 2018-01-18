@@ -19,30 +19,20 @@ import android.widget.TextView;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
-import io.tanjundang.chat.base.api.BusinessApi;
-import io.tanjundang.chat.base.entity.QiNiuTokenResp;
-import io.tanjundang.chat.base.network.ApiObserver;
-import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.LogTool;
-import io.tanjundang.chat.base.utils.PicUploadTool;
+import io.tanjundang.chat.base.utils.PhotoUploadTool;
 
 /**
  * @Author: TanJunDang
@@ -159,7 +149,7 @@ public class MeFragment extends BaseFragment {
         } else if (requestCode == REQ_NO_ZIP) {
 //            通过file来定位文件，通过fileInputStream获取bitmap
             File file = new File(Functions.getSDPath(), "uriPhoto.jpg");
-            PicUploadTool.getInstance().upload(file.getPath(), "qiniutjd.jpg", Global.getInstance().getQiniuToken(), new PicUploadTool.Callback() {
+            PhotoUploadTool.getInstance().upload(file.getPath(), "qiniutjd.jpg", Global.getInstance().getQiniuToken(), new PhotoUploadTool.Callback() {
                 @Override
                 public void onSuccess(String url) {
                     Functions.toast("上错成功");
