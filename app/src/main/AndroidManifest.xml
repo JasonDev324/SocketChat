@@ -51,6 +51,11 @@
         <meta-data
             android:name="GIT_VERSION"
             android:value="${GIT_VERSION}" />
+        <receiver android:name=".base.broadcast.MsgReceiver">
+            <intent-filter>
+                <action android:name="io.tanjundang.github.msg.receiver" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".SplashActivity"
@@ -64,9 +69,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".account.LoginActivity" />
         <activity android:name=".account.RegisterActivity" />
-        <activity
-            android:name=".talk.ChatActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".talk.ChatTestActivity"
             android:launchMode="singleTask"
@@ -81,14 +84,12 @@
         <activity android:name=".friends.FriendSelectActivity" />
         <activity android:name=".me.SettingActivity" />
 
-        <receiver android:name=".base.broadcast.MsgReceiver">
-            <intent-filter>
-                <action android:name="io.tanjundang.github.msg.receiver" />
-            </intent-filter>
-        </receiver>
 
         <activity android:name=".me.MomentsActivity" />
-        <activity android:name=".me.AddMomentsActivity"></activity>
+        <activity android:name=".me.AddMomentsActivity" />
+        <activity android:name=".TjdTestActivity">
+
+        </activity>
     </application>
 
 </manifest>

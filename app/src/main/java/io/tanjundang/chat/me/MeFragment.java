@@ -16,23 +16,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.zhihu.matisse.Matisse;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.base.Global;
 import io.tanjundang.chat.base.utils.Functions;
+import io.tanjundang.chat.base.utils.ImageLoaderTool;
 import io.tanjundang.chat.base.utils.LogTool;
+import io.tanjundang.chat.base.utils.PhotoPickTool;
 import io.tanjundang.chat.base.utils.PhotoUploadTool;
+
+import static android.app.Activity.RESULT_OK;
+import static io.tanjundang.chat.base.utils.PhotoPickTool.REQUEST_CODE_CHOOSE;
 
 /**
  * @Author: TanJunDang
@@ -50,8 +61,8 @@ public class MeFragment extends BaseFragment {
     TextView tvEmail;
     @BindView(R.id.tvAlbum)
     TextView tvAlbum;
-    @BindView(R.id.tvWallet)
-    TextView tvWallet;
+    @BindView(R.id.tvMoments)
+    TextView tvMoments;
     @BindView(R.id.tvFriends)
     TextView tvFriends;
     @BindView(R.id.tvUpdate)
@@ -80,24 +91,26 @@ public class MeFragment extends BaseFragment {
     int REQ_NO_ZIP = 0XFA;
 
     @OnClick({R.id.ivAvatar, R.id.tvAlbum,
-            R.id.tvWallet, R.id.tvFriends,
+            R.id.tvMoments, R.id.tvFriends,
             R.id.tvUpdate, R.id.ivSetting})
     public void onClick(View v) {
         if (v.equals(ivAvatar)) {
+            PhotoPickTool.getInstance().selectPhoto(MeFragment.this, 1);
+
 //            通过Uri来操作文件，将文件保存到本地
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Uri uri = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
-                uri = FileProvider.getUriForFile(getContext(), "io.tanjundang.chat.provider", new File(Functions.getSDPath(), "uriPhoto.jpg"));
-            } else {
-                uri = Uri.fromFile(new File(Functions.getSDPath(), "uriPhoto.jpg"));
-            }
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(intent, REQ_NO_ZIP);
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            Uri uri = null;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+//                uri = FileProvider.getUriForFile(getContext(), "io.tanjundang.chat.provider", new File(Functions.getSDPath(), "uriPhoto.jpg"));
+//            } else {
+//                uri = Uri.fromFile(new File(Functions.getSDPath(), "uriPhoto.jpg"));
+//            }
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//            startActivityForResult(intent, REQ_NO_ZIP);
         } else if (v.equals(tvAlbum)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, REQ_ZIP);
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(intent, REQ_ZIP);
 //            SocketMsgResp.SocketMsgInfo info = new SocketMsgResp.SocketMsgInfo();
 //            info.setChatType("p2p");
 //            info.setUserName("TJD");
@@ -106,12 +119,10 @@ public class MeFragment extends BaseFragment {
 //            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 //            intent.putExtra(Constants.DATA, info);
 //            getContext().sendBroadcast(intent);
-        } else if (v.equals(tvWallet)) {
+        } else if (v.equals(tvMoments)) {
             Intent intent = new Intent(getContext(), MomentsActivity.class);
             startActivity(intent);
         } else if (v.equals(tvFriends)) {
-            Functions.toast(Global.getInstance().getQiniuToken());
-            LogTool.d(TAG, "Qi Niu Token :" + Global.getInstance().getQiniuToken());
         } else if (v.equals(tvUpdate)) {
             Functions.toast(Functions.getGitVersion());
         } else if (v.equals(ivSetting)) {
@@ -120,12 +131,31 @@ public class MeFragment extends BaseFragment {
         }
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_ZIP) {
-            final Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            List<Uri> selectedList =PhotoPickTool.getInstance().getResult(data);
+            if (selectedList == null || selectedList.isEmpty()) return;
+            Uri uri = selectedList.get(0);
+            File file = Functions.uri2File(getContext(), uri);
+            PhotoUploadTool
+                    .getInstance()
+                    .upload(file, file.getName(), Global.getInstance()
+                            .getQiniuToken(), new PhotoUploadTool.Callback() {
+                        @Override
+                        public void onSuccess(String url) {
+                            ImageLoaderTool.getInstance().loadImage(ivAvatar, url);
+                        }
 
+                        @Override
+                        public void onFailure(String error) {
+                            Functions.toast(error);
+                        }
+                    });
+
+        } else if (requestCode == REQ_ZIP) {
+            final Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
 //            File file = new File(Functions.getSDPath(), "zipPhoto.jpg");
 //            FileOutputStream fos = null;
@@ -148,18 +178,18 @@ public class MeFragment extends BaseFragment {
 //            }
         } else if (requestCode == REQ_NO_ZIP) {
 //            通过file来定位文件，通过fileInputStream获取bitmap
-            File file = new File(Functions.getSDPath(), "uriPhoto.jpg");
-            PhotoUploadTool.getInstance().upload(file.getPath(), "qiniutjd.jpg", Global.getInstance().getQiniuToken(), new PhotoUploadTool.Callback() {
-                @Override
-                public void onSuccess(String url) {
-                    Functions.toast("上错成功");
-                }
-
-                @Override
-                public void onFailure(String error) {
-                    Functions.toast(error);
-                }
-            });
+//            File file = new File(Functions.getSDPath(), "uriPhoto.jpg");
+//            PhotoUploadTool.getInstance().upload(file.getPath(), "qiniutjd.jpg", Global.getInstance().getQiniuToken(), new PhotoUploadTool.Callback() {
+//                @Override
+//                public void onSuccess(String url) {
+//                    Functions.toast("上错成功");
+//                }
+//
+//                @Override
+//                public void onFailure(String error) {
+//                    Functions.toast(error);
+//                }
+//            });
 //            Bitmap bitmap = getimage(file.getPath());
 //            File outputFile = new File(Functions.getSDPath(), "zipImage.jpg");
 //            try {

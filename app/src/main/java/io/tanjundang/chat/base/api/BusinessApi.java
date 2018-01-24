@@ -152,11 +152,16 @@ public interface BusinessApi {
 
     /**
      * 发朋友圈
+     *
      * @param contents
      * @param picurls
      * @return
      */
     @FormUrlEncoded
     @POST("moments")
-    Observable<CreateMomentsResp> addMoments(@Field("contents") String contents, @Field("pictures") String[] picurls);
+    Observable<CreateMomentsResp> addMoments(@Field("contents") String contents, @Field("pictures[]") String[] picurls);
+
+
+    @DELETE("moments/{id}")
+    Observable<HttpBaseBean> delMoments(@Path("id") long id);
 }

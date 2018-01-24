@@ -13,7 +13,7 @@ import io.tanjundang.chat.base.utils.SharePreTool;
 /**
  * @Author: TanJunDang
  * @Date: 2017/10/20
- * @Description:
+ * @Description: socket通信参考 http://www.voidcn.com/article/p-rbowyrhj-va.html
  */
 
 public class BaseApplication extends Application {

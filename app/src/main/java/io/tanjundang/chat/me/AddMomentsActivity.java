@@ -1,5 +1,6 @@
 package io.tanjundang.chat.me;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -66,9 +67,9 @@ public class AddMomentsActivity extends BaseActivity {
     List<Uri> selectedList = new ArrayList<>();
     ArrayList<String> picUrls = new ArrayList<>();
 
-    public static void Start(Context context) {
+    public static void Start(Context context, int reqCode) {
         Intent intent = new Intent(context, AddMomentsActivity.class);
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, reqCode);
     }
 
     @Override
@@ -87,17 +88,11 @@ public class AddMomentsActivity extends BaseActivity {
         tvSubTitle.setVisibility(View.VISIBLE);
         tvSubTitle.setText("发送");
         tvTitle.setText("");
-//        multipleGridView.addPic("https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=3bf901b332adcbef01347900949449e0/aec379310a55b319009fba0240a98226cffc1766.jpg");
-//        multipleGridView.addPic("https://tanjundang.github.io/img/lrving.jpg");
-//        multipleGridView.addPic("https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3866823653,3481734704&fm=173&s=D69082633E8070554910DDDD030080A1&w=500&h=306&img.JPEG");
-//        multipleGridView.addPic("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3143316835,1781534804&fm=173&s=20E2732690422F5D1D06D6910300009D&w=500&h=333&img.JPEG");
-//        multipleGridView.addPic("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3909146119,2483223891&fm=175&s=1E34C0052A61330517A828870300C0E2&w=218&h=146&img.JPEG");
-//        multipleGridView.addPic("https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2448380558,788942888&fm=173&s=E30DB044CE737C9EC7BA81910300D09B&w=218&h=146&img.JPEG");
 
         nineGridView.setOnClickListener(new NineGridView.onClickListener() {
             @Override
             public void addPic() {
-                PhotoPickTool.getInstance().selectPhoto(AddMomentsActivity.this);
+                PhotoPickTool.getInstance().selectPhoto(AddMomentsActivity.this, 6);
             }
 
             @Override
@@ -124,6 +119,7 @@ public class AddMomentsActivity extends BaseActivity {
                         @Override
                         public void onSuccess(CreateMomentsResp resp) {
                             if (resp.isSuccess()) {
+                                setResult(RESULT_OK);
                                 finish();
                             } else {
                                 Functions.toast(resp.getMsg());

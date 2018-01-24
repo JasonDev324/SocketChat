@@ -2,8 +2,10 @@ package io.tanjundang.chat.base.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
+import android.net.Uri;
 
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -14,9 +16,11 @@ import com.zhihu.matisse.internal.entity.UncapableCause;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import io.tanjundang.chat.R;
+import io.tanjundang.chat.base.BaseFragment;
 import io.tanjundang.chat.me.AddMomentsActivity;
 
 /**
@@ -38,15 +42,37 @@ public class PhotoPickTool {
         return Holder.INSTANCE;
     }
 
-    public void selectPhoto(Context context) {
+    public void selectPhoto(Context context, int maxNum) {
         Matisse.from((Activity) context)
                 .choose(MimeType.allOf())
                 .countable(true)
-                .maxSelectable(9)
+                .maxSelectable(maxNum)
                 .gridExpectedSize(context.getResources().getDimensionPixelSize(R.dimen.photo_pick_size))
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
                 .imageEngine(new GlideEngine())
                 .forResult(REQUEST_CODE_CHOOSE);
+    }
+
+    public void selectPhoto(BaseFragment fragment, int maxNum) {
+        Matisse.from(fragment)
+                .choose(MimeType.allOf())
+                .countable(true)
+                .maxSelectable(maxNum)
+                .gridExpectedSize(fragment.getResources().getDimensionPixelSize(R.dimen.photo_pick_size))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new GlideEngine())
+                .forResult(REQUEST_CODE_CHOOSE);
+    }
+
+    /**
+     * 获取得到的图片集合
+     * @param data
+     * @return
+     */
+    public List<Uri> getResult(Intent data) {
+        List<Uri> selectedList = Matisse.obtainResult(data);
+        return selectedList;
     }
 }

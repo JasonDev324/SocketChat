@@ -1,64 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="150dp">
 
-    <ImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="@dimen/margin_15dp"
-        android:layout_marginTop="@dimen/margin_15dp"
-        android:src="@drawable/ic_default_avatar" />
-
     <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivAvatar"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="@dimen/margin_15dp"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:singleLine="true"
-        android:text="TITLE" />
+        android:id="@+id/tvDel"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="@color/base_theme_color"
+        android:gravity="center"
+        android:text="删除"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/text_size_16dp" />
 
-    <TextView
-        android:id="@+id/tvContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="@dimen/margin_15dp"
-        android:layout_marginTop="@dimen/margin_10dp"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:text="CONTENT" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/ivImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvContent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="@dimen/margin_15dp"
-        android:layout_marginTop="@dimen/margin_10dp"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:src="@drawable/ic_default_avatar" />
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="@dimen/margin_15dp"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:src="@drawable/ic_default_avatar" />
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivImage"
-        android:layout_marginBottom="@dimen/margin_15dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="@dimen/margin_15dp"
-        android:layout_marginTop="@dimen/margin_10dp"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:singleLine="true"
-        android:text="DATE" />
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivAvatar"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="@dimen/margin_15dp"
+            android:layout_toRightOf="@+id/ivAvatar"
+            android:singleLine="true"
+            android:text="TITLE" />
 
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="@dimen/margin_15dp"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_toRightOf="@+id/ivAvatar"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="CONTENT" />
 
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvContent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="@dimen/margin_15dp"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_toRightOf="@+id/ivAvatar" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recyclerView"
+            android:layout_marginBottom="@dimen/margin_15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="@dimen/margin_15dp"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_toRightOf="@+id/ivAvatar"
+            android:singleLine="true"
+            android:text="DATE" />
+
+    </RelativeLayout>
+
+</com.daimajia.swipe.SwipeLayout>

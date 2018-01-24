@@ -7,7 +7,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.utils.DialogTool;
@@ -24,10 +27,14 @@ import io.tanjundang.chat.base.utils.ImageLoaderTool;
  * 2.宽为AT_MOST
  * 3.高位AT_MOST
  */
+//        nineGridView.addPic("https://tanjundang.github.io/img/lrving.jpg");
+//        nineGridView.addPic("https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3866823653,3481734704&fm=173&s=D69082633E8070554910DDDD030080A1&w=500&h=306&img.JPEG");
+//        nineGridView.addPic("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3143316835,1781534804&fm=173&s=20E2732690422F5D1D06D6910300009D&w=500&h=333&img.JPEG");
+//        nineGridView.addPic("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3909146119,2483223891&fm=175&s=1E34C0052A61330517A828870300C0E2&w=218&h=146&img.JPEG");
+//        nineGridView.addPic("https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2448380558,788942888&fm=173&s=E30DB044CE737C9EC7BA81910300D09B&w=218&h=146&img.JPEG");
 
 public class NineGridView extends ViewGroup {
 
-    private static final int MAX_LENGTH = 7;
     private Context mContext;
     //    private ArrayList<String> picUrls = new ArrayList<>();
     private onClickListener listener;
@@ -61,7 +68,6 @@ public class NineGridView extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        MarginLayoutParams params = null;
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 //        下面俩个参数默认是填满屏幕
@@ -141,6 +147,21 @@ public class NineGridView extends ViewGroup {
         }
     }
 
+    @Override
+    protected boolean checkLayoutParams(LayoutParams p) {
+        return p instanceof NineGridViewLayoutParams;
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new NineGridViewLayoutParams(Functions.dp2px(70), Functions.dp2px(70));
+    }
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new NineGridViewLayoutParams(getContext(), attrs);
+    }
+
 
     public void addPic(String url) {
         ImageView child = (ImageView) LayoutInflater.from(mContext).inflate(R.layout.item_add_image, null);
@@ -184,6 +205,10 @@ public class NineGridView extends ViewGroup {
         }
     }
 
+    @Override
+    protected LayoutParams generateLayoutParams(LayoutParams p) {
+        return new GridLayout.LayoutParams(p);
+    }
 
     public void setOnClickListener(onClickListener listener) {
         this.listener = listener;
@@ -191,6 +216,7 @@ public class NineGridView extends ViewGroup {
 
     public interface onClickListener {
         void addPic();
+
         void delPic(int index);
     }
 

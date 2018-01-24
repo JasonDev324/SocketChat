@@ -129,6 +129,8 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
+
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
 }
 //打包时间
 def releaseTime() {
