@@ -1,5 +1,10 @@
 package io.tanjundang.chat.base.network;
 
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.tanjundang.chat.base.utils.Functions;
@@ -11,7 +16,7 @@ import io.tanjundang.chat.base.utils.LogTool;
  * @Description:
  */
 
-public abstract class ApiObserver<T> implements Observer<T> {
+public abstract class ApiObserver<T extends HttpBaseBean> implements Observer<T> {
     Disposable disposable;
 
     public abstract void onSuccess(T resp);
@@ -25,15 +30,26 @@ public abstract class ApiObserver<T> implements Observer<T> {
 
     @Override
     public void onNext(T resp) {
-        onSuccess(resp);
+        if (resp.isSuccess()) {
+            onSuccess(resp);
+        } else {
+            onFailure(resp.getMsg());
+            Functions.toast(resp.getMsg());
+        }
     }
 
     @Override
     public void onError(Throwable e) {
-        onFailure(e.getMessage());
-        LogTool.e(getClass().getName(), "Cause:" + e.getMessage());
-        Functions.toast(e.getMessage());
+        LogTool.e(getClass().getName(), "返回错误信息:" + e);
         disposable.dispose();
+        if (e instanceof ConnectException ||
+                e instanceof SocketTimeoutException ||
+                e instanceof TimeoutException) {
+            //网络错误
+            onFailure("请确保网络是否通畅");
+        }else{
+            onFailure(e.toString());
+        }
     }
 
     @Override

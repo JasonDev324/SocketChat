@@ -109,7 +109,9 @@ public class CrashHandler implements UncaughtExceptionHandler {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                LogTool.v(TAG, "Error : ", e);
+                LogTool.e(TAG, "\n错误信息: ================================================================================================== \n" +
+                        "==================================================================================================\n" +
+                        " ==================================================================================================\n", e);
             }
             LogTool.logCrash(ex);
             android.os.Process.killProcess(android.os.Process.myPid());
@@ -130,12 +132,14 @@ public class CrashHandler implements UncaughtExceptionHandler {
             LogTool.v(TAG, "handleException --- ex==null");
             return true;
         }
-        final String msg = ex.getMessage();
+        final String msg = ex.toString();
 
         if (msg == null) {
             return false;
         } else {
-            LogTool.e(TAG, "Error : ", msg);
+            LogTool.e(TAG, "\n错误信息: ================================================================================================== \n" +
+                    "==================================================================================================\n" +
+                    " ==================================================================================================\n", msg);
         }
         //使用Toast来显示异常信息
         new Thread() {

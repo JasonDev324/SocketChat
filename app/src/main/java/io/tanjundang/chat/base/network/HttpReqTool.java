@@ -61,7 +61,11 @@ public class HttpReqTool {
     class HttpLogger implements HttpLoggingInterceptor.Logger {
         @Override
         public void log(String message) {
-            LogTool.d(LogTool.TAG, getClass().getName() + "\n" + message);
+            if (message.contains("status")) {
+                LogTool.i(LogTool.TAG, "类名：" + getClass().getName() + "\n网络返回:" + message);
+            } else {
+                LogTool.i(LogTool.TAG, "\n " + message);
+            }
         }
     }
 
