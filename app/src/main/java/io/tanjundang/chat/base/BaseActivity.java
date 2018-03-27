@@ -37,7 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        该方法不是用于修改ProgressStyle的样式，而是设置dialog形状
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
         dialog.setMessage("加载中....");
     }
 

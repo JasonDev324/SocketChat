@@ -37,6 +37,6 @@ public class BaseApplication extends Application {
         Global.getInstance().setEmail(email);
         Global.getInstance().setUserId(userId);
         Global.getInstance().setQiniuToken(qiNiuToken);
-
+        CrashHandler.getInstance().init(getApplicationContext());
     }
 }
