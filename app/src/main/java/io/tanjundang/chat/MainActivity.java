@@ -64,8 +64,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     MeFragment meFragment;
 
     public static SocketConnector connector;
-    int ipPort = 4000;
-    String ipHost = "59.110.136.203";
+    int ipPort = 9587;
+    String ipHost = "39.104.75.186";
     ArrayList<SocketMsgResp.SocketMsgInfo> loadList = new ArrayList<>();
 
     Disposable closeDisposable;

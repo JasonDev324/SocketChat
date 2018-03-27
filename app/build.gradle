@@ -68,12 +68,12 @@ android {
         }
 
         online_test {
-            buildConfigField("String", "BASE_URL", "\"http://59.110.136.203:8282/api/\"");
+            buildConfigField("String", "BASE_URL", "\"http://39.104.75.186:9587/api/\"")
             buildConfigField "boolean", "DEBUG_MODE", "true"
         }
 
         online_adv {
-            buildConfigField("String", "BASE_URL", "\"http://59.110.136.203:8282/api/\"");
+            buildConfigField("String", "BASE_URL", "\"http://39.104.75.186:9587/api/\"")
             buildConfigField "boolean", "DEBUG_MODE", "true"
         }
     }
@@ -108,7 +108,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+//    retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
