@@ -34,6 +34,7 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.MomentsResp;
 import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.DialogTool;
@@ -123,10 +124,9 @@ public class MomentsActivity extends BaseActivity {
                 .getMoments("mine")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ApiObserver<MomentsResp>() {
+                .subscribe(new DialogApiObserver<MomentsResp>(this) {
                     @Override
                     public void onSuccess(MomentsResp resp) {
-                        dialog.dismiss();
                         if (resp.isSuccess()) {
                             list.clear();
                             MomentsResp.MomentsInfo info = resp.getData();
@@ -144,8 +144,6 @@ public class MomentsActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String error) {
-                        dialog.dismiss();
-                        Functions.toast(error);
                         refreshLayout.finishRefresh();
                     }
                 });
