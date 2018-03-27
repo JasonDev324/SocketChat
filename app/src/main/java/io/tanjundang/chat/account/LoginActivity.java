@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.ObservableSource;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -53,12 +53,15 @@ public class LoginActivity extends BaseActivity {
         Functions.setNoChineseInput(etEmail);
     }
 
+    String email;
+    String password;
+
     @OnClick({R.id.btnLogin, R.id.btnRegister})
     public void onClick(View v) {
         if (v.equals(btnLogin)) {
             Functions.hideKeyboard(v);
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            email = etEmail.getText().toString().trim();
+            password = etPassword.getText().toString().trim();
 
             if (!Functions.isVaildEmail(email)) {
                 Functions.toast("Email invaild");
@@ -75,9 +78,10 @@ public class LoginActivity extends BaseActivity {
                     .getInstance()
                     .createApi(BusinessApi.class)
                     .login(email, password)
-                    .flatMap(new Function<LoginResp, ObservableSource<QiNiuTokenResp>>() {
+                    .flatMap(new Function<LoginResp, Observable<QiNiuTokenResp>>() {
                         @Override
-                        public ObservableSource<QiNiuTokenResp> apply(LoginResp resp) {
+                        public Observable<QiNiuTokenResp> apply(final LoginResp resp) {
+                            dialog.dismiss();
                             if (resp.isSuccess()) {
                                 LoginResp.LoginInfo info = resp.getData();
                                 SharePreTool.getSP(LoginActivity.this).putString(Constants.TOKEN, info.getApi_token());
@@ -92,13 +96,19 @@ public class LoginActivity extends BaseActivity {
 
                                 return HttpReqTool.getInstance().createApi(BusinessApi.class).getQiNiuToken();
                             } else {
-                                Functions.toast(resp.getMsg());
+//                                由于是在io线程中做请求，所以error情况下，弹toast药调用runOnUITHread
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Functions.toast(resp.getMsg());
+                                    }
+                                });
                                 return null;
                             }
 
                         }
                     })
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ApiObserver<QiNiuTokenResp>() {
                         @Override
