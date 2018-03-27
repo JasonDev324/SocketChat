@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.tanjundang.chat.R;
 import io.tanjundang.chat.base.BaseActivity;
@@ -25,7 +24,7 @@ import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.ChatMsgResp;
 import io.tanjundang.chat.base.entity.User;
-import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
@@ -88,15 +87,13 @@ public class ChatMsgActivity extends BaseActivity {
     }
 
     private void getData() {
-        dialog.show();
         HttpReqTool.getInstance().createApi(BusinessApi.class)
                 .getGroupMember(groupId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ApiObserver<ChatMsgResp>() {
+                .subscribe(new DialogApiObserver<ChatMsgResp>(this) {
                     @Override
                     public void onSuccess(ChatMsgResp resp) {
-                        dialog.dismiss();
                         if (resp.isSuccess()) {
                             list.clear();
                             if (resp.getData() != null & !resp.getData().isEmpty()) {
@@ -114,7 +111,6 @@ public class ChatMsgActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String error) {
-                        dialog.dismiss();
                         Functions.toast(error);
                     }
                 });
@@ -153,7 +149,6 @@ public class ChatMsgActivity extends BaseActivity {
         if (data == null) return;
         if (requestCode == REQ_FRIEND_SELECT && resultCode == RESULT_OK) {
             long userId = data.getLongExtra(Constants.USER_ID, 0);
-            dialog.show();
             HttpReqTool.getInstance().createApi(BusinessApi.class)
                     .joinGroup(userId, groupId)
                     .subscribeOn(Schedulers.io())
@@ -164,7 +159,6 @@ public class ChatMsgActivity extends BaseActivity {
                             if (resp.isSuccess()) {
                                 getData();
                             } else {
-                                dialog.dismiss();
                                 Functions.toast(resp.getMsg());
                             }
                         }

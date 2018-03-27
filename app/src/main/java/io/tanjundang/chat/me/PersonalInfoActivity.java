@@ -26,6 +26,7 @@ import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.FriendsResp;
 import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpBaseBean;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.DialogTool;
@@ -72,10 +73,15 @@ public class PersonalInfoActivity extends BaseActivity {
                 .interval(1, TimeUnit.SECONDS)
                 .take(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
+                .subscribe(new DialogApiObserver<Long>(this) {
                     @Override
-                    public void accept(Long aLong) throws Exception {
-                        dialog.dismiss();
+                    public void onSuccess(Long resp) {
+
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+
                     }
                 });
     }
@@ -88,7 +94,6 @@ public class PersonalInfoActivity extends BaseActivity {
         tvName.setText(info.getName());
         ItemTool.titleValue(rlAccount, "帐号", info.getName());
         ItemTool.titleValue(rlEmail, "邮箱", info.getEmail());
-        dialog.show();
     }
 
     public static void Start(Context context, FriendsResp.FriendsInfo info) {
@@ -114,7 +119,7 @@ public class PersonalInfoActivity extends BaseActivity {
                                     .delFriend(info.getFriend_id())
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new ApiObserver<HttpBaseBean>() {
+                                    .subscribe(new DialogApiObserver<HttpBaseBean>(PersonalInfoActivity.this) {
                                         @Override
                                         public void onSuccess(HttpBaseBean resp) {
                                             if (resp.isSuccess()) {

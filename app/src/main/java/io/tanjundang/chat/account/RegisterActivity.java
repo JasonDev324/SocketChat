@@ -19,6 +19,7 @@ import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.LoginResp;
 import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 
@@ -72,17 +73,15 @@ public class RegisterActivity extends BaseActivity {
                 Functions.toast("Password must be not null");
                 return;
             }
-            dialog.show();
             HttpReqTool
                     .getInstance()
                     .createApi(BusinessApi.class)
                     .register(name, email, password)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ApiObserver<LoginResp>() {
+                    .subscribe(new DialogApiObserver<LoginResp>(this) {
                         @Override
                         public void onSuccess(LoginResp resp) {
-                            dialog.dismiss();
                             if (resp.isSuccess()) {
                                 Functions.toast("Register Success");
                                 finish();
@@ -93,7 +92,6 @@ public class RegisterActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(String error) {
-                            dialog.dismiss();
                         }
                     });
 

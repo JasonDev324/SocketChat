@@ -26,18 +26,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected final String TAG = getClass().getName();
     protected final String AUTHOR = "TanJunDang";
 
-    protected ProgressDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("");
-//        设置progressDialog的样式需要在初始化的时候进行
-        dialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
-//        该方法不是用于修改ProgressStyle的样式，而是设置dialog形状
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setMessage("加载中....");
     }
 
 }

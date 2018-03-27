@@ -27,6 +27,7 @@ import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.LoginResp;
 import io.tanjundang.chat.base.entity.QiNiuTokenResp;
 import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.utils.SharePreTool;
@@ -72,8 +73,6 @@ public class LoginActivity extends BaseActivity {
                 Functions.toast("Password must be not null");
                 return;
             }
-            dialog.show();
-            dialog.setMessage("Authenticating..");
             HttpReqTool
                     .getInstance()
                     .createApi(BusinessApi.class)
@@ -81,7 +80,6 @@ public class LoginActivity extends BaseActivity {
                     .flatMap(new Function<LoginResp, Observable<QiNiuTokenResp>>() {
                         @Override
                         public Observable<QiNiuTokenResp> apply(final LoginResp resp) {
-                            dialog.dismiss();
                             if (resp.isSuccess()) {
                                 LoginResp.LoginInfo info = resp.getData();
                                 SharePreTool.getSP(LoginActivity.this).putString(Constants.TOKEN, info.getApi_token());
@@ -110,10 +108,9 @@ public class LoginActivity extends BaseActivity {
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ApiObserver<QiNiuTokenResp>() {
+                    .subscribe(new DialogApiObserver<QiNiuTokenResp>(this) {
                         @Override
                         public void onSuccess(QiNiuTokenResp resp) {
-                            dialog.dismiss();
                             if (resp.isSuccess()) {
                                 QiNiuTokenResp.TokenInfo info = resp.getData();
                                 if (info == null) return;
@@ -129,7 +126,6 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(String error) {
-                            dialog.dismiss();
                         }
                     });
         } else if (v.equals(btnRegister)) {

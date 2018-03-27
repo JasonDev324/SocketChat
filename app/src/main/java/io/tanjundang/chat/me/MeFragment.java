@@ -134,8 +134,9 @@ public class MeFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) return;
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
-            List<Uri> selectedList =PhotoPickTool.getInstance().getResult(data);
+            List<Uri> selectedList = PhotoPickTool.getInstance().getResult(data);
             if (selectedList == null || selectedList.isEmpty()) return;
             Uri uri = selectedList.get(0);
             File file = Functions.uri2File(getContext(), uri);

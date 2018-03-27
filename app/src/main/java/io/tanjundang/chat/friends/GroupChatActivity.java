@@ -28,7 +28,7 @@ import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.GroupChatResp;
 import io.tanjundang.chat.base.entity.type.ChatType;
 import io.tanjundang.chat.base.entity.type.SetType;
-import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
@@ -81,7 +81,6 @@ public class GroupChatActivity extends BaseActivity {
     }
 
     private void initView() {
-        dialog.show();
         ButterKnife.bind(this);
         tvSubTitle.setText("新建");
         tvSubTitle.setVisibility(View.VISIBLE);
@@ -115,10 +114,9 @@ public class GroupChatActivity extends BaseActivity {
                 .getGroupList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ApiObserver<GroupChatResp>() {
+                .subscribe(new DialogApiObserver<GroupChatResp>(this) {
                     @Override
                     public void onSuccess(GroupChatResp resp) {
-                        dialog.dismiss();
                         if (resp.isSuccess()) {
                             list.clear();
                             if (resp.getData() != null && !resp.getData().isEmpty()) {
@@ -133,7 +131,6 @@ public class GroupChatActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String error) {
-                        dialog.dismiss();
                         refreshLayout.finishRefresh();
                     }
                 });

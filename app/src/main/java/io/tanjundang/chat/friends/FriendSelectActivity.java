@@ -27,7 +27,7 @@ import io.tanjundang.chat.base.BaseActivity;
 import io.tanjundang.chat.base.Constants;
 import io.tanjundang.chat.base.api.BusinessApi;
 import io.tanjundang.chat.base.entity.FriendsResp;
-import io.tanjundang.chat.base.network.ApiObserver;
+import io.tanjundang.chat.base.network.DialogApiObserver;
 import io.tanjundang.chat.base.network.HttpReqTool;
 import io.tanjundang.chat.base.utils.Functions;
 import io.tanjundang.chat.base.view.CommonHolder;
@@ -97,15 +97,13 @@ public class FriendSelectActivity extends BaseActivity {
     }
 
     private void getData() {
-        dialog.show();
         HttpReqTool.getInstance().createApi(BusinessApi.class)
                 .getFriends()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ApiObserver<FriendsResp>() {
+                .subscribe(new DialogApiObserver<FriendsResp>(this) {
                     @Override
                     public void onSuccess(FriendsResp resp) {
-                        dialog.dismiss();
                         if (resp.isSuccess()) {
                             list.clear();
                             if (resp.getData() != null & !resp.getData().isEmpty()) {
@@ -120,7 +118,6 @@ public class FriendSelectActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String error) {
-                        dialog.dismiss();
                         refreshLayout.finishRefresh();
                         Functions.toast(error);
                     }
